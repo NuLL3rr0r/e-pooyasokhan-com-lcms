@@ -1,7 +1,7 @@
 e-pooyasokhan-com LCMS
 ======================
 
-A LCMS software with a client / server architecture and a cross-platform client.
+A LCMS software with a client / server architecture and a cross-platform client written in C++ with portability and performance in mind.
 
 This project consists of the following sub-projects:
 
