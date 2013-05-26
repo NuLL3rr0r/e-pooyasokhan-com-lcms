@@ -1,5 +1,5 @@
-mkdir build
-cd ..\build
+mkdir ..\_build
+cd ..\_build
 
 cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DCMAKE_INCLUDE_PATH=deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=deps-win32\mingw\lib\debug -DCMAKE_FRAMEWORK_PATH=deps-win32\mingw\share -DBoost_NO_SYSTEM_PATHS=TRUE -DBoost_NO_BOOST_CMAKE=TRUE -DBOOST_ROOT=deps-win32\mingw\Boost ..\
 
