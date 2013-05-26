@@ -1,4 +1,12 @@
 SET ( MYLIB_SOURCE_FILES
+    main.cpp
+    crypto.cpp
+    db.cpp
+    exception.cpp
+    ipcclient.cpp
+    ipcserver.cpp
+    mail.cpp
+    system.cpp
 )
 
 SET ( EPS_SERVER_SOURCE_FILES
