@@ -1,0 +1,16 @@
+* YOU PROBABLY NEED TO MAKE A COPY OF MINGW32-MAKE.EXE -> make.exe for this to work
+* You need Git-bash for perl.exe, sh.exe, etc.
+
+1. In zeromq-3.2.2 // 3.2.3 needs patching for strndup
+    sh configure
+    mingw32-make -j5
+
+2. copy all the needed files in .lib folder  and all include files to destination.
+debug/libzmq.dll
+debug/libzmq.dll.a
+release/libzmq.dll
+release/libzmq.dll.a
+include/zmq.h
+include/zmq.hpp
+include/zmq_utils.h
+

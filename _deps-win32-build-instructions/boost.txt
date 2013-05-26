@@ -1,0 +1,27 @@
+1. In boost source tree:
+    * cd .\tools\build\v2\engine\
+    * .\build.bat mingw
+    * move .\bin.ntx86\bjam.exe ..\..\..\..\
+    * cd ..\..\..\..\
+    * mkdir .\build
+
+2. For more info and available libs:
+    * bjam --help
+    * bjam --show-libraries
+
+3. To strat the build process:
+
+/// Shared version
+bjam toolset=gcc --build-type=minimal threading=multi link=shared runtime-link=shared --build-dir=".\build" --prefix="C:\Boost" --without-mpi --without-python install
+
+/// Static version
+bjam toolset=gcc --build-type=minimal threading=multi link=static runtime-link=static --build-dir=".\build" --prefix="C:\Boost" --without-mpi --without-python install
+
+/// Complete version
+bjam toolset=gcc --build-type=complete --build-dir=".\build" --prefix="C:\Boost" --without-mpi --without-python install
+
+4. Now,
+copy D:\Dev\Boost\include\* to our include dir
+copy D:\Dev\Boost\lib\* to our lib dir
+
+

@@ -1,0 +1,22 @@
+1. In sqlite-amalgamation-3071602
+    * qmake -project
+
+2. Rename sqlite-amalgamation-3071602.pro to sqlite3.pro
+
+3. In sqlite3.pro do the following changes:
+TEMPLATE = lib
+TARGET = sqlite3
+INCLUDEPATH += .
+
+4. Do the following:
+    * qmake
+    * mingw32-make all -j5
+
+5. Copy the following files to an appropriate directory:
+debug/libsqlite3.a
+debug/sqlite3.dll
+release/libsqlite3.a
+release/sqlite3.dll
+sqlite3.h
+sqlite3ext.h
+

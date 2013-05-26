@@ -1,0 +1,49 @@
+1. In GeoIP-1.4.8/libGeoIP
+    * Delete all the Makefiles
+    * qmake -project
+
+2. Rename GeoIP-1.4.8.pro to GeoIP.pro
+
+3. In GeoIP-1.4.8.pro do the following changes:
+TEMPLATE = lib
+TARGET = GeoIP
+INCLUDEPATH += .
+INCLUDEPATH += $$PWD/../../zlib/include
+LIBS += -L$$PWD/../../zlib/lib/
+LIBS += -lWs2_32 -lwsock32 -lzlib
+DEFINES += PACKAGE_VERSION=\\\"1.4.8\\\"
+
+4. // http://stackoverflow.com/questions/12187040/compile-maxmind-c-library-with-visual-studio-2010
+// Add the following to GeoIP.h
+#include <io.h>
+// Add the following to GeoIP.c and GeoIPCity.c
+#define pread my_pread
+static size_t my_pread( int file_no, void *buffer, size_t size, size_t offset )
+{
+  if (_lseek( file_no, (long)offset, SEEK_SET) == offset)
+    return _read(file_no, buffer, (int)size);
+  else
+    return -1L;
+}
+
+5. Do the following:
+    * qmake
+    * mingw32-make all -j5
+
+6. Copy the following files to an appropriate directory:
+debug/GeoIP.dll
+debug/libGeoIP.a
+debug/libzlib.dll
+debug/libzlib.dll.a
+debug/libzlibstatic.a
+release/GeoIP.dll
+release/libGeoIP.a
+release/libzlib.dll
+release/libzlib.dll.a
+release/libzlibstatic.a
+include/GeoIP.h
+include/GeoIPCity.h
+include/GeoIPUpdate.h
+// and extract the dbs in the target share directory
+share/GeoIP/GeoIP.dat
+share/GeoIP/GeoLiteCity.dat

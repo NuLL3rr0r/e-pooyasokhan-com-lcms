@@ -1,0 +1,22 @@
+1. In libb64-1.2/src
+    * Delete the 'Makefile'
+    * qmake -project
+
+2. Rename src.pro to b64.pro
+
+3. In b64.pro do the following changes:
+TEMPLATE = lib
+TARGET = b64
+INCLUDEPATH += ../include
+
+4. Do the following:
+    * qmake
+    * mingw32-make all -j5
+
+5. Copy the following files to an appropriate directory:
+debug/b64.dll
+debug/libb64.a
+release/b64.dll
+release/libb64.a
+include/b64/*
+

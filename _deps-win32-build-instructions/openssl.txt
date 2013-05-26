@@ -1,0 +1,25 @@
+//http://stackoverflow.com/questions/9379363/how-to-build-openssl-with-mingw-in-windows
+// http://qt-project.org/wiki/Compiling-OpenSSL-with-MinGW
+
+1. No need for tar (WinRar does the job / Symlink issues)
+
+* ALSO YOU PROBABLY NEED TO MAKE A COPY OF MINGW32-MAKE.EXE -> make.exe
+* You need Git-bash for perl.exe, sh.exe, etc.
+
+2. Run the following for static builds:
+perl Configure mingw no-shared no-asm --prefix=./dist
+
+3. Run the following for shared builds:
+perl Configure mingw shared no-asm --prefix=./dist
+
+4.
+// do not use -j5
+mingw32-make depend
+mingw32-make
+mingw32-make install // probably fails, just copy the needed files
+
+5. Copy the following files to an appropriate directory:
+libcrypto.a
+libssl.a
+include/openssl/*
+

@@ -1,0 +1,25 @@
+1. Deps
+    libiconv-1.9.2-1-lib.zip (bin/lib)
+    openssl-1.0.1e.tar.gz (src)
+    gsasl-1.8.0-x86.zip (bin/lib)
+    gnutls-3.1.10-w32.zip (bin/lib)
+    vmime-git-version (CMake build is included)
+
+//// NOTE YOU SHOULD USE \\ for path separator
+
+2. In the build directory, for debug build:
+cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Debug -DCMAKE_LIBRARY_PATH=\\path\\to\\openssl\\libs;\\path\\to\\libiconv\\libs;\\path\\to\\gnutls\\libs;\\path\\to\\gsasl\\libs -DCMAKE_INCLUDE_PATH=\\path\\to\\openssl\\headers;\\path\\to\\libiconv\\headers;\\path\\to\\gnutls\\headers;\\path\\to\\gsasl\\headers -DVMIME_BUILD_TESTS=NO -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=NO -DVMIME_BUILD_SHARED_LIBRARY=YES -DVMIME_BUILD_STATIC_LIBRARY=YES ..\
+
+3. In the build directory, for release release:
+cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Release  -DCMAKE_LIBRARY_PATH=\\path\\to\\openssl\\libs;\\path\\to\\libiconv\\libs;\\path\\to\\gnutls\\libs;\\path\\to\\gsasl\\libs -DCMAKE_INCLUDE_PATH=\\path\\to\\openssl\\headers;\\path\\to\\libiconv\\headers;\\path\\to\\gnutls\\headers;\\path\\to\\gsasl\\headers -DVMIME_BUILD_TESTS=NO -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=NO -DVMIME_BUILD_SHARED_LIBRARY=YES -DVMIME_BUILD_STATIC_LIBRARY=YES ..\
+
+4.
+mingw32-make -j5
+
+4. Cut everything in C:/Program Files (x86)/vmime/ and place it where you want. And libvmime.dll in the build's bin directory.
+
+
+
+
+
+
