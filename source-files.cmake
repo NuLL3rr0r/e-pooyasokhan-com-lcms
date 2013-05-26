@@ -10,15 +10,21 @@ SET ( MYLIB_SOURCE_FILES
 )
 
 SET ( EPS_SERVER_SOURCE_FILES
+    main.cpp
+    dbtables.cpp
+    rt.cpp
 )
 
 SET ( EPS_ADMIN_SOURCE_FILES
+    main.cpp
 )
 
 SET ( EPS_TEACHER_SOURCE_FILES
+    main.cpp
 )
 
 SET ( EPS_STUDENT_SOURCE_FILES
+    main.cpp
 )
 
 
