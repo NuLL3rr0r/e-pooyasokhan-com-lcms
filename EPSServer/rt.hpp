@@ -25,12 +25,15 @@ public:
         typedef std::unique_ptr<DBTables> DBTables_ptr;
 
     public:
+        std::string AppPath;
         DB_ptr DB_;
         DBTables_ptr DBTables_;
 
     public:
         StaticStuff();
         ~StaticStuff();
+
+        void Initialize();
     };
 
 protected:

@@ -30,6 +30,8 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    EPSServer::RT::Static->AppPath = appPath;
+    EPSServer::RT::Static->Initialize();
     EPSServer::DBTables::InitTables();
 
     MyLib::IPCServer server(54323);
