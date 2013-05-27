@@ -2,10 +2,8 @@
 #define MYLIB_HPP
 
 
-#include <string>
-
 namespace MyLib {
-    void MyLibInitialize(const std::string &path);
+    void MyLibInitialize(int argc, char **argv);
 }
 
 

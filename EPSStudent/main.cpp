@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     std::string appId(path.filename().string());
     std::string appPath(boost::algorithm::replace_last_copy(path.string(), appId, ""));
     boost::filesystem::current_path(appPath);
-    MyLib::MyLibInitialize(appPath);
+    MyLib::MyLibInitialize(argc, argv);
 
 #if defined ( __unix__ )
     int lock;
