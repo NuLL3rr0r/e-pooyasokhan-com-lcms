@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     int lock;
 #elif defined(_WIN32)
     HANDLE lock;
-#endif /* defined (__unix__) */
+#endif  // defined (__unix__)
 
     if(!MyLib::System::GetLock(appId, lock)) {
         std::cerr << "Process is already running!" << std::endl;

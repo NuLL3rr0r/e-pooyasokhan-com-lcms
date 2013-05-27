@@ -1,6 +1,6 @@
 #if defined (__unix__)
 #include <fcntl.h>
-#endif /* defined (__unix__) */
+#endif  // defined (__unix__)
 
 #include "system.hpp"
 
@@ -9,7 +9,7 @@ using namespace MyLib;
 
 #if defined (__unix__)
 const mode_t System::LOCK_FILE_PERMISSION = 0666;
-#endif /* defined (__unix__) */
+#endif  // defined (__unix__)
 
 #if defined (__unix__)
 

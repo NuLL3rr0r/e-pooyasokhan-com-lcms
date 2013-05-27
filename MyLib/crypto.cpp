@@ -3,7 +3,7 @@
 #if defined(_WIN32)
 #include <windows.h>
 //#include <cryptopp/dll.h>     // msvc-shared only
-#endif /* defined(_WIN32) */
+#endif  // defined(_WIN32)
 
 #include <cryptopp/aes.h>
 #include <cryptopp/ccm.h>
@@ -21,11 +21,10 @@ using namespace MyLib;
 
 const std::string Crypto::UNKNOWN_ERROR = "MyLib::Crypto unknown error!";
 
-/*
-* Use this nice HEX/ASCII converter and your editor's replace dialog,
-* to create your own Key and IV.
-* http://www.dolcevie.com/js/converter.html
-*/
+
+// Use this nice HEX/ASCII converter and your editor's replace dialog,
+// to create your own Key and IV.
+// http://www.dolcevie.com/js/converter.html
 
 unsigned char Crypto::m_key[] = {
     0x4e, 0x40, 0x21, 0x6b, 0x21, 0x30, 0x2d, 0x40, 0x6b, 0x23, 0x48, 0x2f, 0x2e, 0x3f, 0x71

@@ -10,13 +10,13 @@ using namespace MyLib;
 
 #ifdef MYLIB_STATIC
 bool DB::m_isSQLite3DriverLoaded = false;
-#endif /* MYLIB_STATIC */
+#endif  // MYLIB_STATIC
 
 #ifdef MYLIB_STATIC
 extern "C" {
     cppdb::backend::connection *cppdb_sqlite3_get_connection(cppdb::connection_info const &);
 }
-#endif /* MYLIB_STATIC */
+#endif  // MYLIB_STATIC
 
 #ifdef MYLIB_STATIC
 void DB::LoadSQLite3Driver()
@@ -28,7 +28,7 @@ void DB::LoadSQLite3Driver()
                                 new cppdb::backend::static_driver(cppdb_sqlite3_get_connection));
     }
 }
-#endif /* MYLIB_STATIC */
+#endif  // MYLIB_STATIC
 
 bool DB::Vacuum(const std::string &dbFile)
 {

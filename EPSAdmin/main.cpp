@@ -1,6 +1,6 @@
 #ifndef _WIN32
 #include <iostream>
-#endif /* _WIN32 */
+#endif  // _WIN32
 
 #include <boost/filesystem.hpp>
 #include <QApplication>
@@ -19,14 +19,14 @@ int main(int argc, char **argv)
     int lock;
 #elif defined(_WIN32)
     HANDLE lock;
-#endif /* defined (__unix__) */
+#endif  // defined (__unix__)
 
     if(!MyLib::System::GetLock(app_id, lock)) {
     #if defined(_WIN32)
         MessageBox(NULL, "Process is already running!", "Error", MB_OK);
     #else
         std::cerr << "Process is already running!" << std::endl;
-    #endif /* defined(_WIN32) */
+    #endif  // defined(_WIN32)
         return EXIT_FAILURE;
     }
 

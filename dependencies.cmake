@@ -19,8 +19,7 @@ SET ( ZEROMQ_FIND_REQUIRED TRUE )
 ### Boost ###
 FIND_PACKAGE (Boost 1.52.0
     COMPONENTS
-        date_time filesystem program_options
-        random regex signals system thread
+        filesystem system thread
     )
 INCLUDE_DIRECTORIES ( ${Boost_INCLUDE_DIRS} )
 LINK_DIRECTORIES ( ${Boost_LIBRARY_DIRS} )

@@ -8,8 +8,8 @@
 #include <sys/types.h>
 #elif defined(_WIN32)
 #include <windows.h>
-#include <winbase.h> // Synchapi.h on Windows 8 and Windows Server 2012
-#endif /* defined (__unix__) */
+#include <winbase.h>    // Synchapi.h on Windows 8 and Windows Server 2012
+#endif  // defined (__unix__)
 
 namespace MyLib {
     class System;
@@ -29,7 +29,7 @@ public:
 #elif defined(_WIN32)
     static bool GetLock(const std::string &name, HANDLE &out_handle);
     static void ReleaseLock(HANDLE &handle);
-#endif /* defined (__unix__) */
+#endif  // defined (__unix__)
 };
 
 

@@ -47,5 +47,5 @@ public:
 #endif /* MAILER_HPP */
 
 
-#endif /* defined ( MYLIB_SERVER_BULD ) */
+#endif  // defined ( MYLIB_SERVER_BULD )
 

@@ -8,7 +8,7 @@
     #include <vmime/platforms/windows/windowsHandler.hpp>
 #else
     #include <vmime/platforms/posix/posixHandler.hpp>
-#endif /* defined (_WIN32) */
+#endif  // defined (_WIN32)
 
 #include "mail.hpp"
 

@@ -14,7 +14,7 @@ class MyLib::DB
 private:
 #ifdef MYLIB_STATIC
     static bool m_isSQLite3DriverLoaded;
-#endif /* MYLIB_STATIC */
+#endif  // MYLIB_STATIC
 
 private:
     cppdb::session m_sql;
@@ -22,7 +22,7 @@ private:
 public:
 #ifdef MYLIB_STATIC
     static void LoadSQLite3Driver();
-#endif /* MYLIB_STATIC */
+#endif  // MYLIB_STATIC
 
     static bool Vacuum(const std::string &dbFile);
 
