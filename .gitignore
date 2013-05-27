@@ -1,2 +1,3 @@
 /_build/
 /_deps-win32/
+/CMakeLists.txt.user
