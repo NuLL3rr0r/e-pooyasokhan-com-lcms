@@ -1,7 +1,8 @@
-#ifndef _WIN32
+#ifndef defined ( _WIN32 )
 #include <iostream>
-#endif  // _WIN32
+#endif  // defined ( _WIN32 )
 
+#include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <QGuiApplication>
 #include <QMessageBox>
@@ -13,20 +14,23 @@ int main(int argc, char **argv)
     boost::filesystem::path path(boost::filesystem::initial_path<boost::filesystem::path>());
     if (argc > 0 && argv[0] != NULL)
         path = boost::filesystem::system_complete(boost::filesystem::path(argv[0]));
-    std::string app_id(path.filename().string());
+    std::string appId(path.filename().string());
+    std::string appPath(boost::algorithm::replace_last_copy(path.string(), appId, ""));
+    boost::filesystem::current_path(appPath);
+    MyLib::MyLibInitialize(appPath);
 
-#if defined (__unix__)
+#if defined ( __unix__ )
     int lock;
-#elif defined(_WIN32)
+#elif defined ( _WIN32 )
     HANDLE lock;
-#endif  // defined (__unix__)
+#endif  // defined ( __unix__ )
 
     if(!MyLib::System::GetLock(app_id, lock)) {
-    #if defined(_WIN32)
+    #if defined ( _WIN32 )
         MessageBox(NULL, "Process is already running!", "Error", MB_OK);
     #else
         std::cerr << "Process is already running!" << std::endl;
-    #endif  // defined(_WIN32)
+    #endif  // defined ( _WIN32 )
         return EXIT_FAILURE;
     }
 

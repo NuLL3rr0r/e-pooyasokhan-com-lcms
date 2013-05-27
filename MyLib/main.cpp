@@ -1,4 +1,7 @@
-#if defined(_WIN32)
+#include <boost/filesystem.hpp>
+#include "mylib.hpp"
+
+#if defined ( _WIN32 )
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -20,6 +23,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     return TRUE;
 }
 
-#endif /* defined(_WIN32) */
+#endif  // defined ( _WIN32 )
 
+void MyLib::MyLibInitialize(const std::string &path)
+{
+    boost::filesystem::current_path(path);
+}
 

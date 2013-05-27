@@ -1,17 +1,17 @@
-#if defined (__unix__)
+#if defined ( __unix__ )
 #include <fcntl.h>
-#endif  // defined (__unix__)
+#endif  // defined ( __unix__ )
 
 #include "system.hpp"
 
 using namespace std;
 using namespace MyLib;
 
-#if defined (__unix__)
+#if defined ( __unix__ )
 const mode_t System::LOCK_FILE_PERMISSION = 0666;
-#endif  // defined (__unix__)
+#endif  // defined ( __unix__ )
 
-#if defined (__unix__)
+#if defined ( __unix__ )
 
 bool System::GetLock(const std::string &name, int &out_handle)
 {
@@ -36,7 +36,7 @@ void System::ReleaseLock(int &handle)
     close(handle);
 }
 
-#elif defined(_WIN32)
+#elif defined ( _WIN32 )
 
 bool System::GetLock(const std::string &name, HANDLE &out_handle)
 {
@@ -58,6 +58,6 @@ void System::ReleaseLock(HANDLE &handle)
     CloseHandle(handle);
 }
 
-#endif /* defined (__unix__) */
+#endif  // defined ( __unix__ )
 
 

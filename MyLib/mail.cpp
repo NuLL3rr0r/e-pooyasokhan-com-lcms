@@ -131,5 +131,5 @@ void Mail::SendAsync() const
 }
 
 
-#endif /* defined ( MYLIB_SERVER_BULD ) */
+#endif  // defined ( MYLIB_SERVER_BULD )
 

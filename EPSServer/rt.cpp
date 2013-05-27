@@ -8,7 +8,7 @@ using namespace EPSServer;
 const std::string RT::DB_FILE_NAME = "eps.db";
 
 RT::StaticStuff::StaticStuff()
-    : DB_(new MyLib::DB(AppPath + RT::DB_FILE_NAME)),
+    : DB_(new MyLib::DB(RT::DB_FILE_NAME)),
       DBTables_(new DBTables())
 {
 }

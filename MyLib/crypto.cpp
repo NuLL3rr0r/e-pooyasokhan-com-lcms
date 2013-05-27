@@ -1,9 +1,9 @@
 #include <stdexcept>
 
-#if defined(_WIN32)
+#if defined ( _WIN32 )
 #include <windows.h>
 //#include <cryptopp/dll.h>     // msvc-shared only
-#endif  // defined(_WIN32)
+#endif  // defined ( _WIN32 )
 
 #include <cryptopp/aes.h>
 #include <cryptopp/ccm.h>
