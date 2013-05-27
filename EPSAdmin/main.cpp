@@ -7,6 +7,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QWidget>
+#include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
 
 int main(int argc, char **argv)
@@ -25,7 +26,7 @@ int main(int argc, char **argv)
     HANDLE lock;
 #endif  // defined (__unix__)
 
-    if(!MyLib::System::GetLock(app_id, lock)) {
+    if(!MyLib::System::GetLock(appId, lock)) {
     #if defined ( _WIN32 )
         MessageBox(NULL, "Process is already running!", "Error", MB_OK);
     #else
