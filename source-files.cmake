@@ -27,6 +27,10 @@ SET ( EPS_STUDENT_SOURCE_FILES
     main.cpp
 )
 
+SET ( EPS_SERVER_RC_FILE "../Resources/eps-server.rc" )
+SET ( EPS_ADMIN_RC_FILE "../Resources/eps-admin.rc" )
+SET ( EPS_TEACHER_RC_FILE "../Resources/eps-teacher.rc" )
+SET ( EPS_STUDENT_RC_FILE "../Resources/eps-student.rc" )
 
 SET ( MYLIB_BIN_NAME "mylib" )
 SET ( EPS_SERVER_BIN_NAME "eps-server" )
