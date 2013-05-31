@@ -182,18 +182,19 @@ INCLUDE ( build-config.cmake )
 
 IF ( CXX_GCC )
     IF ( GCC_MINOR GREATER 6 )
-        SET ( CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}" )
+        SET ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11" )
     ELSE (  )
-        SET ( CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}" )
+        SET ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x" )
     ENDIF (  )
+
+    SET ( GCC_CXX_FLAGS_WARN_LEVEL "-Wall -Wextra -Wno-unused-parameter" )
+    SET ( GCC_CXX_FLAGS_ISO_CPP "-pedantic" )
+    SET ( GCC_CXX_FLAGS_USE_PIPE "-pipe" )
 
     IF ( CMAKE_BUILD_TYPE MATCHES "GCCMinSizeRel"
             OR CMAKE_BUILD_TYPE MATCHES "GCCMaxSpeedRel"
             OR CMAKE_BUILD_TYPE MATCHES "GCCNativeMinSizeRel"
             OR CMAKE_BUILD_TYPE MATCHES "GCCNativeMaxSpeedRel" )
-        SET ( GCC_CXX_FLAGS_WARN_LEVEL "-Wall -Wextra -Wno-unused-parameter" )
-        SET ( GCC_CXX_FLAGS_ISO_CPP "-pedantic" )
-        SET ( GCC_CXX_FLAGS_USE_PIPE "-pipe" )
         SET ( GCC_CXX_FLAGS_OPT_LEVEL_SIZE "-Os" )
         SET ( GCC_CXX_FLAGS_OPT_LEVEL_SPEED "-O2" )
         SET ( GCC_CXX_FLAGS_OPT_NATIVE "-march=native -mtune=native" )
@@ -206,10 +207,10 @@ IF ( CXX_GCC )
         SET ( CMAKE_CXX_FLAGS_GCCNativeMinSizeRel "${GCC_CXX_FLAGS_WARN_LEVEL} ${GCC_CXX_FLAGS_ISO_CPP}  ${GCC_CXX_FLAGS_USE_PIPE} ${GCC_CXX_FLAGS_OPT_LEVEL_SIZE} ${GCC_CXX_FLAGS_OPT_NATIVE} ${GCC_CXX_FLAGS_OMIT_FP} ${GCC_CXX_FLAGS_SIZE_OPT}" )
         SET ( CMAKE_CXX_FLAGS_GCCNativeMaxSpeedRel "${GCC_CXX_FLAGS_WARN_LEVEL} ${GCC_CXX_FLAGS_ISO_CPP}  ${GCC_CXX_FLAGS_USE_PIPE} ${GCC_CXX_FLAGS_OPT_LEVEL_SPEED}  ${GCC_CXX_FLAGS_OPT_NATIVE} ${GCC_CXX_FLAGS_OMIT_FP} ${GCC_CXX_FLAGS_SIZE_OPT}" )
 
-        SET ( CMAKE_C_FLAGS_GCCMinSizeRel CMAKE_CXX_FLAGS_GCCMinSizeRel )
-        SET ( CMAKE_C_FLAGS_GCCMaxSpeedRel CMAKE_CXX_FLAGS_GCCMaxSpeedRel )
-        SET ( CMAKE_C_FLAGS_GCCNativeMinSizeRel CMAKE_CXX_FLAGS_GCCNativeMinSizeRel )
-        SET ( CMAKE_C_FLAGS_GCCNativeMaxSpeedRel CMAKE_CXX_FLAGS_GCCNativeMaxSpeedRel )
+        SET ( CMAKE_C_FLAGS_GCCMinSizeRel "${CMAKE_CXX_FLAGS_GCCMinSizeRel}" )
+        SET ( CMAKE_C_FLAGS_GCCMaxSpeedRel "${CMAKE_CXX_FLAGS_GCCMaxSpeedRel}" )
+        SET ( CMAKE_C_FLAGS_GCCNativeMinSizeRel "${CMAKE_CXX_FLAGS_GCCNativeMinSizeRel}" )
+        SET ( CMAKE_C_FLAGS_GCCNativeMaxSpeedRel "${CMAKE_CXX_FLAGS_GCCNativeMaxSpeedRel}" )
 
         IF ( CMAKE_BUILD_TYPE MATCHES "GCCMinSizeRel")
             SET ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_GCCMinSizeRel}" )
@@ -232,7 +233,10 @@ IF ( CXX_GCC )
         ENDIF (  )
 
         SET ( CMAKE_EXE_LINKER_FLAGS "${GCC_LD_FLAGS_SIZE_OPT}" )
-    ENDIF ()
+    ELSE (  )
+        SET ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_CXX_FLAGS_WARN_LEVEL} ${GCC_CXX_FLAGS_ISO_CPP}  ${GCC_CXX_FLAGS_USE_PIPE}" )
+        SET ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS}" )
+    ENDIF (  )
 ENDIF (  )
 
 
