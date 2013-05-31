@@ -8,7 +8,7 @@ using namespace std;
 using namespace cppdb;
 using namespace MyLib;
 
-#ifdef defined ( MYLIB_STATIC )
+#if defined ( MYLIB_STATIC )
 bool DB::m_isSQLite3DriverLoaded = false;
 #endif  // defined ( MYLIB_STATIC )
 

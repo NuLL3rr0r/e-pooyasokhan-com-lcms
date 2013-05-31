@@ -1,4 +1,4 @@
-1 ICON "app-icon_eps-admin.ico"
+1 ICON "app-icon.ico"
 
 2 VERSIONINFO
 FILEVERSION     1,0,0,0
@@ -9,12 +9,12 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "CompanyName", "e-pooyasokhan.com"
-      VALUE "FileDescription", "The EPS Admin Client"
+      VALUE "FileDescription", "The EPS Server"
       VALUE "FileVersion", "1.0"
-      VALUE "InternalName", "EPS_ADMIN"
+      VALUE "InternalName", "EPS_SERVER"
       VALUE "LegalCopyright", "e-pooyasokhan.com"
-      VALUE "OriginalFilename", "eps-admin.exe"
-      VALUE "ProductName", "EPS Admin Version"
+      VALUE "OriginalFilename", "eps-server.exe"
+      VALUE "ProductName", "EPS Server Version"
       VALUE "ProductVersion", "1.0"
     END
   END

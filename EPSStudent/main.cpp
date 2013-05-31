@@ -6,9 +6,9 @@
 #include <boost/filesystem.hpp>
 #include <QGuiApplication>
 #include <QMessageBox>
-#include <QQuickView>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
+#include "splashscreen.hpp"
 
 int main(int argc, char **argv)
 {
@@ -38,9 +38,8 @@ int main(int argc, char **argv)
 
     QGuiApplication app(argc, argv);
 
-    QQuickView *view = new QQuickView;
-    view->setSource(QUrl::fromLocalFile("qml/mainwindow.qml"));
-    view->show();
+    EPS::SplashScreen *splash = new EPS::SplashScreen();
+    splash->show();
 
     return app.exec();
 }

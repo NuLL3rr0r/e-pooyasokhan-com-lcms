@@ -1,4 +1,4 @@
-1 ICON "app-icon_eps-student.ico"
+1 ICON "app-icon.ico"
 
 2 VERSIONINFO
 FILEVERSION     1,0,0,0
@@ -9,12 +9,12 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "CompanyName", "e-pooyasokhan.com"
-      VALUE "FileDescription", "The EPS Student Client"
+      VALUE "FileDescription", "The EPS Admin Client"
       VALUE "FileVersion", "1.0"
-      VALUE "InternalName", "EPS_STUDENT"
+      VALUE "InternalName", "EPS_ADMIN"
       VALUE "LegalCopyright", "e-pooyasokhan.com"
-      VALUE "OriginalFilename", "eps-student.exe"
-      VALUE "ProductName", "EPS Student Version"
+      VALUE "OriginalFilename", "eps-admin.exe"
+      VALUE "ProductName", "EPS Admin Version"
       VALUE "ProductVersion", "1.0"
     END
   END
