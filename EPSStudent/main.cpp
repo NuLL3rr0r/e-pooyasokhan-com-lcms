@@ -1,6 +1,6 @@
-#ifndef _WIN32
+#if defined ( _WIN32 )
 #include <iostream>
-#endif  // _WIN32
+#endif  // defined ( _WIN32 )
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>

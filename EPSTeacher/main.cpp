@@ -1,14 +1,14 @@
-#ifndef _WIN32
+#if defined ( _WIN32 )
 #include <iostream>
-#endif  // _WIN32
+#endif  // defined ( _WIN32 )
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
-#include <QApplication>
+#include <QGuiApplication>
 #include <QMessageBox>
-#include <QWidget>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
+#include "splashscreen.hpp"
 
 int main(int argc, char **argv)
 {
@@ -36,11 +36,11 @@ int main(int argc, char **argv)
     }
 
 
-    QApplication a(argc, argv);
-    QWidget w;
-    w.resize(550, 400);
-    w.show();
+    QGuiApplication app(argc, argv);
 
-    return a.exec();
+    EPS::SplashScreen *splash = new EPS::SplashScreen();
+    splash->show();
+
+    return app.exec();
 }
 
