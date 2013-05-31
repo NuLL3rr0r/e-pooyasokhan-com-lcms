@@ -8,6 +8,12 @@ SET ( BUILD_EPS_ADMIN "YES" )
 SET ( BUILD_EPS_TEACHER "YES" )
 SET ( BUILD_EPS_STUDENT "YES" )
 
+SET ( MYLIB_BIN_NAME "mylib" )
+SET ( EPS_SERVER_BIN_NAME "eps-server" )
+SET ( EPS_ADMIN_BIN_NAME "eps-admin" )
+SET ( EPS_TEACHER_BIN_NAME "eps-teacher" )
+SET ( EPS_STUDENT_BIN_NAME "eps-student" )
+
 
 # CMAKE_BUILD_TYPE
 #   * None

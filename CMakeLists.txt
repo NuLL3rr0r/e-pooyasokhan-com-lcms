@@ -339,9 +339,9 @@ IF ( WIN32 AND MINGW )
     ENDIF (  )
 ENDIF (  )
 
+INCLUDE ( resources.cmake )
 
 SUBDIRS( MyLib EPSServer EPSAdmin EPSTeacher EPSStudent )
 
-INCLUDE ( source-files.cmake )
 
 
