@@ -3,7 +3,7 @@
 #include <QScreen>
 #include "splashscreen.hpp"
 
-using namespace EPS;
+using namespace EPSDesktop;
 
 SplashScreen::SplashScreen(QWindow *parent)
     : QQuickView(parent)
@@ -16,6 +16,8 @@ SplashScreen::SplashScreen(QWindow *parent)
     this->setY((screenSize.height() - this->height()) / 2.0);
 
     QObject *rootObject = this->rootObject();
+    QObject::connect(rootObject, SIGNAL(signal_SplashScreenShown()),
+                     this, SLOT(OnSplashScreenPoppedUp()));
     QObject::connect(rootObject, SIGNAL(signal_SplashScreenTimedOut()),
                      this, SLOT(OnSplashScreenTimedOut()));
 
@@ -25,6 +27,12 @@ SplashScreen::SplashScreen(QWindow *parent)
 SplashScreen::~SplashScreen()
 {
 
+}
+
+void SplashScreen::OnSplashScreenPoppedUp()
+{
+    this->close();
+    QGuiApplication::exit();
 }
 
 void SplashScreen::OnSplashScreenTimedOut()

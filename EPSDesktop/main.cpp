@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
     if(!MyLib::System::GetLock(appId, lock)) {
     #if defined ( _WIN32 )
-        MessageBox(NULL, "Process is already running!", "Error", MB_OK);
+        MessageBoxW(NULL, L"نسخه دیگری از برنامه در حال اجراست!", L"خطا", MB_OK);
     #else
         std::cerr << "Process is already running!" << std::endl;
     #endif  // defined ( _WIN32 )
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
     QGuiApplication app(argc, argv);
 
-    EPS::SplashScreen *splash = new EPS::SplashScreen();
+    EPSDesktop::SplashScreen *splash = new EPSDesktop::SplashScreen();
     splash->show();
 
     return app.exec();

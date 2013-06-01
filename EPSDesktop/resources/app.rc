@@ -9,12 +9,12 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "CompanyName", "e-pooyasokhan.com"
-      VALUE "FileDescription", "The EPS Student Client"
+      VALUE "FileDescription", "The EPS Desktop Client"
       VALUE "FileVersion", "1.0"
-      VALUE "InternalName", "EPS_STUDENT"
+      VALUE "InternalName", "EPS_DESKTOP"
       VALUE "LegalCopyright", "e-pooyasokhan.com"
-      VALUE "OriginalFilename", "eps-student.exe"
-      VALUE "ProductName", "EPS Student Version"
+      VALUE "OriginalFilename", "eps-desktop.exe"
+      VALUE "ProductName", "EPS Desktop Version"
       VALUE "ProductVersion", "1.0"
     END
   END

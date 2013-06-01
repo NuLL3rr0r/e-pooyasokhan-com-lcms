@@ -247,7 +247,7 @@ MESSAGE ( STATUS "Linker flags: ${CMAKE_EXE_LINKER_FLAGS}" )
 INCLUDE_DIRECTORIES(.)
 
 IF ( WIN32 AND MINGW )
-    IF ( BUILD_EPS_ADMIN OR BUILD_EPS_TEACHER OR BUILD_EPS_STUDENT )
+    IF ( BUILD_EPS_DESKTOP )
         SET ( QT5_GCC_LIB "libgcc_s_sjlj-1.dll" )
         SET ( QT5_STDCPP_LIB "libstdc++-6.dll" )
         SET ( QT5_WINPTHREAD_LIB "libwinpthread-1.dll" )
@@ -341,7 +341,7 @@ ENDIF (  )
 
 INCLUDE ( resources.cmake )
 
-SUBDIRS( MyLib EPSServer EPSAdmin EPSTeacher EPSStudent )
+SUBDIRS( MyLib EPSServer EPSDesktop )
 
 
 

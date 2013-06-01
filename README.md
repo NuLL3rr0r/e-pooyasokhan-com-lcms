@@ -7,10 +7,6 @@ MyLib
 
 EPSServer
 
-EPSAdmin
-
-EPSTeacher
-
-EPSStudent
+EPSDesktop
 
 

@@ -5,11 +5,11 @@
 #include <string>
 #include <QQuickView>
 
-namespace EPS {
+namespace EPSDesktop {
     class SplashScreen;
 }
 
-class EPS::SplashScreen : public QQuickView
+class EPSDesktop::SplashScreen : public QQuickView
 {
     Q_OBJECT
 
@@ -18,6 +18,7 @@ public:
     ~SplashScreen();
 
 public slots:
+    void OnSplashScreenPoppedUp();
     void OnSplashScreenTimedOut();
 };
 
