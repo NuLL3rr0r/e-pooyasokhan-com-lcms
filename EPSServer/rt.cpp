@@ -1,4 +1,5 @@
 #include <MyLib/db.hpp>
+#include <MyLib/make_unique.hpp>
 #include "rt.hpp"
 #include "dbtables.hpp"
 
@@ -20,8 +21,8 @@ RT::StaticStuff::~StaticStuff()
 
 void RT::StaticStuff::Initialize()
 {
-    DB_ = DB_ptr(new MyLib::DB(AppPath + RT::DB_FILE_NAME));
+    DB_ = std::make_unique<MyLib::DB>(AppPath + RT::DB_FILE_NAME);
 }
 
-RT::StaticStuff_ptr RT::Static(new RT::StaticStuff());
+RT::StaticStuff_ptr RT::Static(std::make_unique<RT::StaticStuff>());
 

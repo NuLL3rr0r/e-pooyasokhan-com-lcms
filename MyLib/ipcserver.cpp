@@ -4,6 +4,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <MyLib/make_unique.hpp>
 #include "ipcserver.hpp"
 #include "exception.hpp"
 
@@ -65,8 +66,8 @@ void IPCServer::Start()
     std::string tcpURL((boost::format("tcp://*:%1%") % boost::lexical_cast<std::string>(m_port)).str());
 
     try {
-        m_context = context_ptr(new zmq::context_t(1));
-        m_socket = socket_ptr(new zmq::socket_t(*m_context.get(), ZMQ_REP));
+        m_context = std::make_unique<zmq::context_t>(1);
+        m_socket = std::make_unique<zmq::socket_t>(*m_context.get(), ZMQ_REP);
 
         int linger = 0;
         m_socket->setsockopt(ZMQ_LINGER, &linger, sizeof(linger));
@@ -85,7 +86,7 @@ void IPCServer::Start()
 
     m_running = true;
 
-    m_workerThread = thread_ptr(new boost::thread(&IPCServer::Listen, this));
+    m_workerThread = std::make_unique<boost::thread>(&IPCServer::Listen, this);
     m_workerThread->detach();
 
     m_workerMutex.unlock();
