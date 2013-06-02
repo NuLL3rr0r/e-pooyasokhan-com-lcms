@@ -7,6 +7,7 @@
 #include <QQuickItem>
 #include <QScreen>
 #include "splashscreen.hpp"
+#include <dwmapi.h>
 
 using namespace EPSDesktop;
 
@@ -19,7 +20,24 @@ SplashScreen::SplashScreen(QWindow *parent)
     // Add Qt::X11BypassWindowManagerHint for X11 if Qt::WindowStaysOnTopHint won't work
     // Also this is an elegant solution for toggling stay-on-top on windows if necessary
     // SetWindowPos(this->winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-    this->setFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    //this->setFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+    /****** NOT WORKING RIGHT NOW
+    // TranslucentBackground
+    this->setSurfaceType(QSurface::OpenGLSurface);
+    QSurfaceFormat surfaceFormat;
+    surfaceFormat.setAlphaBufferSize(8);
+    surfaceFormat.setRenderableType(QSurfaceFormat::OpenGL);
+    this->setFormat(surfaceFormat);
+    //QColor color;
+    //color.setRedF(0.0);
+    //color.setGreenF(0.0);
+    //color.setBlueF(0.0);
+    //color.setAlphaF(0.0);
+    //this->setColor(color);
+    this->setColor(Qt::transparent);
+    this->setClearBeforeRendering(true);
+    *****************/
 
     this->setSource(QUrl("qrc:/splashscreen.qml"));
 
