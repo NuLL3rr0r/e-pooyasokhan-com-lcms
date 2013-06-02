@@ -18,6 +18,7 @@ Rectangle {
         anchors.centerIn: parent;
         anchors.fill: parent;
         fillMode: Image.PreserveAspectFit;
+        visible: false;
     }
 
     FastBlur {
