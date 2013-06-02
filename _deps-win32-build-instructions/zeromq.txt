@@ -1,5 +1,5 @@
 * YOU PROBABLY NEED TO MAKE A COPY OF MINGW32-MAKE.EXE -> make.exe for this to work
-* You need Git-bash for perl.exe, sh.exe, etc.
+* You need Git-bash for perl.exe, sh.exe, etc. (Note: Install it somewhere without space in the path or you will get errors in configure stage)
 
 1. In zeromq-3.2.2 // 3.2.3 needs patching for strndup
     sh configure

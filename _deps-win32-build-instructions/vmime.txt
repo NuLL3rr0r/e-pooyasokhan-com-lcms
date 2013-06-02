@@ -10,8 +10,17 @@
 2. In the build directory, for debug build:
 cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Debug -DCMAKE_LIBRARY_PATH=\\path\\to\\openssl\\libs;\\path\\to\\libiconv\\libs;\\path\\to\\gnutls\\libs;\\path\\to\\gsasl\\libs -DCMAKE_INCLUDE_PATH=\\path\\to\\openssl\\headers;\\path\\to\\libiconv\\headers;\\path\\to\\gnutls\\headers;\\path\\to\\gsasl\\headers -DVMIME_BUILD_TESTS=NO -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=NO -DVMIME_BUILD_SHARED_LIBRARY=YES -DVMIME_BUILD_STATIC_LIBRARY=YES ..\
 
+e.g.
+
+cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Debug -DCMAKE_LIBRARY_PATH=..\\openssl-1.0.1e;..\\libiconv-1.9.2-1-bin\\bin;..\\libiconv-1.9.2-1-lib\\lib;\\..\\gnutls-3.1.10-w32\\bin;..\\gnutls-3.1.10-w32\\lib;..\\gsasl-1.8.0-x86\\bin;..\\gsasl-1.8.0-x86\\lib -DCMAKE_INCLUDE_PATH=..\\openssl-1.0.1e\\include;..\\libiconv-1.9.2-1-lib\\include;..\\gnutls-3.1.10-w32\\include;..\\gsasl-1.8.0-x86\\include -DVMIME_BUILD_TESTS=NO -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=NO -DVMIME_BUILD_SHARED_LIBRARY=YES -DVMIME_BUILD_STATIC_LIBRARY=YES ..\
+
+
 3. In the build directory, for release release:
 cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Release  -DCMAKE_LIBRARY_PATH=\\path\\to\\openssl\\libs;\\path\\to\\libiconv\\libs;\\path\\to\\gnutls\\libs;\\path\\to\\gsasl\\libs -DCMAKE_INCLUDE_PATH=\\path\\to\\openssl\\headers;\\path\\to\\libiconv\\headers;\\path\\to\\gnutls\\headers;\\path\\to\\gsasl\\headers -DVMIME_BUILD_TESTS=NO -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=NO -DVMIME_BUILD_SHARED_LIBRARY=YES -DVMIME_BUILD_STATIC_LIBRARY=YES ..\
+
+e.g.
+
+cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Release -DCMAKE_LIBRARY_PATH=..\\openssl-1.0.1e;..\\libiconv-1.9.2-1-bin\\bin;..\\libiconv-1.9.2-1-lib\\lib;\\..\\gnutls-3.1.10-w32\\bin;..\\gnutls-3.1.10-w32\\lib;..\\gsasl-1.8.0-x86\\bin;..\\gsasl-1.8.0-x86\\lib -DCMAKE_INCLUDE_PATH=..\\openssl-1.0.1e\\include;..\\libiconv-1.9.2-1-lib\\include;..\\gnutls-3.1.10-w32\\include;..\\gsasl-1.8.0-x86\\include -DVMIME_BUILD_TESTS=NO -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=NO -DVMIME_BUILD_SHARED_LIBRARY=YES -DVMIME_BUILD_STATIC_LIBRARY=YES ..\
 
 4.
 mingw32-make -j5

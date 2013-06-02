@@ -4,7 +4,7 @@
 1. No need for tar (WinRar does the job / Symlink issues)
 
 * ALSO YOU PROBABLY NEED TO MAKE A COPY OF MINGW32-MAKE.EXE -> make.exe
-* You need Git-bash for perl.exe, sh.exe, etc.
+* You need Git-bash for perl.exe, sh.exe, etc. (Note: Install it somewhere without space in the path or you will get errors in configure stage)
 
 2. Run the following for static builds:
 perl Configure mingw no-shared no-asm --prefix=./dist

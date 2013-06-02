@@ -1,10 +1,10 @@
 1. Create both build_debug and build_release directories inside source tree.
 
 2. For debug build:
-cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Debug -DCMAKE_LIBRARY_PATH=\path\to\static\sqlite3\debug\or\release\build -DCMAKE_INCLUDE_PATH=\path\to\sqlite3\headers -DSQLITE_BACKEND_INTERNAL=OFF -DDISABLE_MYSQL=ON -DDISABLE_PQ=ON -DDISABLE_ODBC=ON ..\
+cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Debug -DCMAKE_LIBRARY_PATH=../sqlite3/debug -DCMAKE_INCLUDE_PATH=../sqlite3/ -DSQLITE_BACKEND_INTERNAL=OFF -DDISABLE_MYSQL=ON -DDISABLE_PQ=ON -DDISABLE_ODBC=ON ..\
 
 3. For release build:
-cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Release -DCMAKE_LIBRARY_PATH=\path\to\static\sqlite3\debug\or\release\build -DCMAKE_INCLUDE_PATH=\path\to\sqlite3\headers -DSQLITE_BACKEND_INTERNAL=OFF -DDISABLE_MYSQL=ON -DDISABLE_PQ=ON -DDISABLE_ODBC=ON ..\
+cmake -G "MinGW Makefiles"  -D CMAKE_BUILD_TYPE=Release -DCMAKE_LIBRARY_PATH=../sqlite3/release -DCMAKE_INCLUDE_PATH=../sqlite3/ -DSQLITE_BACKEND_INTERNAL=OFF -DDISABLE_MYSQL=ON -DDISABLE_PQ=ON -DDISABLE_ODBC=ON ..\
 
 4. For each build:
 mingw32-make -j5
