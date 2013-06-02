@@ -6,7 +6,6 @@
 #include <boost/filesystem.hpp>
 #include <QApplication>
 #include <QLabel>
-#include <QMessageBox>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
 #include "splashscreen.hpp"

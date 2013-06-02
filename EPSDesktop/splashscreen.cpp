@@ -13,6 +13,7 @@ using namespace EPSDesktop;
 SplashScreen::SplashScreen(QWindow *parent)
     : QQuickView(parent)
 {
+    // Shoud have NULL value, otherwise we crash
     m_networkAccessManager = NULL;
 
     // Add Qt::X11BypassWindowManagerHint for X11 if Qt::WindowStaysOnTopHint won't work
@@ -22,10 +23,12 @@ SplashScreen::SplashScreen(QWindow *parent)
 
     this->setSource(QUrl("qrc:/splashscreen.qml"));
 
+    // Centering the splash
     QSize screenSize = QApplication::primaryScreen()->size();
     this->setX((screenSize.width() - this->width()) / 2.0);
     this->setY((screenSize.height() - this->height()) / 2.0);
 
+    // Connecting signals/slots
     QObject *rootObject = this->rootObject();
     QObject::connect(rootObject, SIGNAL(signal_SplashScreenPoppedUp()),
                      this, SLOT(OnSplashScreenPoppedUp()));
