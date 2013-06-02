@@ -3,6 +3,7 @@
 
 
 #include <string>
+#include <QtNetwork>
 #include <QQuickView>
 
 namespace EPSDesktop {
@@ -13,13 +14,21 @@ class EPSDesktop::SplashScreen : public QQuickView
 {
     Q_OBJECT
 
+private:
+    QNetworkAccessManager *m_networkAccessManager;
+
 public:
     SplashScreen(QWindow *parent = 0);
     ~SplashScreen();
 
-public slots:
+private slots:
     void OnSplashScreenPoppedUp();
     void OnSplashScreenTimedOut();
+
+    void OnConnectionEstablished(QNetworkReply *reply);
+
+private:
+    void TryConnection();
 };
 
 

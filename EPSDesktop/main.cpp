@@ -1,10 +1,11 @@
-#if defined ( _WIN32 )
+#if !defined ( _WIN32 )
 #include <iostream>
-#endif  // defined ( _WIN32 )
+#endif  // !defined ( _WIN32 )
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
-#include <QGuiApplication>
+#include <QApplication>
+#include <QLabel>
 #include <QMessageBox>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
@@ -20,6 +21,7 @@ int main(int argc, char **argv)
     boost::filesystem::current_path(appPath);
     MyLib::MyLibInitialize(argc, argv);
 
+#if !defined ( DEBUG_BUILD )
 #if defined ( __unix__ )
     int lock;
 #elif defined ( _WIN32 )
@@ -28,15 +30,17 @@ int main(int argc, char **argv)
 
     if(!MyLib::System::GetLock(appId, lock)) {
     #if defined ( _WIN32 )
-        MessageBoxW(NULL, L"نسخه دیگری از برنامه در حال اجراست!", L"خطا", MB_OK);
+        MessageBoxW(NULL, L"نسخه دیگری از برنامه در حال اجراست!", L"خطا",
+                    MB_OK || MB_ICONERROR | MB_RTLREADING | MB_TOPMOST);
     #else
         std::cerr << "Process is already running!" << std::endl;
     #endif  // defined ( _WIN32 )
         return EXIT_FAILURE;
     }
+#endif // !defined ( DEBUG_BUILD )
 
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     EPSDesktop::SplashScreen *splash = new EPSDesktop::SplashScreen();
     splash->show();

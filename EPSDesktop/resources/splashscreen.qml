@@ -2,6 +2,7 @@ import QtQuick 2.0;
 import QtGraphicalEffects 1.0;
 
 Rectangle {
+    signal signal_SplashScreenPoppedUp();
     signal signal_SplashScreenTimedOut();
 
     width: 570;
@@ -37,7 +38,8 @@ Rectangle {
 
         onRunningChanged: {
             if (!blurInAnim.running) {
-                showTimer.start();
+                //showTimer.start();
+                signal_SplashScreenPoppedUp();
             }
         }
     }
