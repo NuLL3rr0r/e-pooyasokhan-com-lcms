@@ -1,10 +1,14 @@
-import QtQuick 2.0;
+import QtQuick 2.1;
 import QtGraphicalEffects 1.0;
 
 Rectangle {
     id : splashScreen;
     property bool hasCloseRequest: false;
     property int passedSecondsSinceShown: 0;
+
+    width: 570;
+    height: 328;
+    color: "transparent";
 
     signal signal_splashScreenPoppedUp();
     signal signal_splashScreenTimedOut();
@@ -13,9 +17,10 @@ Rectangle {
         splashScreen.hasCloseRequest = true;
     }
 
-    width: 570;
-    height: 328;
-    color: "transparent";
+    Component.onCompleted: {
+        cppSplashScreen.onSignal_CloseRequest.connect(splashScreen.onCloseRequest);
+        blurInAnim.start();
+    }
 
     Image {
         id: splashImage;
@@ -66,11 +71,6 @@ Rectangle {
                 signal_splashScreenTimedOut();
             }
         }
-    }
-
-    Component.onCompleted: {
-        cppSplashScreen.onSignal_CloseRequest.connect(splashScreen.onCloseRequest);
-        blurInAnim.start();
     }
 
     Timer {
