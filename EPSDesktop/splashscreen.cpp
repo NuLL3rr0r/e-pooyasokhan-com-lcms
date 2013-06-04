@@ -4,6 +4,7 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QQmlContext>
 #include <QQuickItem>
 #include <QScreen>
 #include "splashscreen.hpp"
@@ -39,6 +40,9 @@ SplashScreen::SplashScreen(QWindow *parent)
     this->setClearBeforeRendering(true);
     *****************/
 
+    // makes this class available in QML part
+    this->rootContext()->setContextProperty("cppSplashScreen", this);
+
     this->setSource(QUrl("qrc:/splashscreen.qml"));
 
     // Centering the splash
@@ -46,11 +50,11 @@ SplashScreen::SplashScreen(QWindow *parent)
     this->setX((screenSize.width() - this->width()) / 2.0);
     this->setY((screenSize.height() - this->height()) / 2.0);
 
-    // Connecting signals/slots
+    // Connecting signals/slots from QML to C++
     QObject *rootObject = this->rootObject();
-    QObject::connect(rootObject, SIGNAL(signal_SplashScreenPoppedUp()),
+    QObject::connect(rootObject, SIGNAL(signal_splashScreenPoppedUp()),
                      this, SLOT(OnSplashScreenPoppedUp()));
-    QObject::connect(rootObject, SIGNAL(signal_SplashScreenTimedOut()),
+    QObject::connect(rootObject, SIGNAL(signal_splashScreenTimedOut()),
                      this, SLOT(OnSplashScreenTimedOut()));
 
     this->show();
@@ -68,8 +72,8 @@ void SplashScreen::OnSplashScreenPoppedUp()
 
 void SplashScreen::OnSplashScreenTimedOut()
 {
-    //this->close();
-    //QGuiApplication::exit();
+    this->close();
+    QApplication::exit();
 }
 
 void SplashScreen::OnConnectionEstablished(QNetworkReply *reply)
@@ -88,6 +92,7 @@ void SplashScreen::OnConnectionEstablished(QNetworkReply *reply)
         messageBox->setAttribute(Qt::WA_RightToLeft, true);
         messageBox->setModal(true);
         messageBox->exec();
+        emit signal_CloseRequest();
     } else {
         QMessageBox *messageBox = new QMessageBox(QMessageBox::Critical, "خطا در برقراری ارتباط",
                                                   "متاسفانه امکان دسترسی به سرور برنامه وجود ندارد.",
@@ -106,7 +111,7 @@ void SplashScreen::OnConnectionEstablished(QNetworkReply *reply)
             TryConnection();
             return;
         } else {
-            QGuiApplication::exit();
+            QApplication::exit();
         }
     }
 
@@ -140,7 +145,7 @@ void SplashScreen::TryConnection()
             TryConnection();
             return;
         } else {
-            QGuiApplication::exit();
+            QApplication::exit();
         }
     }
 

@@ -17,15 +17,18 @@ class EPSDesktop::SplashScreen : public QQuickView
 private:
     QNetworkAccessManager *m_networkAccessManager;
 
-public:
-    SplashScreen(QWindow *parent = 0);
-    ~SplashScreen();
+signals:
+    void signal_CloseRequest();
 
 private slots:
     void OnSplashScreenPoppedUp();
     void OnSplashScreenTimedOut();
 
     void OnConnectionEstablished(QNetworkReply *reply);
+
+public:
+    SplashScreen(QWindow *parent = 0);
+    ~SplashScreen();
 
 private:
     void TryConnection();

@@ -2,8 +2,16 @@ import QtQuick 2.0;
 import QtGraphicalEffects 1.0;
 
 Rectangle {
-    signal signal_SplashScreenPoppedUp();
-    signal signal_SplashScreenTimedOut();
+    id : splashScreen;
+    property bool hasCloseRequest: false;
+    property int passedSecondsSinceShown: 0;
+
+    signal signal_splashScreenPoppedUp();
+    signal signal_splashScreenTimedOut();
+
+    function onCloseRequest() {
+        splashScreen.hasCloseRequest = true;
+    }
 
     width: 570;
     height: 328;
@@ -39,8 +47,8 @@ Rectangle {
 
         onRunningChanged: {
             if (!blurInAnim.running) {
-                //showTimer.start();
-                signal_SplashScreenPoppedUp();
+                showTimer.start();
+                signal_splashScreenPoppedUp();
             }
         }
     }
@@ -55,24 +63,30 @@ Rectangle {
 
         onRunningChanged: {
             if (!blurOutAnim.running) {
-                signal_SplashScreenTimedOut();
+                signal_splashScreenTimedOut();
             }
         }
     }
 
     Component.onCompleted: {
+        cppSplashScreen.onSignal_CloseRequest.connect(splashScreen.onCloseRequest);
         blurInAnim.start();
     }
 
     Timer {
         id: showTimer;
-        interval: 2500;
+        interval: 100;
         running: false;
-        repeat: false;
+        repeat: true;
 
         onTriggered: {
-            showTimer.stop();
-            blurOutAnim.start();
+            splashScreen.passedSecondsSinceShown += 100;
+            if (splashScreen.passedSecondsSinceShown >= 2500) {
+                if (splashScreen.hasCloseRequest) {
+                    showTimer.stop();
+                    blurOutAnim.start();
+                }
+            }
         }
     }
 }
