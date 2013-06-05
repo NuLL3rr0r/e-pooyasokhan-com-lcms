@@ -89,9 +89,10 @@ void AudioPlayer::Start()
 
     m_audioOutput->reset();
 
-    if (!m_file->open(QIODevice::ReadOnly))
+    if (!m_file->open(QIODevice::ReadOnly)) {
         throw MyLib::Exception((boost::format("Could not open file %1% for playing.")
                                 % GetFilePath().toStdString()).str());
+    }
 
     m_audioOutput->start(m_file.get());
 

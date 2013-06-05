@@ -89,9 +89,10 @@ void AudioRecorder::Start()
 
     m_audioInput->reset();
 
-    if (!m_file->open(QIODevice::WriteOnly | QIODevice::Truncate))
+    if (!m_file->open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         throw MyLib::Exception((boost::format("Could not open file %1% for recording.")
                                 % GetFilePath().toStdString()).str());
+    }
 
     m_audioInput->start(m_file.get());
 
