@@ -1,8 +1,12 @@
+#include <boost/format.hpp>
 #include <QDebug>
+#include <MyLib/exception.hpp>
 #include <MyLib/make_unique.hpp>
 #include "audiorecorder.hpp"
 
 using namespace std;
+using namespace boost;
+using namespace MyLib;
 using namespace EPSDesktop;
 
 AudioRecorder::AudioRecorder(QObject *parent)
@@ -84,7 +88,11 @@ void AudioRecorder::Start()
     m_isRecording = true;
 
     m_audioInput->reset();
-    m_file->open(QIODevice::WriteOnly | QIODevice::Truncate);
+
+    if (!m_file->open(QIODevice::WriteOnly | QIODevice::Truncate))
+        throw MyLib::Exception((boost::format("Could not open file %1% for recording.")
+                                % GetFilePath().toStdString()).str());
+
     m_audioInput->start(m_file.get());
 
     m_isFileOpen = true;

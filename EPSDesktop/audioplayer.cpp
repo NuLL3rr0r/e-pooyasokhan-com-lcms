@@ -1,8 +1,12 @@
+#include <boost/format.hpp>
 #include <QDebug>
+#include <MyLib/exception.hpp>
 #include <MyLib/make_unique.hpp>
 #include "audioplayer.hpp"
 
 using namespace std;
+using namespace boost;
+using namespace MyLib;
 using namespace EPSDesktop;
 
 AudioPlayer::AudioPlayer(QObject *parent)
@@ -18,7 +22,6 @@ AudioPlayer::AudioPlayer(const QString &filePath, QObject *parent)
 
     Initialize();
 }
-
 
 AudioPlayer::~AudioPlayer()
 {
@@ -85,7 +88,11 @@ void AudioPlayer::Start()
     m_isPlaying = true;
 
     m_audioOutput->reset();
-    m_file->open(QIODevice::ReadOnly);
+
+    if (!m_file->open(QIODevice::ReadOnly))
+        throw MyLib::Exception((boost::format("Could not open file %1% for playing.")
+                                % GetFilePath().toStdString()).str());
+
     m_audioOutput->start(m_file.get());
 
     m_isFileOpen = true;
