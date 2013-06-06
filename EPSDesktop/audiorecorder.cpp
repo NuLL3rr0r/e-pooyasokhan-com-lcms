@@ -153,7 +153,8 @@ void AudioRecorder::Initialize()
 
     QAudioDeviceInfo info = QAudioDeviceInfo::defaultInputDevice();
     if (!info.isFormatSupported(format)) {
-        qWarning() << "Default format not supported, trying to use the nearest.";
+        qWarning() << "Default format not supported by backend, "
+                      "trying to use the nearest.";
         format = info.nearestFormat(format);
     }
 

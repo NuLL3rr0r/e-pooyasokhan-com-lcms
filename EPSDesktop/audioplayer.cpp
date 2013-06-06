@@ -153,8 +153,9 @@ void AudioPlayer::Initialize()
 
     QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
     if (!info.isFormatSupported(format)) {
-        qWarning() << "Raw audio format not supported by backend, cannot play audio.";
-        return;
+        qWarning() << "Default format not supported by backend, "
+                      "trying to use the nearest.";
+        format = info.nearestFormat(format);
     }
 
     m_audioOutput = make_unique<QAudioOutput>(format, this);
