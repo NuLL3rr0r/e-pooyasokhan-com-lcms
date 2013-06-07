@@ -7,8 +7,8 @@ using namespace EPSServer;
 
 void DBTables::InitTables()
 {
-    RT::Static->DB_->CreateTable(RT::Static->DBTables_->Table("USERS"),
-                                 RT::Static->DBTables_->Fields("USERS"));
+    RT::Static->DB->CreateTable(RT::Static->DBTables->Table("USERS"),
+                                 RT::Static->DBTables->Fields("USERS"));
 }
 
 DBTables::DBTables()
@@ -36,7 +36,15 @@ string DBTables::Fields(const std::string &id)
 
 void DBTables::InitHashes()
 {
+    m_tablesHash["GROUP"] = "group";
     m_tablesHash["USERS"] = "users";
+
+    m_fieldsHash["GROUP"] =
+            " email TEXT NOT NULL, "
+            " admin INTEGER NOT NULL, "
+            " teacher INTEGER NOT NULL, "
+            " student INTEGER NOT NULL, "
+            " PRIMARY KEY ( email ASC ) ";
 
     m_fieldsHash["USERS"] =
             " email TEXT NOT NULL, "

@@ -21,26 +21,24 @@ class EPSServer::RT
 public:
     class StaticStuff {
     private:
+        static const std::string DB_FILE_NAME;
+
+    public:
         typedef std::unique_ptr<MyLib::DB> DB_ptr;
-        typedef std::unique_ptr<DBTables> DBTables_ptr;
+        typedef std::unique_ptr<EPSServer::DBTables> DBTables_ptr;
 
     public:
         std::string AppPath;
-        DB_ptr DB_;
-        DBTables_ptr DBTables_;
+        DB_ptr DB;
+        DBTables_ptr DBTables;
 
     public:
         StaticStuff();
         ~StaticStuff();
-
-        void Initialize();
     };
 
-protected:
+public:
     typedef std::unique_ptr<StaticStuff> StaticStuff_ptr;
-
-private:
-    static const std::string DB_FILE_NAME;
 
 public:
     static StaticStuff_ptr Static;

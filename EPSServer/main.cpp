@@ -1,9 +1,17 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+
+#if defined ( _WIN32 )
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <MyLib/ipcserver.hpp>
+#include <MyLib/make_unique.hpp>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
 #include "dbtables.hpp"
@@ -31,11 +39,19 @@ int main(int argc, char **argv)
     }
 
     EPSServer::RT::Static->AppPath = appPath;
-    EPSServer::RT::Static->Initialize();
     EPSServer::DBTables::InitTables();
 
-    MyLib::IPCServer server(54323);
-    server.Start();
+    std::unique_ptr<MyLib::IPCServer> server =
+            std::make_unique<MyLib::IPCServer>(11011);
+    server->Start();
+
+    while (true) {
+    #if defined ( _WIN32 )
+        Sleep(1);
+    #else
+        sleep(1);
+    #endif
+    }
 
     return EXIT_SUCCESS;
 }

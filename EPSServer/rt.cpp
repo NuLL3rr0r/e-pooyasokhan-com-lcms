@@ -6,23 +6,19 @@
 using namespace std;
 using namespace EPSServer;
 
-const std::string RT::DB_FILE_NAME = "eps.db";
+const std::string RT::StaticStuff::DB_FILE_NAME = "eps.db";
+
+RT::StaticStuff_ptr RT::Static(std::make_unique<RT::StaticStuff>());
 
 RT::StaticStuff::StaticStuff()
-    : DBTables_(new DBTables())
+    : DB(std::make_unique<MyLib::DB>(AppPath + RT::StaticStuff::DB_FILE_NAME)),
+      DBTables(std::make_unique<EPSServer::DBTables>())
 {
 }
 
 RT::StaticStuff::~StaticStuff()
 {
-    DB_.reset();
-    DBTables_.reset();
+    DB.reset();
+    DBTables.reset();
 }
-
-void RT::StaticStuff::Initialize()
-{
-    DB_ = std::make_unique<MyLib::DB>(AppPath + RT::DB_FILE_NAME);
-}
-
-RT::StaticStuff_ptr RT::Static(std::make_unique<RT::StaticStuff>());
 
