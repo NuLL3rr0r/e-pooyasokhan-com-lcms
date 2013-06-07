@@ -2,6 +2,7 @@
 #define SPLASHSCREEN_HPP
 
 
+#include <memory>
 #include <string>
 #include <QtNetwork>
 #include <QQuickView>
@@ -15,20 +16,22 @@ class EPSDesktop::SplashScreen : public QQuickView
     Q_OBJECT
 
 private:
-    QNetworkAccessManager *m_networkAccessManager;
+    std::unique_ptr<QNetworkAccessManager> m_networkAccessManager;
+
+public:
+    SplashScreen(QWindow *parent = 0);
+    ~SplashScreen();
 
 signals:
-    void signal_CloseRequest();
+    void signal_Closing();
+    void signal_ConnectionFailed();
+    void signal_ConnectionEstablished();
 
 private slots:
     void OnSplashScreenPoppedUp();
     void OnSplashScreenTimedOut();
 
     void OnConnectionEstablished(QNetworkReply *reply);
-
-public:
-    SplashScreen(QWindow *parent = 0);
-    ~SplashScreen();
 
 private:
     void TryConnection();

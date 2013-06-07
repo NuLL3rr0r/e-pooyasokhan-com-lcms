@@ -3,7 +3,7 @@ import QtGraphicalEffects 1.0;
 
 Rectangle {
     id : splashScreen;
-    property bool hasCloseRequest: false;
+    property bool isClosing: false;
     property int passedSecondsSinceShown: 0;
 
     width: 570;
@@ -13,12 +13,12 @@ Rectangle {
     signal signal_splashScreenPoppedUp();
     signal signal_splashScreenTimedOut();
 
-    function onCloseRequest() {
-        splashScreen.hasCloseRequest = true;
+    function onClosing() {
+        splashScreen.isClosing = true;
     }
 
     Component.onCompleted: {
-        cppSplashScreen.onSignal_CloseRequest.connect(splashScreen.onCloseRequest);
+        cppSplashScreen.onSignal_Closing.connect(splashScreen.onClosing);
         blurInAnim.start();
     }
 
@@ -82,7 +82,7 @@ Rectangle {
         onTriggered: {
             splashScreen.passedSecondsSinceShown += 100;
             if (splashScreen.passedSecondsSinceShown >= 2500) {
-                if (splashScreen.hasCloseRequest) {
+                if (splashScreen.isClosing) {
                     showTimer.stop();
                     blurOutAnim.start();
                 }
