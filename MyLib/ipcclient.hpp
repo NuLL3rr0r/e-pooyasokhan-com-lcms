@@ -23,9 +23,6 @@ private:
 
     typedef unsigned short int port_t;
 
-private:
-    static const std::string MSG_RECEIVED;
-
 public:
     std::function<void(const std::string &)> OnMessageSent;
 

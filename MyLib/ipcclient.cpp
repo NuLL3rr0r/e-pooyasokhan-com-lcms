@@ -7,9 +7,11 @@
 #include <MyLib/make_unique.hpp>
 #include "ipcclient.hpp"
 
-using namespace MyLib;
 
-const std::string IPCClient::MSG_RECEIVED = "RCVD!";
+#define     MSG_RECEIVED        "RCVD!"
+
+
+using namespace MyLib;
 
 IPCClient::IPCClient() :
     m_running(false),
@@ -46,9 +48,10 @@ void IPCClient::SetId(const std::string &id)
     if (m_running)
         return;
 
-    m_workerMutex.lock();
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
+
     m_id = id;
-    m_workerMutex.unlock();
 }
 
 void IPCClient::SetPort(port_t port)
@@ -56,9 +59,10 @@ void IPCClient::SetPort(port_t port)
     if (m_running)
         return;
 
-    m_workerMutex.lock();
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
+
     m_port = port;
-    m_workerMutex.unlock();
 }
 
 bool IPCClient::IsRunning() const
@@ -68,13 +72,13 @@ bool IPCClient::IsRunning() const
 
 void IPCClient::Start()
 {
-    m_workerMutex.lock();
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
 
     assert(boost::algorithm::trim_copy(m_id) != "");
     assert(m_port != 0);
 
     if (m_running) {
-        m_workerMutex.unlock();
         return;
     }
 
@@ -92,16 +96,14 @@ void IPCClient::Start()
 
     m_workerThread = std::make_unique<boost::thread>(&IPCClient::SendRequests, this);
     m_workerThread->detach();
-
-    m_workerMutex.unlock();
 }
 
 void IPCClient::Stop()
 {
-    m_workerMutex.lock();
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
 
     if (!m_running) {
-        m_workerMutex.unlock();
         return;
     }
 
@@ -120,8 +122,6 @@ void IPCClient::Stop()
     m_workerThread.reset();
     m_socket.reset();
     m_context.reset();
-
-    m_workerMutex.unlock();
 }
 
 void IPCClient::SendMessage(const std::string &message)
@@ -129,9 +129,10 @@ void IPCClient::SendMessage(const std::string &message)
     if (!m_running)
         return;
 
-    m_dataMutex.lock();
+    std::lock_guard<std::mutex> lock(m_dataMutex);
+    (void)lock;
+
     m_requests.push(message);
-    m_dataMutex.unlock();
 }
 
 std::string IPCClient::GetMessage(const zmq::message_t &message)
@@ -155,30 +156,34 @@ void IPCClient::SendRequest(const std::string &request)
     bool rc = false;
     do {
         boost::this_thread::disable_interruption di;
-        m_workerMutex.lock();
+
         try {
+            std::lock_guard<std::mutex> lock(m_workerMutex);
+            (void)lock;
+
             rc = m_socket->send(req, ZMQ_NOBLOCK);
         } catch (...){
         }
-        m_workerMutex.unlock();
 
         if (rc) {
             zmq::message_t res;
             do {
-                m_workerMutex.lock();
                 try {
+                    std::lock_guard<std::mutex> lock(m_workerMutex);
+                    (void)lock;
+
                     rc = m_socket->recv(&res, ZMQ_NOBLOCK);
                 } catch (...){
                 }
-                m_workerMutex.unlock();
 
                 if (rc) {
-                    if (GetMessage(res) == IPCClient::MSG_RECEIVED) {
+                    if (GetMessage(res) == MSG_RECEIVED) {
                         if (OnMessageSent) {
                             OnMessageSent(request);
                         }
                     }
                 }
+
                 boost::this_thread::restore_interruption ri(di);
                 boost::this_thread::interruption_point();
             } while (!rc);
@@ -193,10 +198,14 @@ void IPCClient::SendRequests()
 {
     while(m_running) {
         if (m_requests.size() > 0) {
-            m_dataMutex.lock();
-            std::string messageStr(m_requests.front());
-            m_requests.pop();
-            m_dataMutex.unlock();
+            std::string messageStr;
+            {
+                std::lock_guard<std::mutex> lock(m_dataMutex);
+                (void)lock;
+
+                messageStr = m_requests.front();
+                m_requests.pop();
+            }
             SendRequest(messageStr);
         }
         boost::this_thread::interruption_point();

@@ -8,10 +8,12 @@
 #include "ipcserver.hpp"
 #include "exception.hpp"
 
-using namespace MyLib;
 
-const std::string IPCServer::MSG_RECEIVED = "RCVD!";
-const std::string IPCServer::MSG_INVALID = "INVLD!";
+#define     MSG_RECEIVED            "RCVD!"
+#define     MSG_INVALID             "INVLD!"
+
+
+using namespace MyLib;
 
 IPCServer::IPCServer() :
     m_running(false),
@@ -42,9 +44,10 @@ void IPCServer::SetPort(port_t port)
     if (m_running)
         return;
 
-    m_workerMutex.lock();
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
+
     m_port = port;
-    m_workerMutex.unlock();
 }
 
 bool IPCServer::IsRunning() const
@@ -54,12 +57,12 @@ bool IPCServer::IsRunning() const
 
 void IPCServer::Start()
 {
-    m_workerMutex.lock();
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
 
     assert(m_port != 0);
 
     if (m_running) {
-        m_workerMutex.unlock();
         return;
     }
 
@@ -88,16 +91,14 @@ void IPCServer::Start()
 
     m_workerThread = std::make_unique<boost::thread>(&IPCServer::Listen, this);
     m_workerThread->detach();
-
-    m_workerMutex.unlock();
 }
 
 void IPCServer::Stop()
 {
-    m_workerMutex.lock();
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
 
     if (!m_running) {
-        m_workerMutex.unlock();
         return;
     }
 
@@ -116,8 +117,6 @@ void IPCServer::Stop()
     m_workerThread.reset();
     m_socket.reset();
     m_context.reset();
-
-    m_workerMutex.unlock();
 }
 
 void IPCServer::Listen()
@@ -128,13 +127,14 @@ void IPCServer::Listen()
 
         zmq::message_t request;
 
-        m_workerMutex.lock();
         try {
+            std::lock_guard<std::mutex> lock(m_workerMutex);
+            (void)lock;
+
             rc = m_socket->recv(&request);
         } catch(...) {
             rc = false;
         }
-        m_workerMutex.unlock();
 
         if (rc) {
             try {
@@ -172,14 +172,16 @@ bool IPCServer::SendResponse(const std::string &response)
     zmq::message_t msg(response.size());
     memcpy(msg.data(), response.data(), response.size());
 
-    m_workerMutex.lock();
     bool rc;
+
     try {
+        std::lock_guard<std::mutex> lock(m_workerMutex);
+        (void)lock;
+
         rc = m_socket->send(msg, ZMQ_NOBLOCK);
     } catch (...){
         rc = false;
     }
-    m_workerMutex.unlock();
 
     return rc;
 }
