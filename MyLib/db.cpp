@@ -53,7 +53,7 @@ DB::~DB()
     m_sql.close();
 }
 
-cppdb::session &DB::Sql()
+cppdb::session &DB::SQL()
 {
     return m_sql;
 }

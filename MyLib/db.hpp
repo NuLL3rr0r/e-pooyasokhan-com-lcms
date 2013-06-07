@@ -30,7 +30,7 @@ public:
     DB(const std::string &dbFile);
     ~DB();
 
-    cppdb::session &Sql();
+    cppdb::session &SQL();
 
     void CreateTable(const std::string &table, const std::string &fields);
     void DropTable(const std::string &table);
