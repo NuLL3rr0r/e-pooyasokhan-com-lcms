@@ -15,8 +15,7 @@ Rectangle {
 
     property bool isFormAnimRunning: false;
     property double formAnimDuration: 500.0;
-    property string formAnimEasingFade: Easing.InBack;
-    property string formAnimEasingScale: Easing.OutExpo;
+    property string formAnimEasing: Easing.OutExpo;
 
     Component.onCompleted: {
         loginRectangle.visible = true;
@@ -657,7 +656,7 @@ Rectangle {
             from: loginWindow.width;
             to: forgotRectangle.parentWidth;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingScale;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -666,7 +665,7 @@ Rectangle {
             from: loginWindow.height;
             to: forgotRectangle.parentHeight;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingScale;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -675,7 +674,7 @@ Rectangle {
             from: 1.0;
             to: 0.0;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingFade;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -684,7 +683,7 @@ Rectangle {
             from: 0.0;
             to: 1.0;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingFade;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         onRunningChanged: {
@@ -704,7 +703,7 @@ Rectangle {
             from: loginWindow.width;
             to: registerRectangle.parentWidth;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingScale;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -713,7 +712,7 @@ Rectangle {
             from: loginWindow.height;
             to: registerRectangle.parentHeight;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingScale;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -722,7 +721,7 @@ Rectangle {
             from: 1.0;
             to: 0.0;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingFade;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -731,7 +730,7 @@ Rectangle {
             from: 0.0;
             to: 1.0;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingFade;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         onRunningChanged: {
@@ -751,7 +750,7 @@ Rectangle {
             from: loginWindow.width;
             to: loginRectangle.parentWidth;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingScale;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -760,7 +759,7 @@ Rectangle {
             from: loginWindow.height;
             to: loginRectangle.parentHeight;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingScale;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -769,7 +768,7 @@ Rectangle {
             from: 1.0;
             to: 0.0;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingFade;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -778,7 +777,7 @@ Rectangle {
             from: 0.0;
             to: 1.0;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingFade;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         onRunningChanged: {
@@ -798,7 +797,7 @@ Rectangle {
             from: loginWindow.width;
             to: loginRectangle.parentWidth;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingScale;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -807,7 +806,7 @@ Rectangle {
             from: loginWindow.height;
             to: loginRectangle.parentHeight;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingScale;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -816,7 +815,7 @@ Rectangle {
             from: 1.0;
             to: 0.0;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingFade;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -825,7 +824,7 @@ Rectangle {
             from: 0.0;
             to: 1.0;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasingFade;
+            easing.type: loginWindow.formAnimEasing;
         }
 
         onRunningChanged: {
