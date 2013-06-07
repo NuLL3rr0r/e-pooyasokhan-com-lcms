@@ -13,7 +13,7 @@
 #include "mail.hpp"
 
 
-#define     Mail::UNKNOWN_ERROR         "MyLib::Mail unknown error!";
+#define     Mail::UNKNOWN_ERROR         "MyLib::Mail unknown error!"
 
 
 using namespace std;

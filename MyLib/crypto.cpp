@@ -16,7 +16,7 @@
 #include "crypto.hpp"
 
 
-#define     UNKNOWN_ERROR           "MyLib::Crypto unknown error!";
+#define     UNKNOWN_ERROR           "MyLib::Crypto unknown error!"
 
 
 using namespace std;
