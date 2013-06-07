@@ -81,11 +81,11 @@ bool Mail::Send() const
 bool Mail::Send(std::string &out_error) const
 {
     try {
-    #if defined (_WIN32)
+#if defined (_WIN32)
         vmime::platform::setHandler<vmime::platforms::windows::windowsHandler>();
-    #else
+#else
         vmime::platform::setHandler<vmime::platforms::posix::posixHandler>();
-    #endif /* defined (_WIN32) */
+#endif /* defined (_WIN32) */
 
         vmime::messageBuilder mb;
 

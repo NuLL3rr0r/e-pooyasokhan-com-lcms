@@ -1,4 +1,11 @@
 #include <cassert>
+
+#if defined ( _WIN32 )
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
@@ -198,16 +205,25 @@ void IPCClient::SendRequests()
 {
     while(m_running) {
         if (m_requests.size() > 0) {
-            std::string messageStr;
+            std::string message;
+
             {
                 std::lock_guard<std::mutex> lock(m_dataMutex);
                 (void)lock;
 
-                messageStr = m_requests.front();
+                message = m_requests.front();
                 m_requests.pop();
             }
-            SendRequest(messageStr);
+
+            SendRequest(message);
+        } else {
+#if defined ( _WIN32 )
+            Sleep(1);
+#else
+            sleep(1);
+#endif
         }
+
         boost::this_thread::interruption_point();
     }
 }

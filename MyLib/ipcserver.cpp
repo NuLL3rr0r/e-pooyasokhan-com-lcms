@@ -1,4 +1,11 @@
 #include <cassert>
+
+#if defined ( _WIN32 )
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
@@ -122,7 +129,7 @@ void IPCServer::Stop()
 void IPCServer::Listen()
 {
     bool rc;
-    while(m_running) {
+    while (m_running) {
         boost::this_thread::disable_interruption di;
 
         zmq::message_t request;

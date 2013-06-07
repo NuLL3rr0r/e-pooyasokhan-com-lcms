@@ -46,11 +46,11 @@ int main(int argc, char **argv)
     server->Start();
 
     while (true) {
-    #if defined ( _WIN32 )
+#if defined ( _WIN32 )
         Sleep(1);
-    #else
+#else
         sleep(1);
-    #endif
+#endif
     }
 
     return EXIT_SUCCESS;
