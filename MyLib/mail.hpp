@@ -14,9 +14,6 @@ namespace MyLib {
 class MyLib::Mail
 {
 private:
-    static const std::string UNKNOWN_ERROR;
-
-private:
     std::string m_from;
     std::string m_to;
     std::string m_subject;

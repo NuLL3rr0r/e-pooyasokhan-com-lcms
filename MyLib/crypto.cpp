@@ -15,11 +15,13 @@
 #include <b64/encode.h>
 #include "crypto.hpp"
 
+
+#define     UNKNOWN_ERROR           "MyLib::Crypto unknown error!";
+
+
 using namespace std;
 using namespace CryptoPP;
 using namespace MyLib;
-
-const std::string Crypto::UNKNOWN_ERROR = "MyLib::Crypto unknown error!";
 
 
 // Use this nice HEX/ASCII converter and your editor's replace dialog,

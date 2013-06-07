@@ -11,8 +11,6 @@ namespace MyLib {
 class MyLib::Crypto
 {
 private:
-    static const std::string UNKNOWN_ERROR;
-
     static unsigned char m_key[];
     static unsigned char m_iv[];
 
