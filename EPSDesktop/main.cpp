@@ -2,13 +2,16 @@
 #include <iostream>
 #endif  // !defined ( _WIN32 )
 
+#include <memory>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <QApplication>
-#include <QLabel>
+#include <QDebug>
+#include <MyLib/make_unique.hpp>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
-#include "splashscreen.hpp"
+#include "application.hpp"
+#include "versioninfo.hpp"
 
 int main(int argc, char **argv)
 {
@@ -39,11 +42,24 @@ int main(int argc, char **argv)
 #endif // !defined ( DEBUG_BUILD )
 
 
-    QApplication app(argc, argv);
+    std::unique_ptr<QApplication> app =
+            std::make_unique<QApplication>(argc, argv);
 
-    EPSDesktop::SplashScreen *splash = new EPSDesktop::SplashScreen();
-    splash->show();
+    std::unique_ptr<EPSDesktop::Application> application =
+            std::make_unique<EPSDesktop::Application>();
+    application->Start();
 
-    return app.exec();
+    qDebug() << VERSION_INFO_BUILD_COMPILER;
+    qDebug() << VERSION_INFO_BUILD_DATE;
+    qDebug() << VERSION_INFO_BUILD_HOST;
+    qDebug() << VERSION_INFO_BUILD_PROCESSOR;
+    qDebug() << VERSION_INFO_BUILD_SYSTEM;
+    qDebug() << VERSION_INFO_COPYRIGHT_HOLDER;
+    qDebug() << VERSION_INFO_COPYRIGHT_YEAR;
+    qDebug() << VERSION_INFO_DEVELOPER;
+    qDebug() << VERSION_INFO_PRODUCT_NAME;
+    qDebug() << VERSION_INFO_PRODUCT_VERSION;
+
+    return app->exec();
 }
 
