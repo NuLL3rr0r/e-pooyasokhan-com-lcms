@@ -14,7 +14,8 @@ Rectangle {
     LayoutMirroring.childrenInherit: true
 
     property bool isFormAnimRunning: false;
-    property double formAnimDuration: 500.0;
+    property int formAnimDuration: 500;
+    property int formAnimDurationWindow: formAnimDuration / 5;
     property string formAnimEasing: Easing.OutExpo;
     property int formAnimStartWindowX: 0.0;
     property int formAnimStartWindowY: 0.0;
@@ -735,7 +736,7 @@ Rectangle {
             property: "X";
             from: loginWindow.formAnimStartWindowX;
             to: loginWindow.formAnimEndWindowX;
-            duration: loginWindow.formAnimDuration / 5;
+            duration: loginWindow.formAnimDurationWindow;
             easing.type: loginWindow.formAnimEasing;
         }
 
@@ -744,7 +745,7 @@ Rectangle {
             property: "Y";
             from: loginWindow.formAnimStartWindowY;
             to: loginWindow.formAnimEndWindowY;
-            duration: loginWindow.formAnimDuration / 5;
+            duration: loginWindow.formAnimDurationWindow;
             easing.type: loginWindow.formAnimEasing;
         }
 
@@ -802,7 +803,7 @@ Rectangle {
             property: "X";
             from: loginWindow.formAnimStartWindowX;
             to: loginWindow.formAnimEndWindowX;
-            duration: loginWindow.formAnimDuration / 5;
+            duration: loginWindow.formAnimDurationWindow;
             easing.type: loginWindow.formAnimEasing;
         }
 
@@ -811,7 +812,7 @@ Rectangle {
             property: "Y";
             from: loginWindow.formAnimStartWindowY;
             to: loginWindow.formAnimEndWindowY;
-            duration: loginWindow.formAnimDuration / 5;
+            duration: loginWindow.formAnimDurationWindow;
             easing.type: loginWindow.formAnimEasing;
         }
 
@@ -867,7 +868,7 @@ Rectangle {
             property: "X";
             from: loginWindow.formAnimStartWindowX;
             to: loginWindow.formAnimEndWindowX;
-            duration: loginWindow.formAnimDuration / 5;
+            duration: loginWindow.formAnimDurationWindow;
             easing.type: loginWindow.formAnimEasing;
         }
 
@@ -876,7 +877,7 @@ Rectangle {
             property: "Y";
             from: loginWindow.formAnimStartWindowY;
             to: loginWindow.formAnimEndWindowY;
-            duration: loginWindow.formAnimDuration / 5;
+            duration: loginWindow.formAnimDurationWindow;
             easing.type: loginWindow.formAnimEasing;
         }
 
@@ -934,7 +935,7 @@ Rectangle {
             property: "X";
             from: loginWindow.formAnimStartWindowX;
             to: loginWindow.formAnimEndWindowX;
-            duration: loginWindow.formAnimDuration / 5;
+            duration: loginWindow.formAnimDurationWindow;
             easing.type: loginWindow.formAnimEasing;
         }
 
@@ -943,7 +944,7 @@ Rectangle {
             property: "Y";
             from: loginWindow.formAnimStartWindowY;
             to: loginWindow.formAnimEndWindowY;
-            duration: loginWindow.formAnimDuration / 5;
+            duration: loginWindow.formAnimDurationWindow;
             easing.type: loginWindow.formAnimEasing;
         }
 
