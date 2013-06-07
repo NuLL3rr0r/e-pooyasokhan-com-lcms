@@ -7,14 +7,19 @@ import QtQuick.Layouts 1.0
 Rectangle {
     id: loginWindow;
     color: "transparent";
-    width: 550;
-    height: 670;
+    width: 300;
+    height: 220;
 
     LayoutMirroring.enabled: true
     LayoutMirroring.childrenInherit: true
 
+    property bool isFormAnimRunning: false;
+    property double formAnimDuration: 500.0;
+    property string formAnimEasingFade: Easing.InBack;
+    property string formAnimEasingScale: Easing.OutExpo;
+
     Component.onCompleted: {
-        loginRectangle.visible = false;
+        loginRectangle.visible = true;
         loginEmailTextField.focus = true;
     }
 
@@ -77,6 +82,11 @@ Rectangle {
                         text: "ورود";
                         style: buttonStyle;
                         width: 106;
+
+                        onClicked: {
+                            if (!loginWindow.isFormAnimRunning) {
+                            }
+                        }
                     }
                 }
 
@@ -86,6 +96,11 @@ Rectangle {
                         text: "لغو";
                         style: buttonStyle;
                         width: 106;
+
+                        onClicked: {
+                            if (!loginWindow.isFormAnimRunning) {
+                            }
+                        }
                     }
                 }
             }
@@ -100,6 +115,15 @@ Rectangle {
                         text: "کلمه عبور را فراموش کرده ام";
                         style: buttonStyle;
                         width: 220;
+
+                        onClicked: {
+                            if (!loginWindow.isFormAnimRunning) {
+                                loginWindow.isFormAnimRunning = true;
+                                forgotRectangle.opacity = 0.0;
+                                forgotRectangle.visible = true;
+                                loginToForgotAnim.start();
+                            }
+                        }
                     }
                 }
             }
@@ -114,6 +138,15 @@ Rectangle {
                         text: "ثبت نام کاربر جدید";
                         style: buttonStyle;
                         width: 220;
+
+                        onClicked: {
+                            if (!loginWindow.isFormAnimRunning) {
+                                loginWindow.isFormAnimRunning = true;
+                                registerRectangle.opacity = 0.0;
+                                registerRectangle.visible = true;
+                                loginToRegisterAnim.start();
+                            }
+                        }
                     }
                 }
             }
@@ -161,6 +194,11 @@ Rectangle {
                         text: "بازیابی";
                         style: buttonStyle;
                         width: 106;
+
+                        onClicked: {
+                            if (!loginWindow.isFormAnimRunning) {
+                            }
+                        }
                     }
                 }
 
@@ -170,6 +208,15 @@ Rectangle {
                         text: "لغو";
                         style: buttonStyle;
                         width: 106;
+
+                        onClicked: {
+                            if (!loginWindow.isFormAnimRunning) {
+                                loginWindow.isFormAnimRunning = true;
+                                loginRectangle.opacity = 0.0;
+                                loginRectangle.visible = true;
+                                forgotToLoginAnim.start();
+                            }
+                        }
                     }
                 }
             }
@@ -179,7 +226,7 @@ Rectangle {
     Rectangle {
         id: registerRectangle;
         anchors.centerIn: parent;
-        visible: true;
+        visible: false;
 
         property int parentWidth: 550;
         property int parentHeight: 670;
@@ -535,6 +582,11 @@ Rectangle {
                         text: "ثبت نام";
                         style: buttonStyle;
                         width: 106;
+
+                        onClicked: {
+                            if (!loginWindow.isFormAnimRunning) {
+                            }
+                        }
                     }
                 }
 
@@ -544,6 +596,15 @@ Rectangle {
                         text: "لغو";
                         style: buttonStyle;
                         width: 106;
+
+                        onClicked: {
+                            if (!loginWindow.isFormAnimRunning) {
+                                loginWindow.isFormAnimRunning = true;
+                                loginRectangle.opacity = 0.0;
+                                loginRectangle.visible = true;
+                                registerToLoginAnim.start();
+                            }
+                        }
                     }
                 }
             }
@@ -585,6 +646,194 @@ Rectangle {
     }
 
     property Component radioButtonStyle: RadioButtonStyle {
+    }
+
+    ParallelAnimation{
+        id: loginToForgotAnim;
+
+        PropertyAnimation {
+            target: loginWindow;
+            property: "width";
+            from: loginWindow.width;
+            to: forgotRectangle.parentWidth;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingScale;
+        }
+
+        PropertyAnimation {
+            target: loginWindow;
+            property: "height";
+            from: loginWindow.height;
+            to: forgotRectangle.parentHeight;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingScale;
+        }
+
+        PropertyAnimation {
+            target: loginRectangle;
+            property: "opacity";
+            from: 1.0;
+            to: 0.0;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingFade;
+        }
+
+        PropertyAnimation {
+            target: forgotRectangle;
+            property: "opacity";
+            from: 0.0;
+            to: 1.0;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingFade;
+        }
+
+        onRunningChanged: {
+            if (!loginToForgotAnim.running) {
+                loginRectangle.visible = false;
+                loginWindow.isFormAnimRunning = false;
+            }
+        }
+    }
+
+    ParallelAnimation{
+        id: loginToRegisterAnim;
+
+        PropertyAnimation {
+            target: loginWindow;
+            property: "width";
+            from: loginWindow.width;
+            to: registerRectangle.parentWidth;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingScale;
+        }
+
+        PropertyAnimation {
+            target: loginWindow;
+            property: "height";
+            from: loginWindow.height;
+            to: registerRectangle.parentHeight;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingScale;
+        }
+
+        PropertyAnimation {
+            target: loginRectangle;
+            property: "opacity";
+            from: 1.0;
+            to: 0.0;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingFade;
+        }
+
+        PropertyAnimation {
+            target: registerRectangle;
+            property: "opacity";
+            from: 0.0;
+            to: 1.0;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingFade;
+        }
+
+        onRunningChanged: {
+            if (!loginToRegisterAnim.running) {
+                loginRectangle.visible = false;
+                loginWindow.isFormAnimRunning = false;
+            }
+        }
+    }
+
+    ParallelAnimation{
+        id: forgotToLoginAnim;
+
+        PropertyAnimation {
+            target: loginWindow;
+            property: "width";
+            from: loginWindow.width;
+            to: loginRectangle.parentWidth;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingScale;
+        }
+
+        PropertyAnimation {
+            target: loginWindow;
+            property: "height";
+            from: loginWindow.height;
+            to: loginRectangle.parentHeight;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingScale;
+        }
+
+        PropertyAnimation {
+            target: forgotRectangle;
+            property: "opacity";
+            from: 1.0;
+            to: 0.0;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingFade;
+        }
+
+        PropertyAnimation {
+            target: loginRectangle;
+            property: "opacity";
+            from: 0.0;
+            to: 1.0;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingFade;
+        }
+
+        onRunningChanged: {
+            if (!forgotToLoginAnim.running) {
+                forgotRectangle.visible = false;
+                loginWindow.isFormAnimRunning = false;
+            }
+        }
+    }
+
+    ParallelAnimation{
+        id: registerToLoginAnim;
+
+        PropertyAnimation {
+            target: loginWindow;
+            property: "width";
+            from: loginWindow.width;
+            to: loginRectangle.parentWidth;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingScale;
+        }
+
+        PropertyAnimation {
+            target: loginWindow;
+            property: "height";
+            from: loginWindow.height;
+            to: loginRectangle.parentHeight;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingScale;
+        }
+
+        PropertyAnimation {
+            target: registerRectangle;
+            property: "opacity";
+            from: 1.0;
+            to: 0.0;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingFade;
+        }
+
+        PropertyAnimation {
+            target: loginRectangle;
+            property: "opacity";
+            from: 0.0;
+            to: 1.0;
+            duration: loginWindow.formAnimDuration;
+            easing.type: loginWindow.formAnimEasingFade;
+        }
+
+        onRunningChanged: {
+            if (!registerToLoginAnim.running) {
+                registerRectangle.visible = false;
+                loginWindow.isFormAnimRunning = false;
+            }
+        }
     }
 }
 
