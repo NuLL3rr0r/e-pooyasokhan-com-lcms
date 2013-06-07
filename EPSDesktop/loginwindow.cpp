@@ -12,7 +12,8 @@ LoginWindow::LoginWindow(QWindow *parent)
 {
     this->setTitle("ورود");
 
-    this->setFlags(Qt::Window);
+    this->setFlags( Qt::Window | Qt::MSWindowsFixedSizeDialogHint
+                   | Qt::WindowTitleHint );
 
     this->rootContext()->setContextProperty("cppLoginWindow", this);
 

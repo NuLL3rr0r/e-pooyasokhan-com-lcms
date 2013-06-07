@@ -3,12 +3,12 @@ import QtGraphicalEffects 1.0;
 
 Rectangle {
     id : splashScreen;
-    property bool isClosing: false;
-    property int passedSecondsSinceShown: 0;
-
+    color: "transparent";
     width: 570;
     height: 328;
-    color: "transparent";
+
+    property bool isClosing: false;
+    property int passedSecondsSinceShown: 0;
 
     signal signal_splashScreenPoppedUp();
     signal signal_splashScreenTimedOut();
