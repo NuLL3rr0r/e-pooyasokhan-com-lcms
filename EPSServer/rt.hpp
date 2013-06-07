@@ -3,7 +3,7 @@
 
 
 #include <memory>
-#include <string>
+#include <mutex>
 
 namespace MyLib {
     class DB;
@@ -16,32 +16,30 @@ namespace EPSServer {
 
 class EPSServer::RT
 {
-    friend class StaticStuff;
-
-public:
-    class StaticStuff {
-    private:
-        static const std::string DB_FILE_NAME;
-
-    public:
-        typedef std::unique_ptr<MyLib::DB> DB_ptr;
-        typedef std::unique_ptr<EPSServer::DBTables> DBTables_ptr;
-
-    public:
+private:
+    struct StorageStruct
+    {
         std::string AppPath;
-        DB_ptr DB;
-        DBTables_ptr DBTables;
-
-    public:
-        StaticStuff();
-        ~StaticStuff();
     };
 
-public:
-    typedef std::unique_ptr<StaticStuff> StaticStuff_ptr;
+    typedef std::unique_ptr<MyLib::DB> DB_ptr;
+    typedef std::unique_ptr<EPSServer::DBTables> DBTables_ptr;
+    typedef std::unique_ptr<StorageStruct> Storage_ptr;
+
+private:
+    static std::mutex m_storageMutex;
+    static Storage_ptr m_storageInstance;
+
+    static std::mutex m_dbMutex;
+    static DB_ptr m_dbInstance;
+
+    static std::mutex m_dbTablesMutex;
+    static DBTables_ptr m_dbTablesInstance;
 
 public:
-    static StaticStuff_ptr Static;
+    static StorageStruct *Storage();
+    static MyLib::DB *DB();
+    static EPSServer::DBTables *DBTables();
 };
 
 

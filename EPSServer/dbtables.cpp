@@ -7,8 +7,8 @@ using namespace EPSServer;
 
 void DBTables::InitTables()
 {
-    RT::Static->DB->CreateTable(RT::Static->DBTables->Table("USERS"),
-                                 RT::Static->DBTables->Fields("USERS"));
+    RT::DB()->CreateTable(RT::DBTables()->Table("USERS"),
+                          RT::DBTables()->Fields("USERS"));
 }
 
 DBTables::DBTables()

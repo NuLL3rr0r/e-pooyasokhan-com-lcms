@@ -3,22 +3,57 @@
 #include "rt.hpp"
 #include "dbtables.hpp"
 
+
+#define     DB_FILE_NAME            "eps.db"
+
+
 using namespace std;
 using namespace EPSServer;
 
-const std::string RT::StaticStuff::DB_FILE_NAME = "eps.db";
+std::mutex RT::m_storageMutex;
+RT::Storage_ptr RT::m_storageInstance;
 
-RT::StaticStuff_ptr RT::Static(std::make_unique<RT::StaticStuff>());
+std::mutex RT::m_dbMutex;
+RT::DB_ptr RT::m_dbInstance;
 
-RT::StaticStuff::StaticStuff()
-    : DB(std::make_unique<MyLib::DB>(AppPath + RT::StaticStuff::DB_FILE_NAME)),
-      DBTables(std::make_unique<EPSServer::DBTables>())
+std::mutex RT::m_dbTablesMutex;
+RT::DBTables_ptr RT::m_dbTablesInstance;
+
+
+RT::StorageStruct *RT::Storage()
 {
+    lock_guard<mutex> lock(m_storageMutex);
+    (void)lock;
+
+    if (m_storageInstance == nullptr) {
+        m_storageInstance = std::make_unique<RT::StorageStruct>();
+    }
+
+    return m_storageInstance.get();
 }
 
-RT::StaticStuff::~StaticStuff()
+MyLib::DB *RT::DB()
 {
-    DB.reset();
-    DBTables.reset();
+    lock_guard<mutex> lock(m_dbMutex);
+    (void)lock;
+
+    if (m_dbInstance == nullptr) {
+        m_dbInstance = std::make_unique<MyLib::DB>(Storage()->AppPath
+                                                   + DB_FILE_NAME);
+    }
+
+    return m_dbInstance.get();
+}
+
+EPSServer::DBTables *RT::DBTables()
+{
+    lock_guard<mutex> lock(m_dbTablesMutex);
+    (void)lock;
+
+    if (m_dbTablesInstance == nullptr) {
+        m_dbTablesInstance = std::make_unique<EPSServer::DBTables>();
+    }
+
+    return m_dbTablesInstance.get();
 }
 

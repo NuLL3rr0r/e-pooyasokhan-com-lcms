@@ -38,7 +38,7 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    EPSServer::RT::Static->AppPath = appPath;
+    EPSServer::RT::Storage()->AppPath = appPath;
     EPSServer::DBTables::InitTables();
 
     std::unique_ptr<MyLib::IPCServer> server =
