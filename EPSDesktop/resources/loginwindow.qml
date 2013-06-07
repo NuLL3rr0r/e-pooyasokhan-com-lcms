@@ -16,6 +16,10 @@ Rectangle {
     property bool isFormAnimRunning: false;
     property double formAnimDuration: 500.0;
     property string formAnimEasing: Easing.OutExpo;
+    property int formAnimStartWindowX: 0.0;
+    property int formAnimStartWindowY: 0.0;
+    property int formAnimEndWindowX: 0.0;
+    property int formAnimEndWindowY: 0.0;
 
     Component.onCompleted: {
         loginRectangle.visible = true;
@@ -118,6 +122,16 @@ Rectangle {
                         onClicked: {
                             if (!loginWindow.isFormAnimRunning) {
                                 loginWindow.isFormAnimRunning = true;
+                                loginWindow.formAnimStartWindowX = cppLoginWindow.X;
+                                loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
+                                loginWindow.formAnimEndWindowX = (((loginRectangle.parentWidth
+                                                                       - forgotRectangle.parentWidth)
+                                                                      / 2.0)
+                                                                     + cppLoginWindow.X);
+                                loginWindow.formAnimEndWindowY = (((loginRectangle.parentHeight
+                                                                       - forgotRectangle.parentHeight)
+                                                                      / 2.0)
+                                                                     + cppLoginWindow.Y);;
                                 forgotRectangle.opacity = 0.0;
                                 forgotRectangle.visible = true;
                                 loginToForgotAnim.start();
@@ -141,6 +155,16 @@ Rectangle {
                         onClicked: {
                             if (!loginWindow.isFormAnimRunning) {
                                 loginWindow.isFormAnimRunning = true;
+                                loginWindow.formAnimStartWindowX = cppLoginWindow.X;
+                                loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
+                                loginWindow.formAnimEndWindowX = (((loginRectangle.parentWidth
+                                                                       - registerRectangle.parentWidth)
+                                                                      / 2.0)
+                                                                     + cppLoginWindow.X);
+                                loginWindow.formAnimEndWindowY = (((loginRectangle.parentHeight
+                                                                       - registerRectangle.parentHeight)
+                                                                      / 2.0)
+                                                                     + cppLoginWindow.Y);;
                                 registerRectangle.opacity = 0.0;
                                 registerRectangle.visible = true;
                                 loginToRegisterAnim.start();
@@ -211,6 +235,16 @@ Rectangle {
                         onClicked: {
                             if (!loginWindow.isFormAnimRunning) {
                                 loginWindow.isFormAnimRunning = true;
+                                loginWindow.formAnimStartWindowX = cppLoginWindow.X;
+                                loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
+                                loginWindow.formAnimEndWindowX = (((forgotRectangle.parentWidth
+                                                                       - loginRectangle.parentWidth)
+                                                                      / 2.0)
+                                                                     + cppLoginWindow.X);
+                                loginWindow.formAnimEndWindowY = (((forgotRectangle.parentHeight
+                                                                       - loginRectangle.parentHeight)
+                                                                      / 2.0)
+                                                                     + cppLoginWindow.Y);;
                                 loginRectangle.opacity = 0.0;
                                 loginRectangle.visible = true;
                                 forgotToLoginAnim.start();
@@ -599,6 +633,16 @@ Rectangle {
                         onClicked: {
                             if (!loginWindow.isFormAnimRunning) {
                                 loginWindow.isFormAnimRunning = true;
+                                loginWindow.formAnimStartWindowX = cppLoginWindow.X;
+                                loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
+                                loginWindow.formAnimEndWindowX = (((registerRectangle.parentWidth
+                                                                       - loginRectangle.parentWidth)
+                                                                      / 2.0)
+                                                                     + cppLoginWindow.X);
+                                loginWindow.formAnimEndWindowY = (((registerRectangle.parentHeight
+                                                                       - loginRectangle.parentHeight)
+                                                                      / 2.0)
+                                                                     + cppLoginWindow.Y);;
                                 loginRectangle.opacity = 0.0;
                                 loginRectangle.visible = true;
                                 registerToLoginAnim.start();
@@ -686,10 +730,30 @@ Rectangle {
             easing.type: loginWindow.formAnimEasing;
         }
 
+        NumberAnimation {
+            target: cppLoginWindow;
+            property: "X";
+            from: loginWindow.formAnimStartWindowX;
+            to: loginWindow.formAnimEndWindowX;
+            duration: loginWindow.formAnimDuration / 5;
+            easing.type: loginWindow.formAnimEasing;
+        }
+
+        NumberAnimation {
+            target: cppLoginWindow;
+            property: "Y";
+            from: loginWindow.formAnimStartWindowY;
+            to: loginWindow.formAnimEndWindowY;
+            duration: loginWindow.formAnimDuration / 5;
+            easing.type: loginWindow.formAnimEasing;
+        }
+
         onRunningChanged: {
             if (!loginToForgotAnim.running) {
                 loginRectangle.visible = false;
                 loginWindow.isFormAnimRunning = false;
+                forgotEmailTextField.selectAll();
+                forgotEmailTextField.focus = true;
             }
         }
     }
@@ -733,10 +797,30 @@ Rectangle {
             easing.type: loginWindow.formAnimEasing;
         }
 
+        NumberAnimation {
+            target: cppLoginWindow;
+            property: "X";
+            from: loginWindow.formAnimStartWindowX;
+            to: loginWindow.formAnimEndWindowX;
+            duration: loginWindow.formAnimDuration / 5;
+            easing.type: loginWindow.formAnimEasing;
+        }
+
+        NumberAnimation {
+            target: cppLoginWindow;
+            property: "Y";
+            from: loginWindow.formAnimStartWindowY;
+            to: loginWindow.formAnimEndWindowY;
+            duration: loginWindow.formAnimDuration / 5;
+            easing.type: loginWindow.formAnimEasing;
+        }
+
         onRunningChanged: {
             if (!loginToRegisterAnim.running) {
                 loginRectangle.visible = false;
                 loginWindow.isFormAnimRunning = false;
+                registerEmailTextField.selectAll();
+                registerEmailTextField.focus = true;
             }
         }
     }
@@ -750,7 +834,6 @@ Rectangle {
             from: loginWindow.width;
             to: loginRectangle.parentWidth;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -759,7 +842,6 @@ Rectangle {
             from: loginWindow.height;
             to: loginRectangle.parentHeight;
             duration: loginWindow.formAnimDuration;
-            easing.type: loginWindow.formAnimEasing;
         }
 
         PropertyAnimation {
@@ -780,10 +862,30 @@ Rectangle {
             easing.type: loginWindow.formAnimEasing;
         }
 
+        NumberAnimation {
+            target: cppLoginWindow;
+            property: "X";
+            from: loginWindow.formAnimStartWindowX;
+            to: loginWindow.formAnimEndWindowX;
+            duration: loginWindow.formAnimDuration / 5;
+            easing.type: loginWindow.formAnimEasing;
+        }
+
+        NumberAnimation {
+            target: cppLoginWindow;
+            property: "Y";
+            from: loginWindow.formAnimStartWindowY;
+            to: loginWindow.formAnimEndWindowY;
+            duration: loginWindow.formAnimDuration / 5;
+            easing.type: loginWindow.formAnimEasing;
+        }
+
         onRunningChanged: {
             if (!forgotToLoginAnim.running) {
                 forgotRectangle.visible = false;
                 loginWindow.isFormAnimRunning = false;
+                loginEmailTextField.selectAll();
+                loginEmailTextField.focus = true;
             }
         }
     }
@@ -827,10 +929,30 @@ Rectangle {
             easing.type: loginWindow.formAnimEasing;
         }
 
+        NumberAnimation {
+            target: cppLoginWindow;
+            property: "X";
+            from: loginWindow.formAnimStartWindowX;
+            to: loginWindow.formAnimEndWindowX;
+            duration: loginWindow.formAnimDuration / 5;
+            easing.type: loginWindow.formAnimEasing;
+        }
+
+        NumberAnimation {
+            target: cppLoginWindow;
+            property: "Y";
+            from: loginWindow.formAnimStartWindowY;
+            to: loginWindow.formAnimEndWindowY;
+            duration: loginWindow.formAnimDuration / 5;
+            easing.type: loginWindow.formAnimEasing;
+        }
+
         onRunningChanged: {
             if (!registerToLoginAnim.running) {
                 registerRectangle.visible = false;
                 loginWindow.isFormAnimRunning = false;
+                loginEmailTextField.selectAll();
+                loginEmailTextField.focus = true;
             }
         }
     }
