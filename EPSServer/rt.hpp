@@ -37,9 +37,9 @@ private:
     static DBTables_ptr m_dbTablesInstance;
 
 public:
-    static StorageStruct *Storage();
-    static MyLib::DB *DB();
-    static EPSServer::DBTables *DBTables();
+    static Storage_ptr &Storage();
+    static DB_ptr &DB();
+    static DBTables_ptr &DBTables();
 };
 
 

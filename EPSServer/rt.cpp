@@ -20,7 +20,7 @@ std::mutex RT::m_dbTablesMutex;
 RT::DBTables_ptr RT::m_dbTablesInstance;
 
 
-RT::StorageStruct *RT::Storage()
+RT::Storage_ptr &RT::Storage()
 {
     lock_guard<mutex> lock(m_storageMutex);
     (void)lock;
@@ -29,10 +29,10 @@ RT::StorageStruct *RT::Storage()
         m_storageInstance = std::make_unique<RT::StorageStruct>();
     }
 
-    return m_storageInstance.get();
+    return m_storageInstance;
 }
 
-MyLib::DB *RT::DB()
+RT::DB_ptr &RT::DB()
 {
     lock_guard<mutex> lock(m_dbMutex);
     (void)lock;
@@ -42,10 +42,10 @@ MyLib::DB *RT::DB()
                                                    + DB_FILE_NAME);
     }
 
-    return m_dbInstance.get();
+    return m_dbInstance;
 }
 
-EPSServer::DBTables *RT::DBTables()
+RT::DBTables_ptr &RT::DBTables()
 {
     lock_guard<mutex> lock(m_dbTablesMutex);
     (void)lock;
@@ -54,6 +54,6 @@ EPSServer::DBTables *RT::DBTables()
         m_dbTablesInstance = std::make_unique<EPSServer::DBTables>();
     }
 
-    return m_dbTablesInstance.get();
+    return m_dbTablesInstance;
 }
 
