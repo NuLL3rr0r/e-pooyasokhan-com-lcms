@@ -22,9 +22,9 @@ private:
         std::string AppPath;
     };
 
+    typedef std::unique_ptr<StorageStruct> Storage_ptr;
     typedef std::unique_ptr<MyLib::DB> DB_ptr;
     typedef std::unique_ptr<EPSServer::DBTables> DBTables_ptr;
-    typedef std::unique_ptr<StorageStruct> Storage_ptr;
 
 private:
     static std::mutex m_storageMutex;
