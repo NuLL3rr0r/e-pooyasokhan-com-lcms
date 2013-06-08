@@ -8,7 +8,8 @@
 using namespace EPSDesktop;
 
 LoginWindow::LoginWindow(QWindow *parent)
-    : QQuickView(parent)
+    : QQuickView(parent),
+      m_canceled(false)
 {
     this->setTitle("ورود");
 
@@ -23,6 +24,12 @@ LoginWindow::LoginWindow(QWindow *parent)
     this->setX((screenSize.width() - this->width()) / 2.0);
     this->setY((screenSize.height() - this->height()) / 2.0);
 
+    QObject *rootObject = this->rootObject();
+    QObject::connect(rootObject, SIGNAL(signal_closed()),
+                     this, SLOT(OnClosed()));
+    QObject::connect(rootObject, SIGNAL(signal_canceled()),
+                     this, SLOT(OnCanceled()));
+
     QObject::connect(this, SIGNAL(signal_XChanged(int)),
                      this, SLOT(OnXChanged(int)));
     QObject::connect(this, SIGNAL(signal_YChanged(int)),
@@ -32,6 +39,20 @@ LoginWindow::LoginWindow(QWindow *parent)
 LoginWindow::~LoginWindow()
 {
 
+}
+
+void LoginWindow::OnClosed()
+{
+    this->close();
+
+    if (m_canceled)
+        emit signal_LoginCanceled();
+}
+
+
+void LoginWindow::OnCanceled()
+{
+    m_canceled = true;
 }
 
 void LoginWindow::OnXChanged(int x)

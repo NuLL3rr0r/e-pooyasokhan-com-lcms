@@ -13,7 +13,8 @@ Rectangle {
     LayoutMirroring.enabled: true
     LayoutMirroring.childrenInherit: true
 
-    property bool isWindowAnimRunning: false;
+    property bool isAnAnimRunning: false;
+
     property int windowOpenAnimDuration: 750;
     property string windowOpenAnimEasing: Easing.InOutElastic;
     property real windowOpenAnimEasingAmplitude : 2.0;
@@ -34,8 +35,21 @@ Rectangle {
     property real windowOpenContentFocusAnimEasingOvershoot: 0.0;
     property real windowOpenContentFocusAnimEasingPeriod: 0.0;
 
+    property int windowCloseAnimDuration: 650;
+    property string windowCloseAnimEasing: Easing.InOutElastic;
+    property real windowCloseAnimEasingAmplitude : 2.0;
+    property real windowCloseAnimEasingOvershoot: 0.0;
+    property real windowCloseAnimEasingPeriod: 2.5;
+    property int windowCloseAnimStartWindowX: 0.0;
+    property int windowCloseAnimStartWindowY: 0.0;
+    property int windowCloseAnimEndWindowX: 0.0;
+    property int windowCloseAnimEndWindowY: 0.0;
+    property int windowCloseContentAnimDuration: 100;
+    property string windowCloseContentAnimEasing: Easing.OutBack;
+    property real windowCloseContentAnimEasingAmplitude: 0.0;
+    property real windowCloseContentAnimEasingOvershoot: 0.0;
+    property real windowCloseContentAnimEasingPeriod: 0.0;
 
-    property bool isFormAnimRunning: false;
     property int formAnimDuration: 500;
     property int formAnimDurationWindow: formAnimDuration / 5;
     property string formAnimEasing: Easing.OutExpo;
@@ -44,18 +58,24 @@ Rectangle {
     property int formAnimEndWindowX: 0.0;
     property int formAnimEndWindowY: 0.0;
 
+    signal signal_closed();
+    signal signal_canceled();
+
     function onShown() {
-        loginWindow.windowOpenAnimStartWindowX = cppLoginWindow.X;
-        loginWindow.windowOpenAnimStartWindowY = cppLoginWindow.Y;
-        loginWindow.windowOpenAnimEndWindowX = (((loginWindow.width
-                                                  -loginRectangle.parentWidth)
-                                                  / 2)
-                                                 + cppLoginWindow.X);
-        loginWindow.windowOpenAnimEndWindowY = (((loginWindow.height
-                                                  - loginRectangle.parentHeight)
-                                                  / 2)
-                                                 + cppLoginWindow.Y);
-        windowOpenAnim.start();
+        if (!loginWindow.isAnAnimRunning) {
+            loginWindow.isAnAnimRunning = true;
+            loginWindow.windowOpenAnimStartWindowX = cppLoginWindow.X;
+            loginWindow.windowOpenAnimStartWindowY = cppLoginWindow.Y;
+            loginWindow.windowOpenAnimEndWindowX = (((loginWindow.width
+                                                      - loginRectangle.parentWidth)
+                                                     / 2)
+                                                    + cppLoginWindow.X);
+            loginWindow.windowOpenAnimEndWindowY = (((loginWindow.height
+                                                      - loginRectangle.parentHeight)
+                                                     / 2)
+                                                    + cppLoginWindow.Y);
+            windowOpenAnim.start();
+        }
     }
 
     Component.onCompleted: {
@@ -133,7 +153,7 @@ Rectangle {
                         width: 106;
 
                         onClicked: {
-                            if (!loginWindow.isFormAnimRunning) {
+                            if (!loginWindow.isAnAnimRunning) {
                             }
                         }
                     }
@@ -141,13 +161,28 @@ Rectangle {
 
                 Column {
                     spacing: 8;
+
                     Button {
+                        id: loginCancelButton;
                         text: "لغو";
                         style: buttonStyle;
                         width: 106;
 
                         onClicked: {
-                            if (!loginWindow.isFormAnimRunning) {
+                            if (!loginWindow.isAnAnimRunning) {
+                                signal_canceled();
+                                loginWindow.windowCloseAnimStartWindowX = cppLoginWindow.X;
+                                loginWindow.windowCloseAnimStartWindowY = cppLoginWindow.Y;
+                                loginWindow.windowCloseAnimEndWindowX = (((loginWindow.width
+                                                                           - 1)
+                                                                          / 2)
+                                                                         + cppLoginWindow.X);
+                                loginWindow.windowCloseAnimEndWindowY = (((loginWindow.height
+                                                                           - 1)
+                                                                          / 2)
+                                                                         + cppLoginWindow.Y)
+
+                                windowCloseAnim.start();
                             }
                         }
                     }
@@ -167,8 +202,8 @@ Rectangle {
                         width: 220;
 
                         onClicked: {
-                            if (!loginWindow.isFormAnimRunning) {
-                                loginWindow.isFormAnimRunning = true;
+                            if (!loginWindow.isAnAnimRunning) {
+                                loginWindow.isAnAnimRunning = true;
                                 loginWindow.formAnimStartWindowX = cppLoginWindow.X;
                                 loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
                                 loginWindow.formAnimEndWindowX = (((loginRectangle.parentWidth
@@ -201,8 +236,8 @@ Rectangle {
                         width: 220;
 
                         onClicked: {
-                            if (!loginWindow.isFormAnimRunning) {
-                                loginWindow.isFormAnimRunning = true;
+                            if (!loginWindow.isAnAnimRunning) {
+                                loginWindow.isAnAnimRunning = true;
                                 loginWindow.formAnimStartWindowX = cppLoginWindow.X;
                                 loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
                                 loginWindow.formAnimEndWindowX = (((loginRectangle.parentWidth
@@ -267,7 +302,7 @@ Rectangle {
                         width: 106;
 
                         onClicked: {
-                            if (!loginWindow.isFormAnimRunning) {
+                            if (!loginWindow.isAnAnimRunning) {
                             }
                         }
                     }
@@ -281,8 +316,8 @@ Rectangle {
                         width: 106;
 
                         onClicked: {
-                            if (!loginWindow.isFormAnimRunning) {
-                                loginWindow.isFormAnimRunning = true;
+                            if (!loginWindow.isAnAnimRunning) {
+                                loginWindow.isAnAnimRunning = true;
                                 loginWindow.formAnimStartWindowX = cppLoginWindow.X;
                                 loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
                                 loginWindow.formAnimEndWindowX = (((forgotRectangle.parentWidth
@@ -665,7 +700,7 @@ Rectangle {
                         width: 106;
 
                         onClicked: {
-                            if (!loginWindow.isFormAnimRunning) {
+                            if (!loginWindow.isAnAnimRunning) {
                             }
                         }
                     }
@@ -679,8 +714,8 @@ Rectangle {
                         width: 106;
 
                         onClicked: {
-                            if (!loginWindow.isFormAnimRunning) {
-                                loginWindow.isFormAnimRunning = true;
+                            if (!loginWindow.isAnAnimRunning) {
+                                loginWindow.isAnAnimRunning = true;
                                 loginWindow.formAnimStartWindowX = cppLoginWindow.X;
                                 loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
                                 loginWindow.formAnimEndWindowX = (((registerRectangle.parentWidth
@@ -870,10 +905,145 @@ Rectangle {
             if (!windowOpenAnim.running) {
                 loginEmailTextField.selectAll();
                 loginEmailTextField.focus = true;
+                loginWindow.isAnAnimRunning = false;
             }
         }
     }
 
+    SequentialAnimation {
+        id: windowCloseAnim;
+
+        SequentialAnimation {
+            PropertyAnimation {
+                target: loginCancelButton;
+                property: "opacity";
+                from: 1.0;
+                to: 0.0;
+                duration: loginWindow.windowCloseContentAnimDuration;
+                easing.type: loginWindow.windowCloseContentAnimEasing;
+                easing.amplitude: windowCloseContentAnimEasingAmplitude;
+                easing.overshoot: windowCloseContentAnimEasingOvershoot;
+                easing.period: windowCloseContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginButtonsRow3;
+                property: "opacity";
+                from: 1.0;
+                to: 0.0;
+                duration: loginWindow.windowCloseContentAnimDuration;
+                easing.type: loginWindow.windowCloseContentAnimEasing;
+                easing.amplitude: windowCloseContentAnimEasingAmplitude;
+                easing.overshoot: windowCloseContentAnimEasingOvershoot;
+                easing.period: windowCloseContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginButtonsRow2;
+                property: "opacity";
+                from: 1.0;
+                to: 0.0;
+                duration: loginWindow.windowCloseContentAnimDuration;
+                easing.type: loginWindow.windowCloseContentAnimEasing;
+                easing.amplitude: windowCloseContentAnimEasingAmplitude;
+                easing.overshoot: windowCloseContentAnimEasingOvershoot;
+                easing.period: windowCloseContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginButtonsRow1;
+                property: "opacity";
+                from: 1.0;
+                to: 0.0;
+                duration: loginWindow.windowCloseContentAnimDuration;
+                easing.type: loginWindow.windowCloseContentAnimEasing;
+                easing.amplitude: windowCloseContentAnimEasingAmplitude;
+                easing.overshoot: windowCloseContentAnimEasingOvershoot;
+                easing.period: windowCloseContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginPwdRow;
+                property: "opacity";
+                from: 1.0;
+                to: 0.0;
+                duration: loginWindow.windowCloseContentAnimDuration;
+                easing.type: loginWindow.windowCloseContentAnimEasing;
+                easing.amplitude: windowCloseContentAnimEasingAmplitude;
+                easing.overshoot: windowCloseContentAnimEasingOvershoot;
+                easing.period: windowCloseContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginEmailRow;
+                property: "opacity";
+                from: 1.0;
+                to: 0.0;
+                duration: loginWindow.windowCloseContentAnimDuration;
+                easing.type: loginWindow.windowCloseContentAnimEasing;
+                easing.amplitude: windowCloseContentAnimEasingAmplitude;
+                easing.overshoot: windowCloseContentAnimEasingOvershoot;
+                easing.period: windowCloseContentAnimEasingPeriod;
+            }
+        }
+
+        ParallelAnimation {
+            NumberAnimation {
+                target: cppLoginWindow;
+                property: "X";
+                from: loginWindow.windowCloseAnimStartWindowX;
+                to: loginWindow.windowCloseAnimEndWindowX;
+                duration: loginWindow.windowCloseAnimDuration;
+                easing.type: loginWindow.windowCloseAnimEasing;
+                easing.amplitude: windowCloseAnimEasingAmplitude;
+                easing.period: windowCloseAnimEasingPeriod;
+                easing.overshoot: windowCloseAnimEasingOvershoot;
+            }
+
+            NumberAnimation {
+                target: cppLoginWindow;
+                property: "Y";
+                from: loginWindow.windowCloseAnimStartWindowY;
+                to: loginWindow.windowCloseAnimEndWindowY;
+                duration: loginWindow.windowCloseAnimDuration;
+                easing.type: loginWindow.windowCloseAnimEasing;
+                easing.amplitude: windowCloseAnimEasingAmplitude;
+                easing.period: windowCloseAnimEasingPeriod;
+                easing.overshoot: windowCloseAnimEasingOvershoot;
+            }
+
+            NumberAnimation {
+                target: loginWindow;
+                property: "width";
+                from: loginWindow.width;
+                to: 1;
+                duration: loginWindow.windowCloseAnimDuration;
+                easing.type: loginWindow.windowCloseAnimEasing;
+                easing.amplitude: windowCloseAnimEasingAmplitude;
+                easing.period: windowCloseAnimEasingPeriod;
+                easing.overshoot: windowCloseAnimEasingOvershoot;
+            }
+
+            NumberAnimation {
+                target: loginWindow;
+                property: "height";
+                from: loginWindow.height;
+                to: 1;
+                duration: loginWindow.windowCloseAnimDuration;
+                easing.type: loginWindow.windowCloseAnimEasing;
+                easing.amplitude: windowCloseAnimEasingAmplitude;
+                easing.period: windowCloseAnimEasingPeriod;
+                easing.overshoot: windowCloseAnimEasingOvershoot;
+            }
+        }
+
+        onRunningChanged: {
+            if (!windowCloseAnim.running) {
+                signal_closed();
+                loginWindow.isAnAnimRunning = false;
+            }
+        }
+    }
 
     ParallelAnimation {
         id: loginToForgotAnim;
@@ -935,9 +1105,9 @@ Rectangle {
         onRunningChanged: {
             if (!loginToForgotAnim.running) {
                 loginRectangle.visible = false;
-                loginWindow.isFormAnimRunning = false;
                 forgotEmailTextField.selectAll();
                 forgotEmailTextField.focus = true;
+                loginWindow.isAnAnimRunning = false;
             }
         }
     }
@@ -1002,9 +1172,9 @@ Rectangle {
         onRunningChanged: {
             if (!loginToRegisterAnim.running) {
                 loginRectangle.visible = false;
-                loginWindow.isFormAnimRunning = false;
                 registerEmailTextField.selectAll();
                 registerEmailTextField.focus = true;
+                loginWindow.isAnAnimRunning = false;
             }
         }
     }
@@ -1067,9 +1237,9 @@ Rectangle {
         onRunningChanged: {
             if (!forgotToLoginAnim.running) {
                 forgotRectangle.visible = false;
-                loginWindow.isFormAnimRunning = false;
                 loginEmailTextField.selectAll();
                 loginEmailTextField.focus = true;
+                loginWindow.isAnAnimRunning = false;
             }
         }
     }
@@ -1134,9 +1304,9 @@ Rectangle {
         onRunningChanged: {
             if (!registerToLoginAnim.running) {
                 registerRectangle.visible = false;
-                loginWindow.isFormAnimRunning = false;
                 loginEmailTextField.selectAll();
                 loginEmailTextField.focus = true;
+                loginWindow.isAnAnimRunning = false;
             }
         }
     }

@@ -49,7 +49,7 @@ int main(int argc, char **argv)
             std::make_unique<EPSDesktop::Application>();
     application->Start();
 
-    qDebug() << VERSION_INFO_BUILD_COMPILER;
+    /*qDebug() << VERSION_INFO_BUILD_COMPILER;
     qDebug() << VERSION_INFO_BUILD_DATE;
     qDebug() << VERSION_INFO_BUILD_HOST;
     qDebug() << VERSION_INFO_BUILD_PROCESSOR;
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     qDebug() << VERSION_INFO_COPYRIGHT_YEAR;
     qDebug() << VERSION_INFO_DEVELOPER;
     qDebug() << VERSION_INFO_PRODUCT_NAME;
-    qDebug() << VERSION_INFO_PRODUCT_VERSION;
+    qDebug() << VERSION_INFO_PRODUCT_VERSION;*/
 
     return app->exec();
 }

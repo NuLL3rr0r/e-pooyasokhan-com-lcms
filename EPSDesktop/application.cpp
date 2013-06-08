@@ -30,12 +30,31 @@ void Application::OnSplashScreenConnectionEstablished()
     m_splashScreen.release();
 
     m_loginWindow = make_unique<LoginWindow>();
-    m_loginWindow->showNormal();
+
+    QObject::connect(m_loginWindow.get(), SIGNAL(signal_LoginCanceled()),
+                     this, SLOT(OnLoginCanceled()));
+    QObject::connect(m_loginWindow.get(), SIGNAL(signal_LoginSucceeded()),
+                     this, SLOT(OnLoginSucceeded()));
+
+    m_loginWindow->OpenWidnow();
+}
+
+void Application::OnLoginCanceled()
+{
+    Terminate();
+}
+
+void Application::OnLoginSucceeded()
+{
+    m_loginWindow->deleteLater();
+    m_loginWindow.release();
+
+    qDebug() << "App Entery...";
 }
 
 void Application::Start()
 {
-    if (m_isInitialized)
+    /*if (m_isInitialized)
         return;
 
     m_isInitialized = true;
@@ -47,7 +66,11 @@ void Application::Start()
     QObject::connect(m_splashScreen.get(), SIGNAL(signal_ConnectionEstablished()),
                              this, SLOT(OnSplashScreenConnectionEstablished()));
 
-    m_splashScreen->showNormal();
+    m_splashScreen->showNormal();*/
+
+    // tempooooooooooooooooooooooo
+    m_splashScreen = make_unique<SplashScreen>();
+    OnSplashScreenConnectionEstablished();
 }
 
 void Application::Terminate()

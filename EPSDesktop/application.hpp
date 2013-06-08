@@ -32,6 +32,8 @@ signals:
 private slots:
     void OnSplashScreenConnectionFailed();
     void OnSplashScreenConnectionEstablished();
+    void OnLoginCanceled();
+    void OnLoginSucceeded();
 
 public:
     void Start();

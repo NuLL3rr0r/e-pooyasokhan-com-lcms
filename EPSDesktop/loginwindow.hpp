@@ -15,16 +15,24 @@ class EPSDesktop::LoginWindow : public QQuickView
     Q_PROPERTY( int X READ GetX WRITE SetX NOTIFY signal_XChanged )
     Q_PROPERTY( int Y READ GetY WRITE SetY NOTIFY signal_YChanged )
 
+private:
+    bool m_canceled;
+
 public:
     LoginWindow(QWindow *parent = 0);
     ~LoginWindow();
 
 signals:
     void signal_Shown();
+    void signal_Closing();
     void signal_XChanged(int);
     void signal_YChanged(int);
+    void signal_LoginCanceled();
+    void signal_LoginSucceeded();
 
 private slots:
+    void OnCanceled();
+    void OnClosed();
     void OnXChanged(int x);
     void OnYChanged(int y);
 
