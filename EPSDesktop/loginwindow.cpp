@@ -90,7 +90,5 @@ void LoginWindow::OpenWidnow()
 {
     this->showNormal();
     emit signal_Shown();
-
-    Loading::Anim()->Start();
 }
 
