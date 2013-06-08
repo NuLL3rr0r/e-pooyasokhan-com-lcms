@@ -1,7 +1,9 @@
 <RCC>
     <qresource prefix="/">
+        <file>loading.qml</file>
         <file>loginwindow.qml</file>
         <file>mainwindow.qml</file>
+        <file>pacman.gif</file>
         <file>splashscreen.png</file>
         <file>splashscreen.qml</file>
     </qresource>

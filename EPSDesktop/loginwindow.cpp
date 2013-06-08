@@ -4,6 +4,7 @@
 #include <QQuickItem>
 #include <QScreen>
 #include "loginwindow.hpp"
+#include "loading.hpp"
 
 using namespace EPSDesktop;
 
@@ -13,8 +14,8 @@ LoginWindow::LoginWindow(QWindow *parent)
 {
     this->setTitle("ورود");
 
-    this->setFlags( Qt::Window | Qt::MSWindowsFixedSizeDialogHint
-                   | Qt::WindowTitleHint );
+    this->setFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint
+                   | Qt::WindowTitleHint);
 
     this->rootContext()->setContextProperty("cppLoginWindow", this);
 
@@ -89,5 +90,7 @@ void LoginWindow::OpenWidnow()
 {
     this->showNormal();
     emit signal_Shown();
+
+    Loading::Anim()->Start();
 }
 

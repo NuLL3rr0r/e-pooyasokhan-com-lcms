@@ -88,12 +88,12 @@ void Application::Start()
     m_splashScreen->showNormal();*/
 
     // tempooooooooooooooooooooooo
-    //m_splashScreen = make_unique<SplashScreen>();
-    //OnSplashScreenConnectionEstablished();
+    m_splashScreen = make_unique<SplashScreen>();
+    OnSplashScreenConnectionEstablished();
 
     // tempooooooooooooooooooooooo
-    m_loginWindow = make_unique<LoginWindow>();
-    OnLoginSucceeded();
+    //m_loginWindow = make_unique<LoginWindow>();
+    //OnLoginSucceeded();
 }
 
 void Application::Terminate()
