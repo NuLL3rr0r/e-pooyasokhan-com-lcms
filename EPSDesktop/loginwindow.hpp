@@ -24,7 +24,6 @@ public:
 
 signals:
     void signal_Shown();
-    void signal_Closing();
     void signal_XChanged(int);
     void signal_YChanged(int);
     void signal_LoginCanceled();

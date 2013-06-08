@@ -49,7 +49,8 @@ void Application::OnLoginSucceeded()
     m_loginWindow->deleteLater();
     m_loginWindow.release();
 
-    qDebug() << "App Entery...";
+    m_mainWindow = make_unique<MainWindow>(MainWindow::EUserType_Student);
+    m_loginWindow->OpenWidnow();
 }
 
 void Application::Start()
@@ -69,8 +70,12 @@ void Application::Start()
     m_splashScreen->showNormal();*/
 
     // tempooooooooooooooooooooooo
-    m_splashScreen = make_unique<SplashScreen>();
-    OnSplashScreenConnectionEstablished();
+    //m_splashScreen = make_unique<SplashScreen>();
+    //OnSplashScreenConnectionEstablished();
+
+    // tempooooooooooooooooooooooo
+    m_loginWindow = make_unique<LoginWindow>();
+    OnLoginSucceeded();
 }
 
 void Application::Terminate()
