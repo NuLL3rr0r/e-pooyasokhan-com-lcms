@@ -125,8 +125,6 @@ Rectangle {
 
         onRunningChanged: {
             if (!windowOpenAnim.running) {
-                loginEmailTextField.selectAll();
-                loginEmailTextField.focus = true;
                 mainWindow.isAnAnimRunning = false;
             }
         }
