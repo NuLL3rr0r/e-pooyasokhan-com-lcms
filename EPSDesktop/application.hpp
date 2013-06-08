@@ -34,6 +34,7 @@ private slots:
     void OnSplashScreenConnectionEstablished();
     void OnLoginCanceled();
     void OnLoginSucceeded();
+    void OnMainWindowClosed();
 
 public:
     void Start();

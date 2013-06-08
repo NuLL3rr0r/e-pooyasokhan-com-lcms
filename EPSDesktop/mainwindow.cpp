@@ -30,8 +30,7 @@ MainWindow::MainWindow(const EUserType &userType, QWindow *parent)
 
     this->setTitle(windowTitle);
 
-    this->setFlags( Qt::Window | Qt::MSWindowsFixedSizeDialogHint
-                   | Qt::WindowTitleHint );
+    this->setFlags(Qt::FramelessWindowHint);
 
     this->rootContext()->setContextProperty("cppMainWindow", this);
 
@@ -92,6 +91,17 @@ void MainWindow::SetY(int y)
 {
     emit signal_YChanged(y);
 }
+
+int MainWindow::GetScreenWidth() const
+{
+    return QApplication::primaryScreen()->size().width();
+}
+
+int MainWindow::GetScreenHeight() const
+{
+    return QApplication::primaryScreen()->size().height();
+}
+
 
 void MainWindow::OpenWidnow()
 {

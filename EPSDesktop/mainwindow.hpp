@@ -46,6 +46,10 @@ public:
     void SetY(int y);
 
 public:
+    Q_INVOKABLE int GetScreenWidth() const;
+    Q_INVOKABLE int GetScreenHeight() const;
+
+public:
     void OpenWidnow();
 
 private:

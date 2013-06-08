@@ -21,6 +21,9 @@ Application::~Application()
 
 void Application::OnSplashScreenConnectionFailed()
 {
+    m_splashScreen->deleteLater();
+    m_splashScreen.release();
+
     Terminate();
 }
 
@@ -41,6 +44,9 @@ void Application::OnSplashScreenConnectionEstablished()
 
 void Application::OnLoginCanceled()
 {
+    m_loginWindow->deleteLater();
+    m_loginWindow.release();
+
     Terminate();
 }
 
@@ -50,7 +56,19 @@ void Application::OnLoginSucceeded()
     m_loginWindow.release();
 
     m_mainWindow = make_unique<MainWindow>(MainWindow::EUserType_Student);
-    m_loginWindow->OpenWidnow();
+
+    QObject::connect(m_mainWindow.get(), SIGNAL(signal_Closed()),
+                     this, SLOT(OnMainWindowClosed()));
+
+    m_mainWindow->OpenWidnow();
+}
+
+void Application::OnMainWindowClosed()
+{
+    /*m_mainWindow->deleteLater();
+    m_mainWindow.release();
+
+    Terminate();*/
 }
 
 void Application::Start()
