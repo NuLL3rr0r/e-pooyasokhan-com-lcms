@@ -23,9 +23,9 @@ LoginWindow::LoginWindow(QWindow *parent)
     this->setX((screenSize.width() - this->width()) / 2.0);
     this->setY((screenSize.height() - this->height()) / 2.0);
 
-    QObject::connect(this, SIGNAL(XChanged(int)),
+    QObject::connect(this, SIGNAL(signal_XChanged(int)),
                      this, SLOT(OnXChanged(int)));
-    QObject::connect(this, SIGNAL(YChanged(int)),
+    QObject::connect(this, SIGNAL(signal_YChanged(int)),
                      this, SLOT(OnYChanged(int)));
 }
 
@@ -51,7 +51,7 @@ int LoginWindow::GetX() const
 
 void LoginWindow::SetX(int x)
 {
-    emit XChanged(x);
+    emit signal_XChanged(x);
 }
 
 int LoginWindow::GetY() const
@@ -61,6 +61,12 @@ int LoginWindow::GetY() const
 
 void LoginWindow::SetY(int y)
 {
-    emit YChanged(y);
+    emit signal_YChanged(y);
+}
+
+void LoginWindow::OpenWidnow()
+{
+    this->showNormal();
+    emit signal_Shown();
 }
 

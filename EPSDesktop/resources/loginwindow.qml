@@ -7,11 +7,33 @@ import QtQuick.Layouts 1.0
 Rectangle {
     id: loginWindow;
     color: "transparent";
-    width: 300;
-    height: 220;
+    width: 1;
+    height: 1;
 
     LayoutMirroring.enabled: true
     LayoutMirroring.childrenInherit: true
+
+    property bool isWindowAnimRunning: false;
+    property int windowOpenAnimDuration: 750;
+    property string windowOpenAnimEasing: Easing.InOutElastic;
+    property real windowOpenAnimEasingAmplitude : 2.0;
+    property real windowOpenAnimEasingOvershoot: 0.0;
+    property real windowOpenAnimEasingPeriod: 2.5;
+    property int windowOpenAnimStartWindowX: 0.0;
+    property int windowOpenAnimStartWindowY: 0.0;
+    property int windowOpenAnimEndWindowX: 0.0;
+    property int windowOpenAnimEndWindowY: 0.0;
+    property int windowOpenContentAnimDuration: 200;
+    property string windowOpenContentAnimEasing: Easing.InCirc;
+    property real windowOpenContentAnimEasingAmplitude: 0.0;
+    property real windowOpenContentAnimEasingOvershoot: 0.0;
+    property real windowOpenContentAnimEasingPeriod: 0.0;
+    property int windowOpenContentFocusAnimDuration: 350;
+    property string windowOpenContentFocusAnimEasing: Easing.OutBounce;
+    property real windowOpenContentFocusAnimEasingAmplitude: 2.75;
+    property real windowOpenContentFocusAnimEasingOvershoot: 0.0;
+    property real windowOpenContentFocusAnimEasingPeriod: 0.0;
+
 
     property bool isFormAnimRunning: false;
     property int formAnimDuration: 500;
@@ -22,9 +44,29 @@ Rectangle {
     property int formAnimEndWindowX: 0.0;
     property int formAnimEndWindowY: 0.0;
 
+    function onShown() {
+        loginWindow.windowOpenAnimStartWindowX = cppLoginWindow.X;
+        loginWindow.windowOpenAnimStartWindowY = cppLoginWindow.Y;
+        loginWindow.windowOpenAnimEndWindowX = (((loginWindow.width
+                                                  -loginRectangle.parentWidth)
+                                                  / 2)
+                                                 + cppLoginWindow.X);
+        loginWindow.windowOpenAnimEndWindowY = (((loginWindow.height
+                                                  - loginRectangle.parentHeight)
+                                                  / 2)
+                                                 + cppLoginWindow.Y);
+        windowOpenAnim.start();
+    }
+
     Component.onCompleted: {
+        cppLoginWindow.onSignal_Shown.connect(loginWindow.onShown);
+        loginEmailRow.opacity = 0.0;
+        loginPwdRow.opacity = 0.0;
+        loginButtonsRow1.opacity = 0.0;
+        loginButtonsRow2.opacity = 0.0;
+        loginButtonsRow3.opacity = 0.0;
         loginRectangle.visible = true;
-        loginEmailTextField.focus = true;
+        loginEmailTextField.focus = false;
     }
 
     Rectangle {
@@ -40,6 +82,7 @@ Rectangle {
             spacing: 12;
 
             Row {
+                id: loginEmailRow;
                 spacing: 8;
 
                 Column {
@@ -59,6 +102,7 @@ Rectangle {
             }
 
             Row {
+                id: loginPwdRow;
                 spacing: 8;
 
                 Column {
@@ -77,6 +121,7 @@ Rectangle {
             }
 
             Row {
+                id: loginButtonsRow1;
                 spacing: 8;
 
                 Column {
@@ -110,6 +155,7 @@ Rectangle {
             }
 
             Row {
+                id: loginButtonsRow2;
                 spacing: 8;
 
                 Column {
@@ -127,11 +173,11 @@ Rectangle {
                                 loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
                                 loginWindow.formAnimEndWindowX = (((loginRectangle.parentWidth
                                                                        - forgotRectangle.parentWidth)
-                                                                      / 2.0)
+                                                                      / 2)
                                                                      + cppLoginWindow.X);
                                 loginWindow.formAnimEndWindowY = (((loginRectangle.parentHeight
                                                                        - forgotRectangle.parentHeight)
-                                                                      / 2.0)
+                                                                      / 2)
                                                                      + cppLoginWindow.Y);;
                                 forgotRectangle.opacity = 0.0;
                                 forgotRectangle.visible = true;
@@ -146,6 +192,7 @@ Rectangle {
                 spacing: 8;
 
                 Column {
+                    id: loginButtonsRow3;
                     spacing: 8;
 
                     Button {
@@ -160,11 +207,11 @@ Rectangle {
                                 loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
                                 loginWindow.formAnimEndWindowX = (((loginRectangle.parentWidth
                                                                        - registerRectangle.parentWidth)
-                                                                      / 2.0)
+                                                                      / 2)
                                                                      + cppLoginWindow.X);
                                 loginWindow.formAnimEndWindowY = (((loginRectangle.parentHeight
                                                                        - registerRectangle.parentHeight)
-                                                                      / 2.0)
+                                                                      / 2)
                                                                      + cppLoginWindow.Y);;
                                 registerRectangle.opacity = 0.0;
                                 registerRectangle.visible = true;
@@ -240,11 +287,11 @@ Rectangle {
                                 loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
                                 loginWindow.formAnimEndWindowX = (((forgotRectangle.parentWidth
                                                                        - loginRectangle.parentWidth)
-                                                                      / 2.0)
+                                                                      / 2)
                                                                      + cppLoginWindow.X);
                                 loginWindow.formAnimEndWindowY = (((forgotRectangle.parentHeight
                                                                        - loginRectangle.parentHeight)
-                                                                      / 2.0)
+                                                                      / 2)
                                                                      + cppLoginWindow.Y);;
                                 loginRectangle.opacity = 0.0;
                                 loginRectangle.visible = true;
@@ -638,11 +685,11 @@ Rectangle {
                                 loginWindow.formAnimStartWindowY = cppLoginWindow.Y;
                                 loginWindow.formAnimEndWindowX = (((registerRectangle.parentWidth
                                                                        - loginRectangle.parentWidth)
-                                                                      / 2.0)
+                                                                      / 2)
                                                                      + cppLoginWindow.X);
                                 loginWindow.formAnimEndWindowY = (((registerRectangle.parentHeight
                                                                        - loginRectangle.parentHeight)
-                                                                      / 2.0)
+                                                                      / 2)
                                                                      + cppLoginWindow.Y);;
                                 loginRectangle.opacity = 0.0;
                                 loginRectangle.visible = true;
@@ -692,7 +739,143 @@ Rectangle {
     property Component radioButtonStyle: RadioButtonStyle {
     }
 
-    ParallelAnimation{
+    SequentialAnimation {
+        id: windowOpenAnim;
+
+        ParallelAnimation {
+            NumberAnimation {
+                target: cppLoginWindow;
+                property: "X";
+                from: loginWindow.windowOpenAnimStartWindowX;
+                to: loginWindow.windowOpenAnimEndWindowX;
+                duration: loginWindow.windowOpenAnimDuration;
+                easing.type: loginWindow.windowOpenAnimEasing;
+                easing.amplitude: windowOpenAnimEasingAmplitude;
+                easing.period: windowOpenAnimEasingPeriod;
+                easing.overshoot: windowOpenAnimEasingOvershoot;
+            }
+
+            NumberAnimation {
+                target: cppLoginWindow;
+                property: "Y";
+                from: loginWindow.windowOpenAnimStartWindowY;
+                to: loginWindow.windowOpenAnimEndWindowY;
+                duration: loginWindow.windowOpenAnimDuration;
+                easing.type: loginWindow.windowOpenAnimEasing;
+                easing.amplitude: windowOpenAnimEasingAmplitude;
+                easing.period: windowOpenAnimEasingPeriod;
+                easing.overshoot: windowOpenAnimEasingOvershoot;
+            }
+
+            NumberAnimation {
+                target: loginWindow;
+                property: "width";
+                from: loginWindow.width;
+                to: loginRectangle.parentWidth;
+                duration: loginWindow.windowOpenAnimDuration;
+                easing.type: loginWindow.windowOpenAnimEasing;
+                easing.amplitude: windowOpenAnimEasingAmplitude;
+                easing.period: windowOpenAnimEasingPeriod;
+                easing.overshoot: windowOpenAnimEasingOvershoot;
+            }
+
+            NumberAnimation {
+                target: loginWindow;
+                property: "height";
+                from: loginWindow.height;
+                to: loginRectangle.parentHeight;
+                duration: loginWindow.windowOpenAnimDuration;
+                easing.type: loginWindow.windowOpenAnimEasing;
+                easing.amplitude: windowOpenAnimEasingAmplitude;
+                easing.period: windowOpenAnimEasingPeriod;
+                easing.overshoot: windowOpenAnimEasingOvershoot;
+            }
+        }
+
+        SequentialAnimation {
+            PropertyAnimation {
+                target: loginEmailRow;
+                property: "opacity";
+                from: 0.0;
+                to: 1.0;
+                duration: loginWindow.windowOpenContentAnimDuration;
+                easing.type: loginWindow.windowOpenContentAnimEasing;
+                easing.amplitude: windowOpenContentAnimEasingAmplitude;
+                easing.overshoot: windowOpenContentAnimEasingOvershoot;
+                easing.period: windowOpenContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginPwdRow;
+                property: "opacity";
+                from: 0.0;
+                to: 1.0;
+                duration: loginWindow.windowOpenContentAnimDuration;
+                easing.type: loginWindow.windowOpenContentAnimEasing;
+                easing.amplitude: windowOpenContentAnimEasingAmplitude;
+                easing.overshoot: windowOpenContentAnimEasingOvershoot;
+                easing.period: windowOpenContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginButtonsRow1;
+                property: "opacity";
+                from: 0.0;
+                to: 1.0;
+                duration: loginWindow.windowOpenContentAnimDuration;
+                easing.type: loginWindow.windowOpenContentAnimEasing;
+                easing.amplitude: windowOpenContentAnimEasingAmplitude;
+                easing.overshoot: windowOpenContentAnimEasingOvershoot;
+                easing.period: windowOpenContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginButtonsRow2;
+                property: "opacity";
+                from: 0.0;
+                to: 1.0;
+                duration: loginWindow.windowOpenContentAnimDuration;
+                easing.type: loginWindow.windowOpenContentAnimEasing;
+                easing.amplitude: windowOpenContentAnimEasingAmplitude;
+                easing.overshoot: windowOpenContentAnimEasingOvershoot;
+                easing.period: windowOpenContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginButtonsRow3;
+                property: "opacity";
+                from: 0.0;
+                to: 1.0;
+                duration: loginWindow.windowOpenContentAnimDuration;
+                easing.type: loginWindow.windowOpenContentAnimEasing;
+                easing.amplitude: windowOpenContentAnimEasingAmplitude;
+                easing.overshoot: windowOpenContentAnimEasingOvershoot;
+                easing.period: windowOpenContentAnimEasingPeriod;
+            }
+
+            PropertyAnimation {
+                target: loginEmailRow;
+                property: "opacity";
+                from: 0.3;
+                to: 1.0;
+                duration: loginWindow.windowOpenContentFocusAnimDuration;
+                easing.type: loginWindow.windowOpenContentFocusAnimEasing;
+                easing.amplitude: windowOpenContentFocusAnimEasingAmplitude;
+                easing.overshoot: windowOpenContentFocusAnimEasingOvershoot;
+                easing.period: windowOpenContentFocusAnimEasingPeriod;
+            }
+        }
+
+        onRunningChanged: {
+            if (!windowOpenAnim.running) {
+                loginEmailTextField.selectAll();
+                loginEmailTextField.focus = true;
+            }
+        }
+    }
+
+
+    ParallelAnimation {
         id: loginToForgotAnim;
 
         PropertyAnimation {
@@ -759,7 +942,7 @@ Rectangle {
         }
     }
 
-    ParallelAnimation{
+    ParallelAnimation {
         id: loginToRegisterAnim;
 
         PropertyAnimation {
@@ -826,7 +1009,7 @@ Rectangle {
         }
     }
 
-    ParallelAnimation{
+    ParallelAnimation {
         id: forgotToLoginAnim;
 
         PropertyAnimation {
@@ -891,7 +1074,7 @@ Rectangle {
         }
     }
 
-    ParallelAnimation{
+    ParallelAnimation {
         id: registerToLoginAnim;
 
         PropertyAnimation {
