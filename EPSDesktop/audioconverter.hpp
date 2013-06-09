@@ -12,7 +12,7 @@ namespace EPSDesktop {
 class EPSDesktop::AudioConverter
 {
 public:
-    static void RawToWave(const std::string &rawFile, const std::string &waveFile,
+    static bool RawToWave(const std::string &rawFile, const std::string &waveFile,
                           unsigned int sampleRate, unsigned short channels);
 
 private:
@@ -22,10 +22,14 @@ private:
     }
 
     template <typename SampleType>
-    static void WriteWaveFromBuffer(const char *outFile, SampleType *buffer, size_t bufferSize,
+    static bool WriteWaveFromBuffer(const char *outFile, SampleType *buffer, size_t bufferSize,
                                     unsigned int sampleRate, unsigned short channels)
     {
         std::ofstream stream(outFile, std::ios::binary);
+
+        if (!stream.is_open())
+            return false;
+
         stream.write("RIFF", 4);
         WriteToStream<int>(stream, 36 + bufferSize);
         stream.write("WAVE", 4);
@@ -40,6 +44,8 @@ private:
         stream.write("data", 4);
         stream.write((const char *)&bufferSize, 4);
         stream.write((const char *)buffer, bufferSize);
+
+        return true;
     }
 };
 
