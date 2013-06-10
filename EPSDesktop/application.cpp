@@ -65,15 +65,15 @@ void Application::OnLoginSucceeded()
 
 void Application::OnMainWindowClosed()
 {
-    /*m_mainWindow->deleteLater();
+    m_mainWindow->deleteLater();
     m_mainWindow.release();
 
-    Terminate();*/
+    Terminate();
 }
 
 void Application::Start()
 {
-    /*if (m_isInitialized)
+    if (m_isInitialized)
         return;
 
     m_isInitialized = true;
@@ -85,11 +85,11 @@ void Application::Start()
     QObject::connect(m_splashScreen.get(), SIGNAL(signal_ConnectionEstablished()),
                              this, SLOT(OnSplashScreenConnectionEstablished()));
 
-    m_splashScreen->showNormal();*/
+    m_splashScreen->showNormal();
 
     // tempooooooooooooooooooooooo
-    m_splashScreen = make_unique<SplashScreen>();
-    OnSplashScreenConnectionEstablished();
+    //m_splashScreen = make_unique<SplashScreen>();
+    //OnSplashScreenConnectionEstablished();
 
     // tempooooooooooooooooooooooo
     //m_loginWindow = make_unique<LoginWindow>();
