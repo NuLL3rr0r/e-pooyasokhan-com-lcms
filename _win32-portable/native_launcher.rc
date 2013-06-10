@@ -1,0 +1,27 @@
+1 ICON "..\\EPSDesktop\\resources\\app-icon.ico"
+
+2 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "e-pooyasokhan.com"
+      VALUE "FileDescription", "The EPS Desktop Client Launcher"
+      VALUE "FileVersion", "1.0"
+      VALUE "InternalName", "EPS_DESKTOP_LAUNCHER"
+      VALUE "LegalCopyright", "e-pooyasokhan.com"
+      VALUE "OriginalFilename", "eps-launcher.exe"
+      VALUE "ProductName", "EPS Desktop Launcher"
+      VALUE "ProductVersion", "1.0"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
+
