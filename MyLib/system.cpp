@@ -41,9 +41,9 @@ void System::ReleaseLock(int &handle)
 bool System::GetLock(const std::string &name, HANDLE &out_handle)
 {
     try {
-        out_handle = OpenMutex(MUTEX_ALL_ACCESS, TRUE, name.c_str());
+        out_handle = OpenMutexA(MUTEX_ALL_ACCESS, TRUE, name.c_str());
         if (!out_handle) {
-            out_handle = CreateMutex(NULL, TRUE, name.c_str());
+            out_handle = CreateMutexA(NULL, TRUE, name.c_str());
             return true;
         }
     } catch (...) {

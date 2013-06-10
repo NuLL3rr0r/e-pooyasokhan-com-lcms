@@ -355,6 +355,7 @@ IF ( WIN32 AND MINGW )
     ENDIF (  )
 ENDIF (  )
 
+INCLUDE ( definitions.cmake )
 INCLUDE ( resources.cmake )
 
 SUBDIRS( MyLib EPSServer EPSDesktop )
