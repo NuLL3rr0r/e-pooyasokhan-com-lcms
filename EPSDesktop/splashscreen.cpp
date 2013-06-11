@@ -10,7 +10,8 @@ using namespace std;
 using namespace EPSDesktop;
 
 SplashScreen::SplashScreen(QWindow *parent)
-    : QQuickView(parent)
+    : QQuickView(parent),
+      m_connectionFailed(false)
 {
     this->setTitle("پویا سخن");
 
@@ -44,7 +45,11 @@ void SplashScreen::OnSplashScreenPoppedUp()
 void SplashScreen::OnSplashScreenTimedOut()
 {
     this->close();
-    emit signal_ConnectionEstablished();
+
+    if (!m_connectionFailed)
+        emit signal_ConnectionEstablished();
+    else
+        emit signal_ConnectionFailed();
 }
 
 void SplashScreen::OnConnectionEstablished(QNetworkReply *reply)
@@ -70,7 +75,8 @@ void SplashScreen::OnConnectionEstablished(QNetworkReply *reply)
             TryConnection();
             return;
         } else {
-            emit signal_ConnectionFailed();
+            m_connectionFailed = true;
+            emit signal_Closing();
         }
     }
 
@@ -103,7 +109,8 @@ void SplashScreen::TryConnection()
             TryConnection();
             return;
         } else {
-            emit signal_ConnectionFailed();
+            m_connectionFailed = true;
+            emit signal_Closing();
         }
     }
 

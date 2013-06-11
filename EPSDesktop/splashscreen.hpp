@@ -18,6 +18,9 @@ class EPSDesktop::SplashScreen : public QQuickView
 private:
     std::unique_ptr<QNetworkAccessManager> m_networkAccessManager;
 
+private:
+    bool m_connectionFailed;
+
 public:
     SplashScreen(QWindow *parent = 0);
     ~SplashScreen();
