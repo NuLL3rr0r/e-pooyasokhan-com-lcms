@@ -2,12 +2,13 @@
 
 
 #include <thread>
+#include <boost/filesystem.hpp>
 #include <vmime/vmime.hpp>
 
 #if defined (_WIN32)
-    #include <vmime/platforms/windows/windowsHandler.hpp>
+#include <vmime/platforms/windows/windowsHandler.hpp>
 #else
-    #include <vmime/platforms/posix/posixHandler.hpp>
+#include <vmime/platforms/posix/posixHandler.hpp>
 #endif  // defined (_WIN32)
 
 #include "mail.hpp"
@@ -17,6 +18,7 @@
 
 
 using namespace std;
+using namespace boost;
 using namespace MyLib;
 
 Mail::Mail()
@@ -24,11 +26,13 @@ Mail::Mail()
 }
 
 Mail::Mail(const std::string &from, const std::string &to,
-           const std::string &subject, const std::string &body)
+           const std::string &subject, const std::string &body,
+           const std::vector<std::string> &attachments)
     : m_from(from),
       m_to(to),
       m_subject(subject),
-      m_body(body)
+      m_body(body),
+      m_attachments(attachments)
 {
 }
 
@@ -52,6 +56,11 @@ std::string Mail::GetBody()
     return m_body;
 }
 
+const std::vector<std::string> &Mail::GetAttachments()
+{
+    return m_attachments;
+}
+
 void Mail::SetFrom(const std::string &from)
 {
     m_from = from;
@@ -70,6 +79,14 @@ void Mail::SetSubject(const std::string &subject)
 void Mail::SetBody(const std::string &body)
 {
     m_body = body;
+}
+
+void SetAttachments(const std::vector<std::string> &attachments)
+{
+    m_attachments.clear();
+    for (auto a : attachments) {
+        m_attachments.push_back(a);
+    }
 }
 
 bool Mail::Send() const
@@ -97,6 +114,15 @@ bool Mail::Send(std::string &out_error) const
         mb.constructTextPart(vmime::mediaType(vmime::mediaTypes::TEXT, vmime::mediaTypes::TEXT_HTML));
         mb.getTextPart()->setCharset(vmime::charsets::UTF_8);
         mb.getTextPart()->setText(vmime::create<vmime::stringContentHandler>(m_body));
+
+        if (m_attachments.size() > 0) {
+            for (auto a : m_attachments) {
+                vmime::ref <vmime::attachment> att = vmime::create <vmime::fileAttachment>
+                        (a, vmime::mediaType("application/octet-stream"),
+                         vmime::text(boost::filesystem::stem(a).string());
+                mb.appendAttachment(att);
+            }
+        }
 
         vmime::ref<vmime::message> msg = mb.construct();
 
