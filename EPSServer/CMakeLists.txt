@@ -42,42 +42,40 @@ IF ( BUILD_EPS_SERVER )
 
         ADD_CUSTOM_COMMAND ( TARGET ${EPS_SERVER_BIN_FILE}
             POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${MYLIB_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${BOOST_FILESYSTEM_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${BOOST_SYSTEM_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${BOOST_THREAD_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CPPDB_LIBRARY}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CPPDB_SQLITE3_DRIVER}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CRYPTOPP_LIBRARY}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${GEOIP_LIBRARY}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${LIBB64_LIBRARY}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${SQLITE3_LIBRARY}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${VMIME_LIBRARY}" "${CMAKE_CURRENT_BINARY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${ZEROMQ_LIBRARY}" "${CMAKE_CURRENT_BINARY_DIR}"
         )
 
         IF ( QT5_LIBRARY_PATH )
-            ADD_CUSTOM_COMMAND ( TARGET ${EPS_SERVER_BIN_FILE}
+            FOREACH ( TARGET_FILE ${MINGW_CPP_RUNTIME_FILES} )
+                ADD_CUSTOM_COMMAND ( TARGET ${EPS_SERVER_BIN_FILE}
                 POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT5_LIBRARY_PATH}/${QT5_GCC_LIB}" "${CMAKE_CURRENT_BINARY_DIR}"
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT5_LIBRARY_PATH}/${QT5_STDCPP_LIB}" "${CMAKE_CURRENT_BINARY_DIR}"
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT5_LIBRARY_PATH}/${QT5_WINPTHREAD_LIB}" "${CMAKE_CURRENT_BINARY_DIR}"
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+               "${QT5_LIBRARY_PATH}/${TARGET_FILE}" "${CMAKE_CURRENT_BINARY_DIR}"
             )
+            ENDFOREACH( TARGET_FILE ${MINGW_CPP_RUNTIME_FILES} )
         ENDIF (  )
     ENDIF (  )
 ENDIF (  )

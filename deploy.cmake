@@ -1,0 +1,240 @@
+IF ( WIN32 AND MINGW )
+    SET ( QT5_WIN32_MINGW_DEPLOY_DESTINATION_DIRS
+        platforms
+        QtGraphicalEffects
+        QtGraphicalEffects/private
+        QtQuick
+        QtQuick/Controls
+        QtQuick/Controls/Private
+        QtQuick/Controls/Styles
+        QtQuick/Controls/Styles/Base
+        QtQuick/Controls/Styles/Base/images
+        QtQuick/Controls/Styles/Desktop
+        QtQuick/Controls/Styles/Private
+        QtQuick/Dialogs
+        QtQuick/Dialogs/images
+        QtQuick/Dialogs/qml
+        QtQuick/Layouts
+        QtQuick.2
+    )
+
+    SET ( MINGW_CPP_RUNTIME_FILES
+        libgcc_s_dw2-1.dll
+        libstdc++-6.dll
+        libwinpthread-1.dll
+    )
+
+    SET ( QT5_WIN32_MINGW_DEPLOY_BIN_DIR_FILES
+        icudt51.dll
+        icuin51.dll
+        icuuc51.dll
+    )
+
+    SET ( QT5_WIN32_MINGW_DEPLOY_BIN_DIR_FILES_DEBUG
+        Qt5Cored.dll
+        Qt5Guid.dll
+        Qt5Multimediad.dll
+        Qt5Networkd.dll
+        Qt5Qmld.dll
+        Qt5Quickd.dll
+        Qt5V8d.dll
+        Qt5Widgetsd.dll
+    )
+
+    SET ( QT5_WIN32_MINGW_DEPLOY_BIN_DIR_FILES_RELEASE
+        Qt5Core.dll
+        Qt5Gui.dll
+        Qt5Multimedia.dll
+        Qt5Network.dll
+        Qt5Qml.dll
+        Qt5Quick.dll
+        Qt5V8.dll
+        Qt5Widgets.dll
+    )
+
+    SET ( QT5_WIN32_MINGW_DEPLOY_PLUGINS_DIR_FILES_DEBUG
+        platforms/qminimald.dll
+        platforms/qoffscreend.dll
+        platforms/qwindowsd.dll
+    )
+
+    SET ( QT5_WIN32_MINGW_DEPLOY_PLUGINS_DIR_FILES_RELEASE
+        platforms/qminimal.dll
+        platforms/qoffscreen.dll
+        platforms/qwindows.dll
+    )
+
+    SET ( QT5_WIN32_MINGW_DEPLOY_QML_DIR_FILES
+        QtGraphicalEffects/Blend.qml
+        QtGraphicalEffects/BrightnessContrast.qml
+        QtGraphicalEffects/ColorOverlay.qml
+        QtGraphicalEffects/Colorize.qml
+        QtGraphicalEffects/ConicalGradient.qml
+        QtGraphicalEffects/Desaturate.qml
+        QtGraphicalEffects/DirectionalBlur.qml
+        QtGraphicalEffects/Displace.qml
+        QtGraphicalEffects/DropShadow.qml
+        QtGraphicalEffects/FastBlur.qml
+        QtGraphicalEffects/GammaAdjust.qml
+        QtGraphicalEffects/GaussianBlur.qml
+        QtGraphicalEffects/Glow.qml
+        QtGraphicalEffects/HueSaturation.qml
+        QtGraphicalEffects/InnerShadow.qml
+        QtGraphicalEffects/LevelAdjust.qml
+        QtGraphicalEffects/LinearGradient.qml
+        QtGraphicalEffects/MaskedBlur.qml
+        QtGraphicalEffects/OpacityMask.qml
+        QtGraphicalEffects/RadialBlur.qml
+        QtGraphicalEffects/RadialGradient.qml
+        QtGraphicalEffects/RectangularGlow.qml
+        QtGraphicalEffects/RecursiveBlur.qml
+        QtGraphicalEffects/ThresholdMask.qml
+        QtGraphicalEffects/ZoomBlur.qml
+        QtGraphicalEffects/private/FastGlow.qml
+        QtGraphicalEffects/private/FastInnerShadow.qml
+        QtGraphicalEffects/private/FastMaskedBlur.qml
+        QtGraphicalEffects/private/GaussianDirectionalBlur.qml
+        QtGraphicalEffects/private/GaussianGlow.qml
+        QtGraphicalEffects/private/GaussianInnerShadow.qml
+        QtGraphicalEffects/private/GaussianMaskedBlur.qml
+        QtGraphicalEffects/private/SourceProxy.qml
+        QtGraphicalEffects/qmldir
+        QtQuick.2/plugins.qmltypes
+        QtQuick.2/qmldir
+        QtQuick/Controls/ApplicationWindow.qml
+        QtQuick/Controls/Button.qml
+        QtQuick/Controls/CheckBox.qml
+        QtQuick/Controls/ComboBox.qml
+        QtQuick/Controls/GroupBox.qml
+        QtQuick/Controls/Label.qml
+        QtQuick/Controls/Menu.qml
+        QtQuick/Controls/MenuBar.qml
+        QtQuick/Controls/Private/AbstractCheckable.qml
+        QtQuick/Controls/Private/BasicButton.qml
+        QtQuick/Controls/Private/Control.qml
+        QtQuick/Controls/Private/FocusFrame.qml
+        QtQuick/Controls/Private/ModalPopupBehavior.qml
+        QtQuick/Controls/Private/ScrollBar.qml
+        QtQuick/Controls/Private/ScrollViewHelper.qml
+        QtQuick/Controls/Private/StackView.js
+        QtQuick/Controls/Private/StackViewSlideDelegate.qml
+        QtQuick/Controls/Private/Style.qml
+        QtQuick/Controls/Private/TabBar.qml
+        QtQuick/Controls/Private/qmldir
+        QtQuick/Controls/Private/style.js
+        QtQuick/Controls/ProgressBar.qml
+        QtQuick/Controls/RadioButton.qml
+        QtQuick/Controls/ScrollView.qml
+        QtQuick/Controls/Slider.qml
+        QtQuick/Controls/SpinBox.qml
+        QtQuick/Controls/SplitView.qml
+        QtQuick/Controls/StackView.qml
+        QtQuick/Controls/StackViewDelegate.qml
+        QtQuick/Controls/StackViewTransition.qml
+        QtQuick/Controls/StatusBar.qml
+        QtQuick/Controls/Styles/Base/ButtonStyle.qml
+        QtQuick/Controls/Styles/Base/CheckBoxStyle.qml
+        QtQuick/Controls/Styles/Base/ComboBoxStyle.qml
+        QtQuick/Controls/Styles/Base/FocusFrameStyle.qml
+        QtQuick/Controls/Styles/Base/GroupBoxStyle.qml
+        QtQuick/Controls/Styles/Base/MenuBarStyle.qml
+        QtQuick/Controls/Styles/Base/MenuStyle.qml
+        QtQuick/Controls/Styles/Base/ProgressBarStyle.qml
+        QtQuick/Controls/Styles/Base/RadioButtonStyle.qml
+        QtQuick/Controls/Styles/Base/ScrollViewStyle.qml
+        QtQuick/Controls/Styles/Base/SliderStyle.qml
+        QtQuick/Controls/Styles/Base/SpinBoxStyle.qml
+        QtQuick/Controls/Styles/Base/StatusBarStyle.qml
+        QtQuick/Controls/Styles/Base/TabViewStyle.qml
+        QtQuick/Controls/Styles/Base/TableViewStyle.qml
+        QtQuick/Controls/Styles/Base/TextFieldStyle.qml
+        QtQuick/Controls/Styles/Base/ToolBarStyle.qml
+        QtQuick/Controls/Styles/Base/ToolButtonStyle.qml
+        QtQuick/Controls/Styles/Base/images/arrow-down.png
+        QtQuick/Controls/Styles/Base/images/arrow-down@2x.png
+        QtQuick/Controls/Styles/Base/images/arrow-left.png
+        QtQuick/Controls/Styles/Base/images/arrow-left@2x.png
+        QtQuick/Controls/Styles/Base/images/arrow-right.png
+        QtQuick/Controls/Styles/Base/images/arrow-right@2x.png
+        QtQuick/Controls/Styles/Base/images/arrow-up.png
+        QtQuick/Controls/Styles/Base/images/arrow-up@2x.png
+        QtQuick/Controls/Styles/Base/images/button.png
+        QtQuick/Controls/Styles/Base/images/button_down.png
+        QtQuick/Controls/Styles/Base/images/editbox.png
+        QtQuick/Controls/Styles/Base/images/focusframe.png
+        QtQuick/Controls/Styles/Base/images/groupbox.png
+        QtQuick/Controls/Styles/Base/images/header.png
+        QtQuick/Controls/Styles/Base/images/progress-indeterminate.png
+        QtQuick/Controls/Styles/Base/images/scrollbar-handle-horizontal.png
+        QtQuick/Controls/Styles/Base/images/scrollbar-handle-vertical.png
+        QtQuick/Controls/Styles/Base/images/tab.png
+        QtQuick/Controls/Styles/Base/images/tab_selected.png
+        QtQuick/Controls/Styles/Desktop/ButtonStyle.qml
+        QtQuick/Controls/Styles/Desktop/CheckBoxStyle.qml
+        QtQuick/Controls/Styles/Desktop/ComboBoxStyle.qml
+        QtQuick/Controls/Styles/Desktop/FocusFrameStyle.qml
+        QtQuick/Controls/Styles/Desktop/GroupBoxStyle.qml
+        QtQuick/Controls/Styles/Desktop/MenuBarStyle.qml
+        QtQuick/Controls/Styles/Desktop/MenuStyle.qml
+        QtQuick/Controls/Styles/Desktop/ProgressBarStyle.qml
+        QtQuick/Controls/Styles/Desktop/RadioButtonStyle.qml
+        QtQuick/Controls/Styles/Desktop/ScrollViewStyle.qml
+        QtQuick/Controls/Styles/Desktop/SliderStyle.qml
+        QtQuick/Controls/Styles/Desktop/SpinBoxStyle.qml
+        QtQuick/Controls/Styles/Desktop/StatusBarStyle.qml
+        QtQuick/Controls/Styles/Desktop/TabViewStyle.qml
+        QtQuick/Controls/Styles/Desktop/TableViewStyle.qml
+        QtQuick/Controls/Styles/Desktop/TextFieldStyle.qml
+        QtQuick/Controls/Styles/Desktop/ToolBarStyle.qml
+        QtQuick/Controls/Styles/Desktop/ToolButtonStyle.qml
+        QtQuick/Controls/Styles/Private/qmldir
+        QtQuick/Controls/Styles/qmldir
+        QtQuick/Controls/Tab.qml
+        QtQuick/Controls/TabView.qml
+        QtQuick/Controls/TableView.qml
+        QtQuick/Controls/TableViewColumn.qml
+        QtQuick/Controls/TextArea.qml
+        QtQuick/Controls/TextField.qml
+        QtQuick/Controls/ToolBar.qml
+        QtQuick/Controls/ToolButton.qml
+        QtQuick/Controls/plugins.qmltypes
+        QtQuick/Controls/qmldir
+        QtQuick/Dialogs/DefaultColorDialog.qml
+        QtQuick/Dialogs/DefaultFileDialog.qml
+        QtQuick/Dialogs/WidgetColorDialog.qml
+        QtQuick/Dialogs/WidgetFileDialog.qml
+        QtQuick/Dialogs/images/checkers.png
+        QtQuick/Dialogs/images/copy.png
+        QtQuick/Dialogs/images/crosshairs.png
+        QtQuick/Dialogs/images/folder.png
+        QtQuick/Dialogs/images/slider_handle.png
+        QtQuick/Dialogs/images/sunken_frame.png
+        QtQuick/Dialogs/images/up.png
+        QtQuick/Dialogs/plugins.qmltypes
+        QtQuick/Dialogs/qml/Button.qml
+        QtQuick/Dialogs/qml/ColorSlider.qml
+        QtQuick/Dialogs/qml/TextField.qml
+        QtQuick/Dialogs/qml/qmldir
+        QtQuick/Dialogs/qmldir
+        QtQuick/Layouts/plugins.qmltypes
+        QtQuick/Layouts/qmldir
+    )
+
+    SET ( QT5_WIN32_MINGW_DEPLOY_QML_DIR_FILES_DEBUG
+        QtQuick.2/qtquick2plugind.dll
+        QtQuick/Controls/Private/qtquickcontrolsprivateplugind.dll
+        QtQuick/Controls/qtquickcontrolsplugind.dll
+        QtQuick/Dialogs/dialogplugind.dll
+        QtQuick/Layouts/qquicklayoutsplugind.dll
+    )
+
+    SET ( QT5_WIN32_MINGW_DEPLOY_QML_DIR_FILES_RELEASE
+        QtQuick.2/qtquick2plugin.dll
+        QtQuick/Controls/Private/qtquickcontrolsprivateplugin.dll
+        QtQuick/Controls/qtquickcontrolsplugin.dll
+        QtQuick/Dialogs/dialogplugin.dll
+        QtQuick/Layouts/qquicklayoutsplugin.dll
+    )
+ENDIF ( WIN32 AND MINGW )
+
+
