@@ -7,23 +7,25 @@
 using namespace boost;
 using namespace MyLib;
 
-void Compression::Compress(const CompressionBuffer_t &data, CompressionBuffer_t &out_compressed)
+void Compression::Compress(const CompressionBuffer_t &dataBuffer,
+                           CompressionBuffer_t &out_compressedBuffer)
 {
-    out_compressed.clear();
+    out_compressedBuffer.clear();
 
     iostreams::filtering_streambuf<iostreams::output> output;
     output.push(iostreams::zlib_compressor());
-    output.push(iostreams::back_inserter(out_compressed));
-    iostreams::write(output, &data[0], data.size());
+    output.push(iostreams::back_inserter(out_compressedBuffer));
+    iostreams::write(output, &dataBuffer[0], dataBuffer.size());
 }
 
-void Compression::Decompress(const CompressionBuffer_t &data, CompressionBuffer_t &out_uncompressed)
+void Compression::Decompress(const CompressionBuffer_t &dataBuffer,
+                             CompressionBuffer_t &out_uncompressedBuffer)
 {
-    out_uncompressed.clear();
+    out_uncompressedBuffer.clear();
 
     iostreams::filtering_streambuf<iostreams::output> output;
     output.push(iostreams::zlib_decompressor());
-    output.push(iostreams::back_inserter(out_uncompressed));
-    iostreams::write(output, &data[0], data.size());
+    output.push(iostreams::back_inserter(out_uncompressedBuffer));
+    iostreams::write(output, &dataBuffer[0], dataBuffer.size());
 }
 
