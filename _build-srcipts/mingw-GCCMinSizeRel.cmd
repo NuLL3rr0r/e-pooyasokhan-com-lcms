@@ -1,4 +1,4 @@
 mkdir ..\_build
 cd ..\_build
 
-cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=GCCMinSizeRel -DCMAKE_PREFIX_PATH=C:\Qt\Qt5.1.0\5.1.0-rc1\mingw48_32\lib\cmake\Qt5Core -DCMAKE_INCLUDE_PATH=_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=_deps-win32\mingw\lib\release -DCMAKE_FRAMEWORK_PATH=_deps-win32\mingw\share -DBoost_NO_SYSTEM_PATHS=TRUE -DBoost_NO_BOOST_CMAKE=TRUE -DBOOST_ROOT=_deps-win32\mingw\Boost ..\
+cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=GCCMinSizeRel -DCMAKE_PREFIX_PATH=C:\Qt\Qt5.1.0\5.1.0-rc1\mingw48_32\lib\cmake\Qt5Core -DCMAKE_INCLUDE_PATH=_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=_deps-win32\mingw\lib\release -DCMAKE_FRAMEWORK_PATH=_deps-win32\mingw\share ..\
