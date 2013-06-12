@@ -29,7 +29,9 @@ public:
 private:
     std::string m_id;
     bool m_running;
-    port_t m_port;
+
+    std::string m_remoteHost;
+    port_t m_remotePort;
 
     std::queue<std::string> m_requests;
 
@@ -42,15 +44,17 @@ private:
 
 public:
     IPCClient();
-    IPCClient(const std::string &id, port_t port);
+    IPCClient(const std::string &id, const std::string &remoteHost, port_t remotePort);
     ~IPCClient();
 
 public:
     std::string GetId() const;
-    port_t GetPort() const;
+    std::string GetRemoteHost() const;
+    port_t GetRemotePort() const;
 
     void SetId(const std::string &id);
-    void SetPort(port_t port);
+    void SetRemoteHost(const std::string &remoteHost);
+    void SetRemotePort(port_t remotePort);
 
     bool IsRunning() const;
     void Start();

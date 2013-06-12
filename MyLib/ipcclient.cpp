@@ -22,14 +22,15 @@ using namespace MyLib;
 
 IPCClient::IPCClient() :
     m_running(false),
-    m_port(0)
+    m_remotePort(0)
 {
 }
 
-IPCClient::IPCClient(const std::string &id, port_t port) :
+IPCClient::IPCClient(const std::string &id, const std::string &remoteHost, port_t remotePort) :
     m_id(id),
     m_running(false),
-    m_port(port)
+    m_remoteHost(remoteHost),
+    m_remotePort(remotePort)
 {
 }
 
@@ -45,9 +46,14 @@ std::string IPCClient::GetId() const
     return m_id;
 }
 
-IPCClient::port_t IPCClient::GetPort() const
+std::string IPCClient::GetRemoteHost() const
 {
-    return m_port;
+    return m_remoteHost;
+}
+
+IPCClient::port_t IPCClient::GetRemotePort() const
+{
+    return m_remotePort;
 }
 
 void IPCClient::SetId(const std::string &id)
@@ -61,7 +67,7 @@ void IPCClient::SetId(const std::string &id)
     m_id = id;
 }
 
-void IPCClient::SetPort(port_t port)
+void IPCClient::SetRemoteHost(const std::string &remoteHost)
 {
     if (m_running)
         return;
@@ -69,7 +75,18 @@ void IPCClient::SetPort(port_t port)
     std::lock_guard<std::mutex> lock(m_workerMutex);
     (void)lock;
 
-    m_port = port;
+    m_remoteHost = remoteHost;
+}
+
+void IPCClient::SetRemotePort(port_t remotePort)
+{
+    if (m_running)
+        return;
+
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
+
+    m_remotePort = remotePort;
 }
 
 bool IPCClient::IsRunning() const
@@ -83,13 +100,16 @@ void IPCClient::Start()
     (void)lock;
 
     assert(boost::algorithm::trim_copy(m_id) != "");
-    assert(m_port != 0);
+    assert(boost::algorithm::trim_copy(m_remoteHost) != "");
+    assert(m_remotePort != 0);
 
     if (m_running) {
         return;
     }
 
-    std::string tcpURL((boost::format("tcp://localhost:%1%") % boost::lexical_cast<std::string>(m_port)).str());
+    std::string tcpURL((boost::format("tcp://%1%:%2%")
+                        % m_remoteHost
+                        % boost::lexical_cast<std::string>(m_remotePort)).str());
 
     m_context = std::make_unique<zmq::context_t>(1);
     m_socket = std::make_unique<zmq::socket_t>(*m_context.get(), ZMQ_REQ);
@@ -117,7 +137,9 @@ void IPCClient::Stop()
     m_running = false;
     m_workerThread->interrupt();
 
-    std::string tcpURL((boost::format("tcp://localhost:%1%") % boost::lexical_cast<std::string>(m_port)).str());
+    std::string tcpURL((boost::format("tcp://%1%:%2%")
+                        % m_remoteHost
+                        % boost::lexical_cast<std::string>(m_remotePort)).str());
     zmq_disconnect((void *)m_socket.get(), tcpURL.c_str());
 
     try {
