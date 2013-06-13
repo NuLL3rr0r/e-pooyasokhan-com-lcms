@@ -6,8 +6,8 @@
 3. In sqlite3.pro do the following changes:
 TEMPLATE = lib
 TARGET = sqlite3
-CONFIG -= qt
 INCLUDEPATH += .
+CONFIG -= qt
 
 4. Do the following:
     * qmake

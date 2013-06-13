@@ -7,9 +7,9 @@
 3. In cryptopp.pro do the following changes:
 TEMPLATE = lib
 TARGET = cryptopp
+INCLUDEPATH += .
 CONFIG -= qt
 LIBS += -lws2_32
-INCLUDEPATH += .
 //QMAKE_CFLAGS += -DCRYPTOPP_DISABLE_ASM
 //QMAKE_CXXFLAGS += -DCRYPTOPP_DISABLE_ASM
 

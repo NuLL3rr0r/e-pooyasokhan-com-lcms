@@ -7,6 +7,8 @@
 3. In GeoIP-1.4.8.pro do the following changes:
 TEMPLATE = lib
 TARGET = GeoIP
+INCLUDEPATH += .
+INCLUDEPATH += $$PWD/../../zlib/include
 CONFIG -= qt
 debug {
     -L$$PWD/../../zlib/lib-debug/
@@ -15,8 +17,6 @@ release {
     -L$$PWD/../../zlib/lib-release/
 }
 LIBS += -lWs2_32 -lwsock32 -lzlib
-INCLUDEPATH += .
-INCLUDEPATH += $$PWD/../../zlib/include
 DEFINES += PACKAGE_VERSION=\\\"1.4.8\\\"
 
 4. // http://stackoverflow.com/questions/12187040/compile-maxmind-c-library-with-visual-studio-2010
