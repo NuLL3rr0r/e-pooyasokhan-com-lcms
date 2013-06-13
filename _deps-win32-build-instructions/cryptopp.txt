@@ -7,12 +7,13 @@
 3. In cryptopp.pro do the following changes:
 TEMPLATE = lib
 TARGET = cryptopp
-INCLUDEPATH += .
+CONFIG -= qt
 LIBS += -lws2_32
+INCLUDEPATH += .
 //QMAKE_CFLAGS += -DCRYPTOPP_DISABLE_ASM
 //QMAKE_CXXFLAGS += -DCRYPTOPP_DISABLE_ASM
 
-4. Open fipstest.cpp and replace evry 'OutputDebugString' with 'OutputDebugStringA'.
+4. Open fipstest.cpp and replace every 'OutputDebugString' with 'OutputDebugStringA'.
 
 5. Do the following:
     * qmake
