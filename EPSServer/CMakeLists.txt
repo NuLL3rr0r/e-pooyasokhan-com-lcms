@@ -53,6 +53,8 @@ IF ( BUILD_EPS_SERVER )
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${BOOST_THREAD_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${BOOST_ZLIB_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CPPDB_LIBRARY}" "${CMAKE_CURRENT_BINARY_DIR}"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CPPDB_SQLITE3_DRIVER}" "${CMAKE_CURRENT_BINARY_DIR}"
