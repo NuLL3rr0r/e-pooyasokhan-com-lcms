@@ -506,7 +506,6 @@ Rectangle {
                         width: 350;
                         height: 95;
                         focus: true;
-                        backgroundColor: "#f0f0f0";
                         antialiasing: true;
                         wrapMode: TextEdit.WordWrap;
                     }
@@ -529,7 +528,6 @@ Rectangle {
                         width: 350;
                         height: 95;
                         focus: true;
-                        backgroundColor: "#f0f0f0";
                         antialiasing: true;
                         wrapMode: TextEdit.WordWrap;
                     }
