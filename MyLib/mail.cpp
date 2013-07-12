@@ -1,7 +1,7 @@
 #if defined ( MYLIB_SERVER_BULD )
 
 
-#include <thread>
+#include <boost/thread/thread.hpp>
 #include <boost/filesystem.hpp>
 #include <vmime/vmime.hpp>
 
@@ -154,7 +154,7 @@ bool Mail::Send(std::string &out_error) const
 
 void Mail::SendAsync() const
 {
-    thread t(static_cast<bool (Mail::*)() const>(&Mail::Send), this);
+    boost::thread t(static_cast<bool (Mail::*)() const>(&Mail::Send), this);
     t.detach();
 }
 
