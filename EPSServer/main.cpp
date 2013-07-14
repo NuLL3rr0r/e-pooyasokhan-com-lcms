@@ -11,6 +11,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <MyLib/ipcserver.hpp>
+#include <MyLib/log.hpp>
 #include <MyLib/make_unique.hpp>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
@@ -34,16 +35,19 @@ int main(int argc, char **argv)
 #endif  // defined ( __unix__ )
 
     if(!MyLib::System::GetLock(appId, lock)) {
-        std::cerr << "Process is already running!" << std::endl;
+        LOG_FATAL("Process is already running!");
         return EXIT_FAILURE;
     }
+    LOG_INFO("Got the process lock!");
 
     EPSServer::RT::Storage()->AppPath = appPath;
     EPSServer::DBTables::InitTables();
 
     std::unique_ptr<MyLib::IPCServer> server =
             std::make_unique<MyLib::IPCServer>(11011);
+    LOG_INFO("Starting server...");
     server->Start();
+    LOG_INFO("Server started successfully!");
 
     while (true) {
 #if defined ( _WIN32 )

@@ -11,8 +11,9 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <MyLib/make_unique.hpp>
 #include "ipcclient.hpp"
+#include "log.hpp"
+#include "make_unique.hpp"
 
 
 #define     MSG_RECEIVED        "RCVD!"
@@ -146,6 +147,7 @@ void IPCClient::Stop()
         m_socket->close();
         m_context->close();
     } catch(...) {
+        LOG_ERROR("...");
     }
 
     m_workerThread.reset();
@@ -192,6 +194,7 @@ void IPCClient::SendRequest(const std::string &request)
 
             rc = m_socket->send(req, ZMQ_NOBLOCK);
         } catch (...){
+            LOG_ERROR("...");
         }
 
         if (rc) {
@@ -203,6 +206,7 @@ void IPCClient::SendRequest(const std::string &request)
 
                     rc = m_socket->recv(&res, ZMQ_NOBLOCK);
                 } catch (...){
+                    LOG_ERROR("...");
                 }
 
                 if (rc) {

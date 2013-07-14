@@ -88,22 +88,22 @@ public:
 };
 
 
-#define TRACE(...)  \
+#define LOG_TRACE(...)  \
     (MyLib::Log(MyLib::Log::EType::Trace, __FILE__, __FUNCTION__, __LINE__)), __VA_ARGS__;
 
-#define DEBUG(...)  \
+#define LOG_DEBUG(...)  \
     (MyLib::Log(MyLib::Log::EType::Debug, __FILE__, __FUNCTION__, __LINE__)), __VA_ARGS__;
 
-#define INFO(...)  \
+#define LOG_INFO(...)  \
     (MyLib::Log(MyLib::Log::EType::Info, __FILE__, __FUNCTION__, __LINE__)), __VA_ARGS__;
 
-#define WARNING(...)  \
+#define LOG_WARNING(...)  \
     (MyLib::Log(MyLib::Log::EType::Warning, __FILE__, __FUNCTION__, __LINE__)), __VA_ARGS__;
 
-#define ERROR(...)  \
+#define LOG_ERROR(...)  \
     (MyLib::Log(MyLib::Log::EType::Error, __FILE__, __FUNCTION__, __LINE__)), __VA_ARGS__;
 
-#define FATAL(...)  \
+#define LOG_FATAL(...)  \
     (MyLib::Log(MyLib::Log::EType::Fatal, __FILE__, __FUNCTION__, __LINE__)), __VA_ARGS__;
 
 

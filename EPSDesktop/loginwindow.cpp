@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QScreen>
+#include <MyLib/log.hpp>
 #include "loginwindow.hpp"
 #include "loading.hpp"
 
@@ -12,6 +13,8 @@ LoginWindow::LoginWindow(QWindow *parent)
     : QQuickView(parent),
       m_canceled(false)
 {
+    LOG_INFO("Initializing login window...");
+
     this->setTitle("ورود");
 
     this->setFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint
@@ -39,11 +42,13 @@ LoginWindow::LoginWindow(QWindow *parent)
 
 LoginWindow::~LoginWindow()
 {
-
+    LOG_INFO("Login window closed!");
 }
 
 void LoginWindow::OnClosed()
 {
+    LOG_INFO("Closing login window...");
+
     this->close();
 
     if (m_canceled)
@@ -88,6 +93,8 @@ void LoginWindow::SetY(int y)
 
 void LoginWindow::OpenWidnow()
 {
+    LOG_INFO("Opening login window...");
+
     this->showNormal();
     emit signal_Shown();
 }

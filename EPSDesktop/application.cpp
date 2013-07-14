@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDebug>
+#include <MyLib/log.hpp>
 #include <MyLib/make_unique.hpp>
 #include "application.hpp"
 #include "loginwindow.hpp"
@@ -13,14 +14,18 @@ Application::Application(QObject *parent)
     : QObject(parent),
       m_isInitialized(false)
 {
+    LOG_INFO("Initializing application...");
 }
 
 Application::~Application()
 {
+    LOG_INFO("Application terminated!");
 }
 
 void Application::OnSplashScreenConnectionFailed()
 {
+    LOG_FATAL("Initial connection to server failed!");
+
     m_splashScreen->deleteLater();
     m_splashScreen.release();
 
@@ -29,6 +34,8 @@ void Application::OnSplashScreenConnectionFailed()
 
 void Application::OnSplashScreenConnectionEstablished()
 {
+    LOG_INFO("Initial connection to server established successfully!");
+
     m_splashScreen->deleteLater();
     m_splashScreen.release();
 
@@ -44,6 +51,8 @@ void Application::OnSplashScreenConnectionEstablished()
 
 void Application::OnLoginCanceled()
 {
+    LOG_WARNING("Login canceled by user!");
+
     m_loginWindow->deleteLater();
     m_loginWindow.release();
 
@@ -52,6 +61,8 @@ void Application::OnLoginCanceled()
 
 void Application::OnLoginSucceeded()
 {
+    LOG_INFO("Logged in successfully!");
+
     m_loginWindow->deleteLater();
     m_loginWindow.release();
 
@@ -65,6 +76,8 @@ void Application::OnLoginSucceeded()
 
 void Application::OnMainWindowClosed()
 {
+    LOG_INFO("User exited application!");
+
     m_mainWindow->deleteLater();
     m_mainWindow.release();
 
@@ -73,6 +86,8 @@ void Application::OnMainWindowClosed()
 
 void Application::Start()
 {
+    LOG_INFO("Starting application...");
+
     if (m_isInitialized)
         return;
 
@@ -98,6 +113,7 @@ void Application::Start()
 
 void Application::Terminate()
 {
+    LOG_INFO("Terminating application...");
     QApplication::exit(0);
 }
 

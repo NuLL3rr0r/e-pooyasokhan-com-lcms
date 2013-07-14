@@ -6,7 +6,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <QApplication>
-#include <QDebug>
+#include <MyLib/log.hpp>
 #include <MyLib/make_unique.hpp>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
@@ -23,6 +23,10 @@ int main(int argc, char **argv)
     boost::filesystem::current_path(appPath);
     MyLib::MyLibInitialize(argc, argv);
 
+    MyLib::Log::Initialize(std::cout,
+                           (boost::filesystem::path(appPath) / boost::filesystem::path("logs")).string(),
+                           "EPSDesktop");
+
 #if !defined ( DEBUG_BUILD )
 #if defined ( __unix__ )
     int lock;
@@ -31,16 +35,17 @@ int main(int argc, char **argv)
 #endif  // defined ( __unix__ )
 
     if(!MyLib::System::GetLock(appId, lock)) {
-    #if defined ( _WIN32 )
+        FATAL("Process is already running!");
+#if defined ( _WIN32 )
         MessageBox(NULL, L"نسخه دیگری از برنامه در حال اجراست!", L"خطا",
                    MB_OK | MB_ICONERROR | MB_RTLREADING | MB_TOPMOST);
-    #else
-        std::cerr << "Process is already running!" << std::endl;
-    #endif  // defined ( _WIN32 )
+#endif  // defined ( _WIN32 )
         return EXIT_FAILURE;
     }
-#endif // !defined ( DEBUG_BUILD )
-
+    LOG_INFO("Got the process lock!");
+#else   // !defined ( DEBUG_BUILD )
+    LOG_WARNING("Ignoring process memory-residency check!");
+#endif  // !defined ( DEBUG_BUILD )
 
     std::unique_ptr<QApplication> app =
             std::make_unique<QApplication>(argc, argv);

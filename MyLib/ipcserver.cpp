@@ -11,9 +11,10 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <MyLib/make_unique.hpp>
 #include "ipcserver.hpp"
 #include "exception.hpp"
+#include "log.hpp"
+#include "make_unique.hpp"
 
 
 #define     MSG_RECEIVED            "RCVD!"
@@ -85,11 +86,13 @@ void IPCServer::Start()
         m_socket->bind(tcpURL.c_str());
     }
     catch(const zmq::error_t &ex) {
+        LOG_ERROR(ex.what());
         throw MyLib::Exception((boost::format("Cannot listen on port '%1%': '%2%'")
                                 % boost::lexical_cast<std::string>(m_port)
                                 % ex.what()).str().c_str());
     }
     catch(...) {
+        LOG_ERROR("...");
         throw MyLib::Exception((boost::format("Cannot listen on port %1% !!")
                                 % boost::lexical_cast<std::string>(m_port)).str().c_str());
     }
@@ -119,6 +122,7 @@ void IPCServer::Stop()
         m_socket->close();
         m_context->close();
     } catch(...) {
+        LOG_ERROR("...");
     }
 
     m_workerThread.reset();
@@ -140,6 +144,7 @@ void IPCServer::Listen()
 
             rc = m_socket->recv(&request);
         } catch(...) {
+            LOG_ERROR("...");
             rc = false;
         }
 
@@ -160,6 +165,7 @@ void IPCServer::Listen()
             }
 
             catch (...) {
+                LOG_ERROR("...");
                 SendResponse(MSG_INVALID);
             }
         }
@@ -187,6 +193,7 @@ bool IPCServer::SendResponse(const std::string &response)
 
         rc = m_socket->send(msg, ZMQ_NOBLOCK);
     } catch (...){
+        LOG_ERROR("...");
         rc = false;
     }
 

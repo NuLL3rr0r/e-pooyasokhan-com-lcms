@@ -14,6 +14,7 @@
 #include <b64/decode.h>
 #include <b64/encode.h>
 #include "crypto.hpp"
+#include "log.hpp"
 
 
 #define     UNKNOWN_ERROR           "MyLib::Crypto unknown error!"
@@ -62,14 +63,17 @@ bool Crypto::Encrypt(const std::string &plainText, std::string &out_encodedText,
     }
 
     catch (CryptoPP::Exception &ex) {
+        LOG_ERROR(ex.what());
         out_error.assign(ex.what());
     }
 
     catch (std::exception &ex) {
+        LOG_ERROR(ex.what());
         out_error.assign(ex.what());
     }
 
     catch (...) {
+        LOG_ERROR(UNKNOWN_ERROR);
         out_error.assign(UNKNOWN_ERROR);
     }
 
@@ -102,14 +106,17 @@ bool Crypto::Decrypt(const std::string &cipherText, std::string &out_recoveredTe
     }
 
     catch (CryptoPP::Exception &ex) {
+        LOG_ERROR(ex.what());
         out_error.assign(ex.what());
     }
 
     catch (std::exception &ex) {
+        LOG_ERROR(ex.what());
         out_error.assign(ex.what());
     }
 
     catch (...) {
+        LOG_ERROR(UNKNOWN_ERROR);
         out_error.assign(UNKNOWN_ERROR);
     }
 
@@ -136,14 +143,17 @@ bool Crypto::GenerateHash(const std::string &text, std::string &out_digest,
     }
 
     catch (CryptoPP::Exception &ex) {
+        LOG_ERROR(ex.what());
         out_error.assign(ex.what());
     }
 
     catch (std::exception &ex) {
+        LOG_ERROR(ex.what());
         out_error.assign(ex.what());
     }
 
     catch (...) {
+        LOG_ERROR(UNKNOWN_ERROR);
         out_error.assign(UNKNOWN_ERROR);
     }
 

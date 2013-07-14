@@ -11,6 +11,7 @@
 #include <vmime/platforms/posix/posixHandler.hpp>
 #endif  // defined (_WIN32)
 
+#include "log.hpp"
 #include "mail.hpp"
 
 
@@ -138,14 +139,17 @@ bool Mail::Send(std::string &out_error) const
     }
 
     catch (vmime::exception &ex) {
+        FATAL(ex.what());
         out_error.assign(ex.what());
     }
 
     catch(std::exception &ex) {
+        FATAL(ex.what());
         out_error.assign(ex.what());
     }
 
     catch (...) {
+        FATAL(ex.what(UNKNOWN_ERROR));
         out_error.assign(UNKNOWN_ERROR);
     }
 
