@@ -19,7 +19,7 @@ SET ( ZEROMQ_FIND_REQUIRED TRUE )
 ### Boost ###
 FIND_PACKAGE (Boost 1.52.0
     COMPONENTS
-        filesystem iostreams system thread zlib
+        date_time filesystem iostreams system thread zlib
     )
 INCLUDE_DIRECTORIES ( SYSTEM ${Boost_INCLUDE_DIRS} )
 LINK_DIRECTORIES ( ${Boost_LIBRARY_DIRS} )

@@ -68,6 +68,8 @@ IF ( BUILD_EPS_DESKTOP )
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${MYLIB_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${BOOST_DATE_TIME_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${BOOST_FILESYSTEM_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${BOOST_IOSTREAMS_LIBRARY_PATH}" "${CMAKE_CURRENT_BINARY_DIR}"
