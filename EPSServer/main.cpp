@@ -58,7 +58,7 @@ int main(int argc, char **argv)
         Sleep(1);
 #else
         sleep(1);
-#endif
+#endif  // defined ( _WIN32 )
     }
 
     return EXIT_SUCCESS;
