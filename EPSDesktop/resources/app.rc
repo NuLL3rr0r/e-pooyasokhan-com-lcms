@@ -1,27 +1,24 @@
-1 ICON "app-icon.ico"
-
-2 VERSIONINFO
-FILEVERSION     1,0,0,0
-PRODUCTVERSION  1,0,0,0
+1 VERSIONINFO
+FILEVERSION     @EPS_DESKTOP_PRODUCT_VERSION_MAJOR@,@EPS_DESKTOP_PRODUCT_VERSION_MINOR@,@EPS_DESKTOP_PRODUCT_VERSION_PATCH@,0
+PRODUCTVERSION  @EPS_DESKTOP_PRODUCT_VERSION_MAJOR@,@EPS_DESKTOP_PRODUCT_VERSION_MINOR@,@EPS_DESKTOP_PRODUCT_VERSION_PATCH@,0
 BEGIN
-  BLOCK "StringFileInfo"
-  BEGIN
-    BLOCK "040904E4"
+    BLOCK "StringFileInfo"
     BEGIN
-      VALUE "CompanyName", "e-pooyasokhan.com"
-      VALUE "FileDescription", "The EPS Desktop Client"
-      VALUE "FileVersion", "1.0"
-      VALUE "InternalName", "EPS_DESKTOP"
-      VALUE "LegalCopyright", "e-pooyasokhan.com"
-      VALUE "OriginalFilename", "eps-desktop.exe"
-      VALUE "ProductName", "EPS Desktop Version"
-      VALUE "ProductVersion", "1.0"
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName", "@EPS_PRODUCT_COMPANY_NAME@"
+            VALUE "FileDescription", "@EPS_DESKTOP_PRODUCT_DESCRIPTION@"
+            VALUE "FileVersion", "@EPS_DESKTOP_PRODUCT_VERSION_MAJOR@.@EPS_DESKTOP_PRODUCT_VERSION_MINOR@.@EPS_DESKTOP_PRODUCT_VERSION_PATCH@-@EPS_DESKTOP_PRODUCT_VERSION_REVISION@"
+            VALUE "InternalName", "@EPS_DESKTOP_PRODUCT_INTERNAL_NAME@"
+            VALUE "LegalCopyright", "@EPS_PRODUCT_COPYRIGHT@"
+            VALUE "OriginalFilename", "@EPS_DESKTOP_BIN_NAME@.exe"
+            VALUE "ProductName", "@EPS_DESKTOP_PRODUCT_NAME@"
+            VALUE "ProductVersion", "@EPS_DESKTOP_PRODUCT_VERSION_MAJOR@.@EPS_DESKTOP_PRODUCT_VERSION_MINOR@.@EPS_DESKTOP_PRODUCT_VERSION_PATCH@-@EPS_DESKTOP_PRODUCT_VERSION_REVISION@"
+        END
     END
-  END
-
-  BLOCK "VarFileInfo"
-  BEGIN
-    VALUE "Translation", 0x409, 1252
-  END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
 END
-
+2 ICON "app-icon.ico"
