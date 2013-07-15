@@ -17,6 +17,7 @@
 #include <MyLib/system.hpp>
 #include "dbtables.hpp"
 #include "rt.hpp"
+#include "versioninfo.hpp"
 
 int main(int argc, char **argv)
 {
@@ -27,6 +28,8 @@ int main(int argc, char **argv)
     std::string appPath(boost::algorithm::replace_last_copy(path.string(), appId, ""));
     boost::filesystem::current_path(appPath);
     MyLib::MyLibInitialize(argc, argv);
+
+    LOG_INFO("Version Information", "", "BUILD_COMPILER             " VERSION_INFO_BUILD_COMPILER, "BUILD_DATE                 " VERSION_INFO_BUILD_DATE, "BUILD_HOST                 " VERSION_INFO_BUILD_HOST, "BUILD_PROCESSOR            " VERSION_INFO_BUILD_PROCESSOR, "BUILD_SYSTEM               " VERSION_INFO_BUILD_SYSTEM, "PRODUCT_COMPANY_NAME       " VERSION_INFO_PRODUCT_COMPANY_NAME, "PRODUCT_COPYRIGHT          " VERSION_INFO_PRODUCT_COPYRIGHT, "PRODUCT_DEVELOPER          " VERSION_INFO_PRODUCT_DEVELOPER, "PRODUCT_INTERNAL_NAME      " VERSION_INFO_PRODUCT_INTERNAL_NAME, "PRODUCT_NAME               " VERSION_INFO_PRODUCT_NAME, "PRODUCT_VERSION            " VERSION_INFO_PRODUCT_VERSION, "PRODUCT_DESCRIPTION        " VERSION_INFO_PRODUCT_DESCRIPTION);
 
 #if defined ( __unix__ )
     int lock;
