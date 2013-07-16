@@ -11,8 +11,8 @@ namespace MyLib {
 class MyLib::Crypto
 {
 private:
-    static unsigned char m_key[];
-    static unsigned char m_iv[];
+    static const unsigned char m_key[];
+    static const unsigned char m_iv[];
 
 public:
     static bool Encrypt(const std::string &plainText, std::string &out_encodedText);

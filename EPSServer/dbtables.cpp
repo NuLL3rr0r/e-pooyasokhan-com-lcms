@@ -36,10 +36,10 @@ string DBTables::Fields(const std::string &id)
 
 void DBTables::InitHashes()
 {
-    m_tablesHash["GROUP"] = "group";
+    m_tablesHash["GROUPS"] = "groups";
     m_tablesHash["USERS"] = "users";
 
-    m_fieldsHash["GROUP"] =
+    m_fieldsHash["GROUPS"] =
             " email TEXT NOT NULL, "
             " admin INTEGER NOT NULL, "
             " teacher INTEGER NOT NULL, "
