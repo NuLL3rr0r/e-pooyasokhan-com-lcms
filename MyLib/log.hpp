@@ -76,12 +76,12 @@ public:
     Log(EType type, const std::string &file, const std::string &func, int line, ...);
     ~Log();
 
-    template<typename ObjectType>
-    Log &operator,(const ObjectType &v)
+    template<typename T>
+    Log &operator,(const T &arg)
     {
         if (m_hasEntries)
             m_buffer << "\n";
-        m_buffer << "  - " << v;
+        m_buffer << "  - " << arg;
         m_hasEntries = true;
         return *this;
     }
