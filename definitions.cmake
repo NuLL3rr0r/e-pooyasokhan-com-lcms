@@ -13,5 +13,5 @@ IF ( WIN32 )
 ENDIF (  )
 
 SET ( IPC_REMOTE_HOST "ipc.e-pooyasokhan.com" )
-SET ( IPC_REMOTE_PORT "17345" )
+SET ( IPC_REMOTE_PORT "11011" )
 
