@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 #endif  // defined ( __unix__ )
 
     if(!MyLib::System::GetLock(appId, lock)) {
-        FATAL("Process is already running!");
+        LOG_FATAL("Process is already running!");
 #if defined ( _WIN32 )
         MessageBox(NULL, L"نسخه دیگری از برنامه در حال اجراست!", L"خطا",
                    MB_OK | MB_ICONERROR | MB_RTLREADING | MB_TOPMOST);
@@ -56,17 +56,6 @@ int main(int argc, char **argv)
     std::unique_ptr<EPSDesktop::Application> application =
             std::make_unique<EPSDesktop::Application>();
     application->Start();
-
-    /*qDebug() << VERSION_INFO_BUILD_COMPILER;
-    qDebug() << VERSION_INFO_BUILD_DATE;
-    qDebug() << VERSION_INFO_BUILD_HOST;
-    qDebug() << VERSION_INFO_BUILD_PROCESSOR;
-    qDebug() << VERSION_INFO_BUILD_SYSTEM;
-    qDebug() << VERSION_INFO_COPYRIGHT_HOLDER;
-    qDebug() << VERSION_INFO_COPYRIGHT_YEAR;
-    qDebug() << VERSION_INFO_DEVELOPER;
-    qDebug() << VERSION_INFO_PRODUCT_NAME;
-    qDebug() << VERSION_INFO_PRODUCT_VERSION;*/
 
     return app->exec();
 }
