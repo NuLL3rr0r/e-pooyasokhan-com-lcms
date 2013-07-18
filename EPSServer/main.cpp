@@ -10,6 +10,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/thread/thread.hpp>
 #include <MyLib/ipcprotocol.hpp>
 #include <MyLib/ipcserver.hpp>
 #include <MyLib/log.hpp>
@@ -30,6 +31,10 @@ int main(int argc, char **argv)
     boost::filesystem::current_path(appPath);
     MyLib::MyLibInitialize(argc, argv);
 
+    MyLib::Log::Initialize(std::cout,
+                           (boost::filesystem::path(appPath) / boost::filesystem::path("logs")).string(),
+                           "EPSServer");
+
     LOG_INFO("Version Information", "", "IPC_PROTOCOL_NAME          " + MyLib::IPCProtocol::Name(), "IPC_PROTOCOL_VERSION       " + MyLib::IPCProtocol::Version(), "BUILD_COMPILER             " VERSION_INFO_BUILD_COMPILER, "BUILD_DATE                 " VERSION_INFO_BUILD_DATE, "BUILD_HOST                 " VERSION_INFO_BUILD_HOST, "BUILD_PROCESSOR            " VERSION_INFO_BUILD_PROCESSOR, "BUILD_SYSTEM               " VERSION_INFO_BUILD_SYSTEM, "PRODUCT_COMPANY_NAME       " VERSION_INFO_PRODUCT_COMPANY_NAME, "PRODUCT_COPYRIGHT          " VERSION_INFO_PRODUCT_COPYRIGHT, "PRODUCT_DEVELOPER          " VERSION_INFO_PRODUCT_DEVELOPER, "PRODUCT_INTERNAL_NAME      " VERSION_INFO_PRODUCT_INTERNAL_NAME, "PRODUCT_NAME               " VERSION_INFO_PRODUCT_NAME, "PRODUCT_VERSION            " VERSION_INFO_PRODUCT_VERSION, "PRODUCT_DESCRIPTION        " VERSION_INFO_PRODUCT_DESCRIPTION);
 
 #if defined ( __unix__ )
@@ -48,18 +53,11 @@ int main(int argc, char **argv)
     EPSServer::DBTables::InitTables();
 
     std::unique_ptr<MyLib::IPCServer> server =
-            std::make_unique<MyLib::IPCServer>(11011);
+            std::make_unique<MyLib::IPCServer>(IPC_REMOTE_PORT);
     LOG_INFO("Starting server...");
-    server->Start();
+    boost::thread t(&MyLib::IPCServer::Start, server.get());
+    t.join();
     LOG_INFO("Server started successfully!");
-
-    while (true) {
-#if defined ( _WIN32 )
-        Sleep(1);
-#else
-        sleep(1);
-#endif  // defined ( _WIN32 )
-    }
 
     return EXIT_SUCCESS;
 }
