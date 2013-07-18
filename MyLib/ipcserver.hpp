@@ -8,6 +8,7 @@
 #include <string>
 #include <boost/thread/thread.hpp>
 #include <zmq.hpp>
+#include "log.hpp"
 
 namespace MyLib {
     class IPCServer;
@@ -21,9 +22,6 @@ private:
     typedef std::unique_ptr<zmq::socket_t> socket_ptr;
 
     typedef unsigned short int port_t;
-
-public:
-    std::function<void(const std::string &, const std::string &)> OnMessageReceived;
 
 private:
     bool m_running;
@@ -41,18 +39,32 @@ public:
     ~IPCServer();
 
 public:
-    port_t GetPort() const;
+    port_t GetPort();
 
     void SetPort(port_t port);
 
-    bool IsRunning() const;
+    bool IsRunning();
     void Start();
     void Stop();
 
 private:
     void Listen();
-    std::string GetMessage(const zmq::message_t &message);
-    bool SendResponse(const std::string &response);
+
+    template<typename _IPCReponseT>
+    void SendResponse(const _IPCReponseT &response)
+    {
+        zmq::message_t res(response.Buffer().size());
+        memcpy(response.Buffer().data(), response.Buffer().data(), response.Buffer().size());
+
+        try {
+            std::lock_guard<std::mutex> lock(m_workerMutex);
+            (void)lock;
+
+            m_socket->send(res, ZMQ_NOBLOCK);
+        } catch (...){
+            LOG_ERROR("...");
+        }
+    }
 };
 
 

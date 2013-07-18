@@ -52,12 +52,20 @@ int main(int argc, char **argv)
     EPSServer::RT::Storage()->AppPath = appPath;
     EPSServer::DBTables::InitTables();
 
+    LOG_INFO("Starting server in a sub-thread...");
     std::unique_ptr<MyLib::IPCServer> server =
             std::make_unique<MyLib::IPCServer>(IPC_REMOTE_PORT);
-    LOG_INFO("Starting server...");
     boost::thread t(&MyLib::IPCServer::Start, server.get());
     t.join();
-    LOG_INFO("Server started successfully!");
+    LOG_INFO("Sub-thread joined!");
+
+    while (true) {
+#if defined ( _WIN32 )
+        Sleep(1);
+#else
+        sleep(1);
+#endif  // defined ( _WIN32 )
+    }
 
     return EXIT_SUCCESS;
 }

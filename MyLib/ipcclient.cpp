@@ -15,10 +15,6 @@
 #include "log.hpp"
 #include "make_unique.hpp"
 
-
-#define     MSG_RECEIVED        "RCVD!"
-
-
 using namespace MyLib;
 
 IPCClient::IPCClient() :
@@ -28,7 +24,6 @@ IPCClient::IPCClient() :
 }
 
 IPCClient::IPCClient(const std::string &id, const std::string &remoteHost, port_t remotePort) :
-    m_id(id),
     m_running(false),
     m_remoteHost(remoteHost),
     m_remotePort(remotePort)
@@ -37,61 +32,58 @@ IPCClient::IPCClient(const std::string &id, const std::string &remoteHost, port_
 
 IPCClient::~IPCClient()
 {
+    m_workerMutex.lock();
     if (m_running) {
+        m_workerMutex.unlock();
         Stop();
+    } else {
+        m_workerMutex.unlock();
     }
 }
 
-std::string IPCClient::GetId() const
+std::string IPCClient::GetRemoteHost()
 {
-    return m_id;
-}
-
-std::string IPCClient::GetRemoteHost() const
-{
-    return m_remoteHost;
-}
-
-IPCClient::port_t IPCClient::GetRemotePort() const
-{
-    return m_remotePort;
-}
-
-void IPCClient::SetId(const std::string &id)
-{
-    if (m_running)
-        return;
-
     std::lock_guard<std::mutex> lock(m_workerMutex);
     (void)lock;
 
-    m_id = id;
+    return m_remoteHost;
+}
+
+IPCClient::port_t IPCClient::GetRemotePort()
+{
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
+
+    return m_remotePort;
 }
 
 void IPCClient::SetRemoteHost(const std::string &remoteHost)
 {
-    if (m_running)
-        return;
-
     std::lock_guard<std::mutex> lock(m_workerMutex);
     (void)lock;
+
+    if (m_running)
+        return;
 
     m_remoteHost = remoteHost;
 }
 
 void IPCClient::SetRemotePort(port_t remotePort)
 {
-    if (m_running)
-        return;
-
     std::lock_guard<std::mutex> lock(m_workerMutex);
     (void)lock;
+
+    if (m_running)
+        return;
 
     m_remotePort = remotePort;
 }
 
-bool IPCClient::IsRunning() const
+bool IPCClient::IsRunning()
 {
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
+
     return m_running;
 }
 
@@ -100,7 +92,6 @@ void IPCClient::Start()
     std::lock_guard<std::mutex> lock(m_workerMutex);
     (void)lock;
 
-    assert(boost::algorithm::trim_copy(m_id) != "");
     assert(boost::algorithm::trim_copy(m_remoteHost) != "");
     assert(m_remotePort != 0);
 
@@ -155,34 +146,11 @@ void IPCClient::Stop()
     m_context.reset();
 }
 
-void IPCClient::SendMessage(const std::string &message)
+
+void IPCClient::SendRequest(Compression::CompressionBuffer_t &buffer, Callback_t &callback)
 {
-    if (!m_running)
-        return;
-
-    std::lock_guard<std::mutex> lock(m_dataMutex);
-    (void)lock;
-
-    m_requests.push(message);
-}
-
-std::string IPCClient::GetMessage(const zmq::message_t &message)
-{
-    return std::string(static_cast<const char *>(message.data()), message.size());
-}
-
-void IPCClient::SendRequest(const std::string &request)
-{
-    boost::property_tree::ptree reqTree;
-    reqTree.put("req.clientId", m_id);
-    reqTree.put("req.message", request);
-
-    std::stringstream reqStream;
-    boost::property_tree::write_json(reqStream, reqTree);
-    std::string reqJSON(reqStream.str());
-
-    zmq::message_t req(reqJSON.size());
-    memcpy(req.data(), reqJSON.data(), reqJSON.size());
+    zmq::message_t req(buffer.size());
+    memcpy(buffer.data(), buffer.data(), buffer.size());
 
     bool rc = false;
     do {
@@ -198,23 +166,22 @@ void IPCClient::SendRequest(const std::string &request)
         }
 
         if (rc) {
-            zmq::message_t res;
+            zmq::message_t response;
             do {
                 try {
                     std::lock_guard<std::mutex> lock(m_workerMutex);
                     (void)lock;
 
-                    rc = m_socket->recv(&res, ZMQ_NOBLOCK);
+                    rc = m_socket->recv(&response, ZMQ_NOBLOCK);
                 } catch (...){
                     LOG_ERROR("...");
                 }
 
                 if (rc) {
-                    if (GetMessage(res) == MSG_RECEIVED) {
-                        if (OnMessageSent) {
-                            OnMessageSent(request);
-                        }
-                    }
+                    const Compression::CompressionBuffer_t
+                            buffer(static_cast<const char *>(response.data())[0], response.size());
+                    boost::bind(callback, buffer);
+                    callback();
                 }
 
                 boost::this_thread::restore_interruption ri(di);
@@ -229,28 +196,40 @@ void IPCClient::SendRequest(const std::string &request)
 
 void IPCClient::SendRequests()
 {
+    m_workerMutex.lock();
     while(m_running) {
-        if (m_requests.size() > 0) {
-            std::string message;
+        m_workerMutex.unlock();
+
+        m_dataMutex.lock();
+        if (m_reqBuffers.size() > 0) {
+            m_dataMutex.unlock();
+
+            Compression::CompressionBuffer_t buffer;
+            Callback_t callback;
 
             {
                 std::lock_guard<std::mutex> lock(m_dataMutex);
                 (void)lock;
 
-                message = m_requests.front();
-                m_requests.pop();
+                buffer = m_reqBuffers.front();
+                callback = m_reqCallbacks.front();
             }
 
-            SendRequest(message);
+            SendRequest(buffer, callback);
+
+            {
+                std::lock_guard<std::mutex> lock(m_dataMutex);
+                (void)lock;
+
+                m_reqBuffers.pop();
+                m_reqCallbacks.pop();
+            }
         } else {
-#if defined ( _WIN32 )
-            Sleep(1);
-#else
-            sleep(1);
-#endif
+            m_dataMutex.unlock();
         }
 
         boost::this_thread::interruption_point();
+        m_workerMutex.lock();
     }
 }
 

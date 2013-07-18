@@ -12,6 +12,7 @@ IF ( WIN32 )
     SET ( EPS_DESKTOP_DEFINES "_UNICODE; UNICODE; WIN32_LEAN_AND_MEAN" )
 ENDIF (  )
 
-SET ( IPC_REMOTE_HOST "ipc.e-pooyasokhan.com" )
+#SET ( IPC_REMOTE_HOST "ipc.e-pooyasokhan.com" )
+SET ( IPC_REMOTE_HOST "localhost" )
 SET ( IPC_REMOTE_PORT "11011" )
 

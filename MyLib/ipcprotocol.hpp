@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include <boost/assign/list_of.hpp>
+#include <boost/bimap.hpp>
 
 namespace MyLib {
     class IPCProtocol;
@@ -12,15 +13,53 @@ namespace MyLib {
 
 class MyLib::IPCProtocol
 {
+public:
+    typedef unsigned char Version_t;
+
 private:
-    template <typename T>
+    template <typename _T>
     struct Hasher
     {
-        std::size_t operator()(const T &t) const
+        std::size_t operator()(const _T &t) const
         {
             return std::hash<unsigned char>()(static_cast<unsigned char>(t));
         }
     };
+
+    template <typename _T>
+    struct HashMapper
+    {
+        typedef std::unordered_map<_T, std::string, Hasher<_T>> Hash_t;
+
+        Hash_t hash;
+
+        void Register(_T t, const std::string &s)
+        {
+            hash[t] = s;
+        }
+    };
+
+    template <typename _T>
+    struct EnumMapper
+    {
+        typedef boost::bimap<_T, std::string> Bimap_t;
+
+        Bimap_t bimap;
+
+        void Register(_T t, const std::string &s)
+        {
+            bimap.insert(Bimap_t::value_type(t, s));
+        }
+
+//        void Find(_T t)
+    };
+
+    struct EnumMapper2
+    {
+        //typedef boost::bimap<_T, std::string> Bimap_t;
+
+    };
+
 
 public:
     enum class Request : unsigned char {
@@ -154,7 +193,7 @@ public:
     Hasher<RegisterationResponseStatus>> RegisterationResponseStatusHash_t;
 
 public:
-    static const RequestHash_t RequestToString;
+    static const HashMapper<IPCProtocol::Request>::Hash_t RequestToString;
     static const HandShakeRequestArgHash_t HandShakeRequestArgToString;
     static const HandShakeResponseStatusHash_t HandShakeResponseStatusToString;
     static const LatestDesktopClientVersionRequestArgHash_t LatestDesktopClientVersionRequestArgToString;
@@ -172,8 +211,8 @@ public:
 public:
     static std::string Name();
     static std::string Version();
-    static unsigned char VersionMajor();
-    static unsigned char NameMinor();
+    static Version_t VersionMajor();
+    static Version_t VersionMinor();
 };
 
 

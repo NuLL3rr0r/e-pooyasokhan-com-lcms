@@ -9,6 +9,8 @@
 #include <string>
 #include <boost/thread/thread.hpp>
 #include <zmq.hpp>
+#include "ipcrequest.hpp"
+#include "compression.hpp"
 
 namespace MyLib {
     class IPCClient;
@@ -23,17 +25,16 @@ private:
 
     typedef unsigned short int port_t;
 
-public:
-    std::function<void(const std::string &)> OnMessageSent;
+    typedef std::function<void(void)> Callback_t;
 
 private:
-    std::string m_id;
     bool m_running;
 
     std::string m_remoteHost;
     port_t m_remotePort;
 
-    std::queue<std::string> m_requests;
+    std::queue<MyLib::Compression::CompressionBuffer_t> m_reqBuffers;
+    std::queue<Callback_t> m_reqCallbacks;
 
     thread_ptr m_workerThread;
     std::mutex m_workerMutex;
@@ -48,23 +49,36 @@ public:
     ~IPCClient();
 
 public:
-    std::string GetId() const;
-    std::string GetRemoteHost() const;
-    port_t GetRemotePort() const;
+    std::string GetRemoteHost();
+    port_t GetRemotePort();
 
-    void SetId(const std::string &id);
     void SetRemoteHost(const std::string &remoteHost);
     void SetRemotePort(port_t remotePort);
 
-    bool IsRunning() const;
+    bool IsRunning();
     void Start();
     void Stop();
 
-    void SendMessage(const std::string &message);
+    template<typename _IPCRequestT>
+    void SendRequest(const _IPCRequestT &request, Callback_t &callback)
+    {
+        {
+            std::lock_guard<std::mutex> lock(m_workerMutex);
+            (void)lock;
+
+            if (!m_running)
+                return;
+        }
+
+        std::lock_guard<std::mutex> lock(m_dataMutex);
+        (void)lock;
+
+        m_reqBuffers.push(request.Buffer());
+        m_reqCallbacks.push(callback);
+    }
 
 private:
-    std::string GetMessage(const zmq::message_t &message);
-    void SendRequest(const std::string &request);
+    void SendRequest(Compression::CompressionBuffer_t &buffer, Callback_t &callback);
     void SendRequests();
 };
 

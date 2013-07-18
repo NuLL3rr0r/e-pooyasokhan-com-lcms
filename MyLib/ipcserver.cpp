@@ -12,14 +12,11 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include "ipcserver.hpp"
+#include "compression.hpp"
 #include "exception.hpp"
+#include "ipcprotocol.hpp"
 #include "log.hpp"
 #include "make_unique.hpp"
-
-
-#define     MSG_RECEIVED            "RCVD!"
-#define     MSG_INVALID             "INVLD!"
-
 
 using namespace MyLib;
 
@@ -37,34 +34,46 @@ IPCServer::IPCServer(port_t port) :
 
 IPCServer::~IPCServer()
 {
+    m_workerMutex.lock();
     if (m_running) {
+        m_workerMutex.unlock();
         Stop();
+    } else {
+        m_workerMutex.unlock();
     }
 }
 
-IPCServer::port_t IPCServer::GetPort() const
+IPCServer::port_t IPCServer::GetPort()
 {
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
+
     return m_port;
 }
 
 void IPCServer::SetPort(port_t port)
 {
-    if (m_running)
-        return;
-
     std::lock_guard<std::mutex> lock(m_workerMutex);
     (void)lock;
+
+    if (m_running)
+        return;
 
     m_port = port;
 }
 
-bool IPCServer::IsRunning() const
+bool IPCServer::IsRunning()
 {
+    std::lock_guard<std::mutex> lock(m_workerMutex);
+    (void)lock;
+
     return m_running;
 }
 
 void IPCServer::Start()
 {
+    LOG_INFO("Starting IPC server...");
+
     std::lock_guard<std::mutex> lock(m_workerMutex);
     (void)lock;
 
@@ -105,6 +114,8 @@ void IPCServer::Start()
 
 void IPCServer::Stop()
 {
+    LOG_INFO("Stopping IPC server...");
+
     std::lock_guard<std::mutex> lock(m_workerMutex);
     (void)lock;
 
@@ -128,10 +139,16 @@ void IPCServer::Stop()
     m_workerThread.reset();
     m_socket.reset();
     m_context.reset();
+
+    LOG_INFO("IPC server stopped successfully!");
 }
 
 void IPCServer::Listen()
 {
+    LOG_INFO("Listening on port "
+             + boost::lexical_cast<std::string>(IPC_REMOTE_PORT)
+             +  " for incoming IPC requests...");
+    LOG_INFO("IPC server started successfully!");
     bool rc;
     while (m_running) {
         boost::this_thread::disable_interruption di;
@@ -150,23 +167,51 @@ void IPCServer::Listen()
 
         if (rc) {
             try {
+                const Compression::CompressionBuffer_t
+                        buffer(static_cast<const char *>(request.data())[0], request.size());
+                std::string req;
+                Compression::Decompress(buffer, req);
+
                 std::stringstream reqJSON;
-                reqJSON << GetMessage(request);
+                reqJSON << req;
 
                 boost::property_tree::ptree reqTree;
                 boost::property_tree::read_json(reqJSON, reqTree);
 
-                if (OnMessageReceived) {
+                if (reqTree.get<std::string>("request.protocol.name") != IPCProtocol::Name()) {
+                    IPCProtocol::Version_t versionMajor = boost::lexical_cast<IPCProtocol::Version_t>(
+                                reqTree.get<std::string>("request.protocol.version.major"));
+                    if (versionMajor == IPCProtocol::VersionMajor()) {
+                        IPCProtocol::Version_t versionMinor = boost::lexical_cast<IPCProtocol::Version_t>(
+                                    reqTree.get<std::string>("request.protocol.version.minor"));
+                        if (versionMinor == IPCProtocol::VersionMinor()) {
+                            LOG_INFO("Request "
+                                     + reqTree.get<std::string>("request.topic")
+                                     + " recieved from"
+                                     + reqTree.get<std::string>("request.client.id"));
+                        } else if (versionMinor < IPCProtocol::VersionMinor()) {
+
+                        } else {
+
+                        }
+                    } else if (versionMajor < IPCProtocol::VersionMajor()) {
+
+                    } else {
+
+                    }
+                }
+                /*if (OnMessageReceived) {
                     OnMessageReceived(reqTree.get<std::string>("req.clientId"),
                                       reqTree.get<std::string>("req.message"));
-                }
+                }*/
 
-                SendResponse(MSG_RECEIVED);
+
+                //SendResponse(MSG_RECEIVED);
             }
 
             catch (...) {
                 LOG_ERROR("...");
-                SendResponse(MSG_INVALID);
+                //SendResponse(MSG_INVALID);
             }
         }
 
@@ -174,30 +219,4 @@ void IPCServer::Listen()
         boost::this_thread::interruption_point();
     }
 }
-
-std::string IPCServer::GetMessage(const zmq::message_t &message)
-{
-    return std::string(static_cast<const char *>(message.data()), message.size());
-}
-
-bool IPCServer::SendResponse(const std::string &response)
-{
-    zmq::message_t msg(response.size());
-    memcpy(msg.data(), response.data(), response.size());
-
-    bool rc;
-
-    try {
-        std::lock_guard<std::mutex> lock(m_workerMutex);
-        (void)lock;
-
-        rc = m_socket->send(msg, ZMQ_NOBLOCK);
-    } catch (...){
-        LOG_ERROR("...");
-        rc = false;
-    }
-
-    return rc;
-}
-
 

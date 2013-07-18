@@ -3,7 +3,7 @@
 using namespace std;
 using namespace  MyLib;
 
-const IPCProtocol::RequestHash_t RequestToString =
+const IPCProtocol::HashMapper<IPCProtocol::Request>::Hash_t RequestToString =
         boost::assign::map_list_of
         (IPCProtocol::Request::HandShake, "HandShake")
         (IPCProtocol::Request::LatestDesktopClientVersion, "LatestDesktopClientVersion")
@@ -102,12 +102,12 @@ std::string IPCProtocol::Version()
     return IPC_PROTOCOL_VERSION;
 }
 
-unsigned char IPCProtocol::VersionMajor()
+IPCProtocol::Version_t IPCProtocol::VersionMajor()
 {
     return IPC_PROTOCOL_VERSION_MAJOR;
 }
 
-unsigned char IPCProtocol::NameMinor()
+IPCProtocol::Version_t IPCProtocol::VersionMinor()
 {
     return IPC_PROTOCOL_VERSION_MINOR;
 }
