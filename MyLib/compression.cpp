@@ -10,8 +10,15 @@
 using namespace boost;
 using namespace MyLib;
 
+void Compression::Compress(const char *data, size_t size,
+                           CompressionBuffer_t &out_compressedBuffer)
+{
+    const Compression::CompressionBuffer_t buffer(data, data + size);
+    Compress(buffer, out_compressedBuffer);
+}
+
 void Compression::Compress(const std::string &dataString,
-                     CompressionBuffer_t &out_compressedBuffer)
+                           CompressionBuffer_t &out_compressedBuffer)
 {
     const CompressionBuffer_t buffer(dataString.begin(), dataString.end());
     Compress(buffer, out_compressedBuffer);

@@ -30,20 +30,26 @@ using namespace MyLib;
 // http://www.dolcevie.com/js/converter.html
 
 const unsigned char Crypto::m_key[] = {
-    0x4e, 0x40, 0x21, 0x6b, 0x21, 0x30, 0x2d, 0x40, 0x6b, 0x23, 0x48, 0x2f, 0x2e, 0x3f, 0x71
+    0x4e, 0x40, 0x21, 0x6b, 0x21, 0x30, 0x0, 0x2d, 0x40, 0x6b, 0x23, 0x48, 0x2f, 0x2e, 0x3f, 0x71
 };
 
 const unsigned char Crypto::m_iv[] = {
-    0x53, 0x23, 0x33, 0x54, 0x34, 0x5f, 0x2b, 0x52, 0x33, 0x40, 0x48, 0x3f, 0x2e, 0x71, 0x2f
+    0x53, 0x23, 0x33, 0x54, 0x34, 0x5f, 0x2b, 0x52, 0x33, 0x40, 0x48, 0x3f, 0x2e, 0x71, 0x0, 0x2f
 };
 
-bool Crypto::Encrypt(const std::string &plainText, std::string &out_encodedText)
+bool Crypto::Encrypt(const char *plainText, std::string &out_encodedText)
 {
     string err;
     return Encrypt(plainText, out_encodedText, err);
 }
 
-bool Crypto::Encrypt(const std::string &plainText, std::string &out_encodedText,
+bool Crypto::Encrypt(const std::string &plainText, std::string &out_encodedText)
+{
+    string err;
+    return Encrypt(plainText.c_str(), out_encodedText, err);
+}
+
+bool Crypto::Encrypt(const char *plainText, std::string &out_encodedText,
                      std::string &out_error)
 {
     try {
@@ -80,13 +86,25 @@ bool Crypto::Encrypt(const std::string &plainText, std::string &out_encodedText,
     return false;
 }
 
-bool Crypto::Decrypt(const std::string &cipherText, std::string &out_recoveredText)
+bool Crypto::Encrypt(const std::string &plainText, std::string &out_encodedText,
+                     std::string &out_error)
+{
+    return Encrypt(plainText.c_str(), out_encodedText, out_error);
+}
+
+bool Crypto::Decrypt(const char *cipherText, std::string &out_recoveredText)
 {
     string err;
     return Decrypt(cipherText, out_recoveredText, err);
 }
 
-bool Crypto::Decrypt(const std::string &cipherText, std::string &out_recoveredText,
+bool Crypto::Decrypt(const std::string &cipherText, std::string &out_recoveredText)
+{
+    string err;
+    return Decrypt(cipherText.c_str(), out_recoveredText, err);
+}
+
+bool Crypto::Decrypt(const char *cipherText, std::string &out_recoveredText,
                      std::string &out_error)
 {
     try {
@@ -123,13 +141,26 @@ bool Crypto::Decrypt(const std::string &cipherText, std::string &out_recoveredTe
     return false;
 }
 
-bool Crypto::GenerateHash(const std::string &text, std::string &out_digest)
+bool Crypto::Decrypt(const std::string &cipherText, std::string &out_recoveredText,
+                     std::string &out_error)
+{
+    return Decrypt(cipherText.c_str(), out_recoveredText, out_error);
+}
+
+
+bool Crypto::GenerateHash(const char *text, std::string &out_digest)
 {
     string err;
     return GenerateHash(text, out_digest, err);
 }
 
-bool Crypto::GenerateHash(const std::string &text, std::string &out_digest,
+bool Crypto::GenerateHash(const std::string &text, std::string &out_digest)
+{
+    string err;
+    return GenerateHash(text.c_str(), out_digest, err);
+}
+
+bool Crypto::GenerateHash(const char *text, std::string &out_digest,
                           std::string &out_error)
 {
     try {
@@ -158,6 +189,12 @@ bool Crypto::GenerateHash(const std::string &text, std::string &out_digest,
     }
 
     return false;
+}
+
+bool Crypto::GenerateHash(const std::string &text, std::string &out_digest,
+                          std::string &out_error)
+{
+    return GenerateHash(text.c_str(), out_digest, out_error);
 }
 
 int Crypto::Base64Decode(char value)

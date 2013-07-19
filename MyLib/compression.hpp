@@ -15,6 +15,8 @@ public:
     typedef std::vector<char> CompressionBuffer_t;
 
 public:
+    static void Compress(const char *data, size_t size,
+                         CompressionBuffer_t &out_compressedBuffer);
     static void Compress(const std::string &dataString,
                          CompressionBuffer_t &out_compressedBuffer);
     static void Compress(const CompressionBuffer_t &dataBuffer,

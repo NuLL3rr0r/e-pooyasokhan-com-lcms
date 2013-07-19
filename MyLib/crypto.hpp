@@ -15,13 +15,22 @@ private:
     static const unsigned char m_iv[];
 
 public:
+    static bool Encrypt(const char *plainText, std::string &out_encodedText);
     static bool Encrypt(const std::string &plainText, std::string &out_encodedText);
+    static bool Encrypt(const char *plainText, std::string &out_encodedText,
+                        std::string &out_error);
     static bool Encrypt(const std::string &plainText, std::string &out_encodedText,
                         std::string &out_error);
+    static bool Decrypt(const char *cipherText, std::string &out_recoveredText);
     static bool Decrypt(const std::string &cipherText, std::string &out_recoveredText);
+    static bool Decrypt(const char *cipherText, std::string &out_recoveredText,
+                        std::string &out_error);
     static bool Decrypt(const std::string &cipherText, std::string &out_recoveredText,
                         std::string &out_error);
+    static bool GenerateHash(const char *text, std::string &out_digest);
     static bool GenerateHash(const std::string &text, std::string &out_digest);
+    static bool GenerateHash(const char *text, std::string &out_digest,
+                             std::string &out_error);
     static bool GenerateHash(const std::string &text, std::string &out_digest,
                              std::string &out_error);
     static int Base64Decode(char value);
