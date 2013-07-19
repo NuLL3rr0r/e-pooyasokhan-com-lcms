@@ -10,6 +10,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/function.hpp>
 #include <boost/thread/thread.hpp>
 #include <MyLib/ipcprotocol.hpp>
 #include <MyLib/ipcserver.hpp>
@@ -17,6 +18,7 @@
 #include <MyLib/make_unique.hpp>
 #include <MyLib/mylib.hpp>
 #include <MyLib/system.hpp>
+#include "backend.hpp"
 #include "dbtables.hpp"
 #include "rt.hpp"
 #include "versioninfo.hpp"
@@ -52,10 +54,15 @@ int main(int argc, char **argv)
     EPSServer::RT::Storage()->AppPath = appPath;
     EPSServer::DBTables::InitTables();
 
-    LOG_INFO("Starting server in a sub-thread...");
-    std::unique_ptr<MyLib::IPCServer> server =
+    std::unique_ptr<EPSServer::Backend> backend =
+            std::make_unique<EPSServer::Backend>();
+
+    LOG_INFO("Starting IPC server in a sub-thread...");
+    std::unique_ptr<MyLib::IPCServer> ipcServer =
             std::make_unique<MyLib::IPCServer>(IPC_REMOTE_PORT);
-    boost::thread t(&MyLib::IPCServer::Start, server.get());
+    ipcServer->ResponseHandler =
+            boost::bind(&EPSServer::Backend::OnIPCRequestReceived, backend.get(), _1, _2);
+    boost::thread t(&MyLib::IPCServer::Start, ipcServer.get());
     t.join();
     LOG_INFO("Sub-thread joined!");
 

@@ -30,36 +30,9 @@ private:
     struct HashMapper
     {
         typedef std::unordered_map<_T, std::string, Hasher<_T>> Hash_t;
-
-        Hash_t hash;
-
-        void Register(_T t, const std::string &s)
-        {
-            hash[t] = s;
-        }
+        typedef std::unordered_map<_T, std::string, Hasher<_T>> HashToString_t;
+        typedef std::unordered_map<std::string, _T> HashToEnum_t;
     };
-
-    template <typename _T>
-    struct EnumMapper
-    {
-        typedef boost::bimap<_T, std::string> Bimap_t;
-
-        Bimap_t bimap;
-
-        void Register(_T t, const std::string &s)
-        {
-            bimap.insert(Bimap_t::value_type(t, s));
-        }
-
-//        void Find(_T t)
-    };
-
-    struct EnumMapper2
-    {
-        //typedef boost::bimap<_T, std::string> Bimap_t;
-
-    };
-
 
 public:
     enum class Request : unsigned char {
@@ -71,32 +44,73 @@ public:
         Registeration
     };
 
-    enum class HandShakeRequestArg : unsigned char {
-        IP
+    typedef HashMapper<IPCProtocol::Request>::HashToString_t RequestToString_t;
+    typedef HashMapper<IPCProtocol::Request>::HashToEnum_t RequestToEnum_t;
+
+
+    struct RequestArg {
+        enum class Common : unsigned char {
+            Void
+        };
+
+        enum class HandShake : unsigned char {
+            IP
+        };
+
+        enum class LatestDesktopClientVersion : unsigned char {
+            IP
+        };
+
+        typedef HashMapper<Common>::Hash_t CommonHash_t;
+        typedef HashMapper<Common>::HashToString_t CommonToString_t;
+        typedef HashMapper<Common>::HashToEnum_t CommonToEnum_t;
+
+        typedef HashMapper<HandShake>::Hash_t HandShakeHash_t;
+        typedef HashMapper<HandShake>::HashToString_t HandShakeToString_t;
+        typedef HashMapper<HandShake>::HashToEnum_t HandShakeToEnum_t;
+
+        typedef HashMapper<LatestDesktopClientVersion>::Hash_t LatestDesktopClientVersionHash_t;
+        typedef HashMapper<LatestDesktopClientVersion>::HashToString_t LatestDesktopClientVersionToString_t;
+        typedef HashMapper<LatestDesktopClientVersion>::HashToEnum_t LatestDesktopClientVersionToEnum_t;
     };
 
-    enum class HandShakeResponseStatus : unsigned char {
-        OK,
-        ProtocolTooOld,
-        InvalidProtocol
+
+    struct ResponseStatus {
+        enum class Common : unsigned char {
+            InvalidProtocol,
+            InvalidProtocolVersion,
+            ExpiredProtocolVersion,
+            OK
+        };
+
+        typedef HashMapper<Common>::HashToString_t CommonToString_t;
+        typedef HashMapper<Common>::HashToEnum_t CommonToEnum_t;
     };
 
-    enum class LatestDesktopClientVersionRequestArg : unsigned char {
-        IP
+
+    struct ResponseArg {
+        enum class Common : unsigned char {
+            Void
+        };
+
+        enum class LatestDesktopClientVersion : unsigned char {
+            String,
+            Major,
+            Minor,
+            Patch,
+            Revision
+        };
+
+        typedef HashMapper<Common>::Hash_t CommonHash_t;
+        typedef HashMapper<Common>::HashToString_t CommonToString_t;
+        typedef HashMapper<Common>::HashToEnum_t CommonToEnum_t;
+
+        typedef HashMapper<LatestDesktopClientVersion>::Hash_t LatestDesktopClientVersionHash_t;
+        typedef HashMapper<LatestDesktopClientVersion>::HashToString_t LatestDesktopClientVersionToString_t;
+        typedef HashMapper<LatestDesktopClientVersion>::HashToEnum_t LatestDesktopClientVersionToEnum_t;
     };
 
-    enum class LatestDesktopClientVersionResponseArg : unsigned char {
-        Version,
-        VersionMajor,
-        VersionMinor,
-        VersionPatch,
-        VersionRevision
-    };
-
-    enum class LatestDesktopClientVersionResponseStatus : unsigned char {
-        OK
-    };
-
+/*
     enum class LoginRequestArg : unsigned char {
         IP,
         Username,
@@ -148,65 +162,29 @@ public:
     enum class RegisterationResponseStatus : unsigned char {
         OK,
         InvalidData
-    };
+    };*/
 
 public:
-    typedef std::unordered_map<Request, std::string, Hasher<Request>> RequestHash_t;
+    static const RequestToString_t RequestToString;
+    static const RequestToEnum_t RequestToEnum;
 
-    typedef std::unordered_map<HandShakeRequestArg, std::string,
-    Hasher<HandShakeRequestArg>> HandShakeRequestArgHash_t;
+    static const RequestArg::CommonToString_t CommonRequestArgToString;
+    static const RequestArg::CommonToEnum_t CommonRequestArgToEnum;
 
-    typedef std::unordered_map<HandShakeResponseStatus, std::string,
-    Hasher<HandShakeResponseStatus>> HandShakeResponseStatusHash_t;
+    static const RequestArg::HandShakeToString_t HandShakeRequestArgToString;
+    static const RequestArg::HandShakeToEnum_t HandShakeRequestArgToEnum;
 
-    typedef std::unordered_map<LatestDesktopClientVersionRequestArg, std::string,
-    Hasher<LatestDesktopClientVersionRequestArg>> LatestDesktopClientVersionRequestArgHash_t;
+    static const RequestArg::LatestDesktopClientVersionToString_t LatestDesktopClientVersionRequestArgToString;
+    static const RequestArg::LatestDesktopClientVersionToEnum_t LatestDesktopClientVersionRequestArgToEnum;
 
-    typedef std::unordered_map<LatestDesktopClientVersionResponseArg, std::string,
-    Hasher<LatestDesktopClientVersionResponseArg>> LatestDesktopClientVersionResponseArgHash_t;
+    static const ResponseStatus::CommonToString_t CommonResponseStatusToString;
+    static const ResponseStatus::CommonToEnum_t CommonResponseStatusToEnum;
 
-    typedef std::unordered_map<LatestDesktopClientVersionResponseStatus, std::string,
-    Hasher<LatestDesktopClientVersionResponseStatus>> LatestDesktopClientVersionResponseStatusHash_t;
+    static const ResponseArg::CommonToString_t CommonResponseArgToString;
+    static const ResponseArg::CommonToEnum_t CommonResponseArgToEnum;
 
-    typedef std::unordered_map<LoginRequestArg, std::string,
-    Hasher<LoginRequestArg>> LoginRequestArgHash_t;
-
-    typedef std::unordered_map<LoginResponseStatus, std::string,
-    Hasher<LoginResponseStatus>> LoginResponseStatusHash_t;
-
-    typedef std::unordered_map<PasswordChangeRequestArg, std::string,
-    Hasher<PasswordChangeRequestArg>> PasswordChangeRequestArgHash_t;
-
-    typedef std::unordered_map<PasswordChangeResponseStatus, std::string,
-    Hasher<PasswordChangeResponseStatus>> PasswordChangeResponseStatusHash_t;
-
-    typedef std::unordered_map<PasswordRecoveryRequestArg, std::string,
-    Hasher<PasswordRecoveryRequestArg>> PasswordRecoveryRequestArgHash_t;
-
-    typedef std::unordered_map<PasswordRecoveryResponseStatus, std::string,
-    Hasher<PasswordRecoveryResponseStatus>> PasswordRecoveryResponseStatusHash_t;
-
-    typedef std::unordered_map<RegisterationRequestArg, std::string,
-    Hasher<RegisterationRequestArg>> RegisterationRequestArgHash_t;
-
-    typedef std::unordered_map<RegisterationResponseStatus, std::string,
-    Hasher<RegisterationResponseStatus>> RegisterationResponseStatusHash_t;
-
-public:
-    static const HashMapper<IPCProtocol::Request>::Hash_t RequestToString;
-    static const HandShakeRequestArgHash_t HandShakeRequestArgToString;
-    static const HandShakeResponseStatusHash_t HandShakeResponseStatusToString;
-    static const LatestDesktopClientVersionRequestArgHash_t LatestDesktopClientVersionRequestArgToString;
-    static const LatestDesktopClientVersionResponseArgHash_t LatestDesktopClientVersionResponseArgToString;
-    static const LatestDesktopClientVersionResponseStatusHash_t LatestDesktopClientVersionResponseStatusToString;
-    static const LoginRequestArgHash_t LoginRequestArgToString;
-    static const LoginResponseStatusHash_t LoginResponseStatusToString;
-    static const PasswordChangeRequestArgHash_t PasswordChangeRequestArgToString;
-    static const PasswordChangeResponseStatusHash_t PasswordChangeResponseStatusToString;
-    static const PasswordRecoveryRequestArgHash_t PasswordRecoveryRequestArgToString;
-    static const PasswordRecoveryResponseStatusHash_t PasswordRecoveryResponseStatusToString;
-    static const RegisterationRequestArgHash_t RegisterationRequestArgToString;
-    static const RegisterationResponseStatusHash_t RegisterationResponseStatusToString;
+    static const ResponseArg::LatestDesktopClientVersionToString_t LatestDesktopClientVersionResponseArgToString;
+    static const ResponseArg::LatestDesktopClientVersionToEnum_t LatestDesktopClientVersionResponseArgToEnum;
 
 public:
     static std::string Name();

@@ -11,23 +11,28 @@
 #include "ipcprotocol.hpp"
 
 namespace MyLib {
-    template<typename _ArgsT, typename _ArgsToStringT>
+    template<typename _RequestArgT, typename _RequestArgToStringT>
+    class BasicIPCRequest;
+
     class IPCRequest;
 }
 
-template<typename _ArgsT, typename _ArgsToStringT>
-class MyLib::IPCRequest
-{
+class MyLib::IPCRequest {
 public:
-    typedef std::unordered_map<_ArgsT, std::string> Args_t;
+    typedef MyLib::BasicIPCRequest<MyLib::IPCProtocol::RequestArg::HandShakeHash_t,
+    MyLib::IPCProtocol::RequestArg::HandShakeToString_t> HandShake;
+};
 
+template<typename _RequestArgHashT, typename _RequestArgToStringT>
+class MyLib::BasicIPCRequest
+{
 private:
     Compression::CompressionBuffer_t m_buffer;
 
 public:
-    IPCRequest(const IPCProtocol::Request &request,
-               const Args_t &args = Args_t(),
-               const _ArgsToStringT &argsToStringT = _ArgsToStringT())
+    BasicIPCRequest(const IPCProtocol::Request &request,
+                    const _RequestArgHashT &args = _RequestArgHashT(),
+                    const _RequestArgToStringT &argsToStringT = _RequestArgToStringT())
     {
         try {
             boost::property_tree::ptree reqTree;

@@ -6,8 +6,10 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <boost/property_tree/ptree.hpp>
 #include <boost/thread/thread.hpp>
 #include <zmq.hpp>
+#include "compression.hpp"
 #include "log.hpp"
 
 namespace MyLib {
@@ -22,6 +24,12 @@ private:
     typedef std::unique_ptr<zmq::socket_t> socket_ptr;
 
     typedef unsigned short int port_t;
+
+    typedef boost::function<void(const boost::property_tree::ptree &,
+                                 MyLib::Compression::CompressionBuffer_t &)> ResponseHandler_t;
+
+public:
+    ResponseHandler_t ResponseHandler;
 
 private:
     bool m_running;
@@ -50,21 +58,7 @@ public:
 private:
     void Listen();
 
-    template<typename _IPCReponseT>
-    void SendResponse(const _IPCReponseT &response)
-    {
-        zmq::message_t res(response.Buffer().size());
-        memcpy(response.Buffer().data(), response.Buffer().data(), response.Buffer().size());
-
-        try {
-            std::lock_guard<std::mutex> lock(m_workerMutex);
-            (void)lock;
-
-            m_socket->send(res, ZMQ_NOBLOCK);
-        } catch (...){
-            LOG_ERROR("...");
-        }
-    }
+    void SendResponse(MyLib::Compression::CompressionBuffer_t &responseBuffer);
 };
 
 

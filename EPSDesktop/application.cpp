@@ -19,12 +19,12 @@ Application::Application(QObject *parent)
 
 Application::~Application()
 {
-    LOG_INFO("Application terminated!");
+    LOG_INFO("The application has been terminated!");
 }
 
 void Application::OnSplashScreenConnectionFailed()
 {
-    LOG_FATAL("Initial connection to server failed!");
+    LOG_FATAL("Initial attemp for connecting to server failed!");
 
     m_splashScreen->deleteLater();
     m_splashScreen.release();
@@ -34,7 +34,7 @@ void Application::OnSplashScreenConnectionFailed()
 
 void Application::OnSplashScreenConnectionEstablished()
 {
-    LOG_INFO("Initial connection to server established successfully!");
+    LOG_INFO("Initial connection to the server has been established successfully!");
 
     m_splashScreen->deleteLater();
     m_splashScreen.release();
@@ -76,7 +76,7 @@ void Application::OnLoginSucceeded()
 
 void Application::OnMainWindowClosed()
 {
-    LOG_INFO("User exited application!");
+    LOG_INFO("Application was closed by user!");
 
     m_mainWindow->deleteLater();
     m_mainWindow.release();

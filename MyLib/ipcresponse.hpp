@@ -11,27 +11,42 @@
 #include "ipcprotocol.hpp"
 
 namespace MyLib {
-    template<typename _HashT, typename _StatusT, typename _ArgsT, typename _ArgsToStringT>
+    template<typename _ResponseStatusT, typename _ResponseStatusToStringT,
+             typename _ResponseArgT, typename _ResponseArgToStringT>
+    class BasicIPCResponse;
+
     class IPCResponse;
 }
 
-template<typename _HashT, typename _StatusT, typename _ArgsT, typename _ArgsToStringT>
-class MyLib::IPCResponse
-{
+class MyLib::IPCResponse {
 public:
-    typedef std::unordered_map<_ArgsT, std::string> Args_t;
+    typedef MyLib::BasicIPCResponse<MyLib::IPCProtocol::ResponseStatus::Common,
+    MyLib::IPCProtocol::ResponseStatus::CommonToString_t,
+    MyLib::IPCProtocol::ResponseArg::CommonHash_t,
+    MyLib::IPCProtocol::ResponseArg::CommonToString_t> Common;
 
+    typedef MyLib::BasicIPCResponse<MyLib::IPCProtocol::ResponseStatus::Common,
+    MyLib::IPCProtocol::ResponseStatus::CommonToString_t,
+    MyLib::IPCProtocol::ResponseArg::CommonHash_t,
+    MyLib::IPCProtocol::ResponseArg::CommonToString_t> HandShake;
+};
+
+template<typename _ResponseStatusT, typename _ResponseStatusToStringT,
+         typename _ResponseArgT, typename _ResponseArgToStringT>
+class MyLib::BasicIPCResponse
+{
 private:
     Compression::CompressionBuffer_t m_buffer;
 
 public:
-    IPCResponse(const _HashT hash, const _StatusT &status, const Args_t &args = Args_t(),
-                const _ArgsToStringT &argsToStringT = _ArgsToStringT())
+    BasicIPCResponse(const _ResponseStatusT status, const _ResponseStatusToStringT &statusToString,
+                     const _ResponseArgT &args = _ResponseArgT(),
+                     const _ResponseArgToStringT &argsToStringT = _ResponseArgToStringT())
     {
         boost::property_tree::ptree resTree;
         resTree.put("response.protocol.name", IPCProtocol::Name());
         resTree.put("response.protocol.version", IPCProtocol::Version());
-        resTree.put("response.status", hash.at(status));
+        resTree.put("response.status", statusToString.at(status));
         for (auto &arg : args) {
             resTree.put("response.args.key", argsToStringT.at(arg.first));
             resTree.put("response.args.value", arg.second);
@@ -45,7 +60,7 @@ public:
     }
 
 public:
-    const Compression::CompressionBuffer_t &Buffer() const
+    Compression::CompressionBuffer_t &Buffer()
     {
         return m_buffer;
     }

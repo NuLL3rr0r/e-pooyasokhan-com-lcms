@@ -10,11 +10,11 @@
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include "ipcserver.hpp"
 #include "compression.hpp"
 #include "exception.hpp"
 #include "ipcprotocol.hpp"
+#include "ipcresponse.hpp"
 #include "log.hpp"
 #include "make_unique.hpp"
 
@@ -150,7 +150,14 @@ void IPCServer::Listen()
              +  " for incoming IPC requests...");
     LOG_INFO("IPC server started successfully!");
     bool rc;
-    while (m_running) {
+    while (true) {
+        {
+            std::lock_guard<std::mutex> lock(m_workerMutex);
+            (void)lock;
+
+            if (!m_running)
+                break;
+        }
         boost::this_thread::disable_interruption di;
 
         zmq::message_t request;
@@ -161,62 +168,102 @@ void IPCServer::Listen()
 
             rc = m_socket->recv(&request);
         } catch(...) {
-            LOG_ERROR("...");
             rc = false;
         }
 
         if (rc) {
             try {
                 const Compression::CompressionBuffer_t
-                        buffer(static_cast<const char *>(request.data())[0], request.size());
+                        buffer(static_cast<const char *>(request.data()),
+                               static_cast<const char *>(request.data()) + request.size());
+
                 std::string req;
                 Compression::Decompress(buffer, req);
-
                 std::stringstream reqJSON;
                 reqJSON << req;
 
                 boost::property_tree::ptree reqTree;
                 boost::property_tree::read_json(reqJSON, reqTree);
 
-                if (reqTree.get<std::string>("request.protocol.name") != IPCProtocol::Name()) {
+                if (reqTree.get<std::string>("request.protocol.name") == IPCProtocol::Name()) {
                     IPCProtocol::Version_t versionMajor = boost::lexical_cast<IPCProtocol::Version_t>(
                                 reqTree.get<std::string>("request.protocol.version.major"));
                     if (versionMajor == IPCProtocol::VersionMajor()) {
                         IPCProtocol::Version_t versionMinor = boost::lexical_cast<IPCProtocol::Version_t>(
                                     reqTree.get<std::string>("request.protocol.version.minor"));
                         if (versionMinor == IPCProtocol::VersionMinor()) {
-                            LOG_INFO("Request "
-                                     + reqTree.get<std::string>("request.topic")
-                                     + " recieved from"
-                                     + reqTree.get<std::string>("request.client.id"));
+                            if (!ResponseHandler.empty()) {
+                                Compression::CompressionBuffer_t responseBuffer;
+                                ResponseHandler(reqTree, responseBuffer);
+                                SendResponse(responseBuffer);
+                            } else {
+                                IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::OK,
+                                                             MyLib::IPCProtocol::CommonResponseStatusToString,
+                                                             MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
+                                                             MyLib::IPCProtocol::CommonResponseArgToString);
+                                SendResponse(response.Buffer());
+                            }
                         } else if (versionMinor < IPCProtocol::VersionMinor()) {
-
+                            IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::ExpiredProtocolVersion,
+                                                         MyLib::IPCProtocol::CommonResponseStatusToString,
+                                                         MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
+                                                         MyLib::IPCProtocol::CommonResponseArgToString);
+                            SendResponse(response.Buffer());
                         } else {
-
+                            IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::InvalidProtocolVersion,
+                                                         MyLib::IPCProtocol::CommonResponseStatusToString,
+                                                         MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
+                                                         MyLib::IPCProtocol::CommonResponseArgToString);
+                            SendResponse(response.Buffer());
                         }
                     } else if (versionMajor < IPCProtocol::VersionMajor()) {
-
+                        IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::ExpiredProtocolVersion,
+                                                     MyLib::IPCProtocol::CommonResponseStatusToString,
+                                                     MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
+                                                     MyLib::IPCProtocol::CommonResponseArgToString);
+                        SendResponse(response.Buffer());
                     } else {
-
+                        IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::InvalidProtocolVersion,
+                                                     MyLib::IPCProtocol::CommonResponseStatusToString,
+                                                     MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
+                                                     MyLib::IPCProtocol::CommonResponseArgToString);
+                        SendResponse(response.Buffer());
                     }
+                } else {
+                    IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::InvalidProtocol,
+                                                 MyLib::IPCProtocol::CommonResponseStatusToString,
+                                                 MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
+                                                 MyLib::IPCProtocol::CommonResponseArgToString);
+                    SendResponse(response.Buffer());
                 }
-                /*if (OnMessageReceived) {
-                    OnMessageReceived(reqTree.get<std::string>("req.clientId"),
-                                      reqTree.get<std::string>("req.message"));
-                }*/
-
-
-                //SendResponse(MSG_RECEIVED);
             }
 
             catch (...) {
-                LOG_ERROR("...");
-                //SendResponse(MSG_INVALID);
+                IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::InvalidProtocol,
+                                             MyLib::IPCProtocol::CommonResponseStatusToString,
+                                             MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
+                                             MyLib::IPCProtocol::CommonResponseArgToString);
+                SendResponse(response.Buffer());
             }
         }
 
         boost::this_thread::restore_interruption ri(di);
         boost::this_thread::interruption_point();
     }
+}
+
+void IPCServer::SendResponse(MyLib::Compression::CompressionBuffer_t &responseBuffer)
+{
+    zmq::message_t res(responseBuffer.size());
+    memcpy(res.data(), &responseBuffer.data()[0], responseBuffer.size());
+
+    try {
+        std::lock_guard<std::mutex> lock(m_workerMutex);
+        (void)lock;
+
+        m_socket->send(res, ZMQ_NOBLOCK);
+    } catch (...){
+    }
+
 }
 

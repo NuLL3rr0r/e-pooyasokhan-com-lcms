@@ -3,94 +3,96 @@
 using namespace std;
 using namespace  MyLib;
 
-const IPCProtocol::HashMapper<IPCProtocol::Request>::Hash_t RequestToString =
+const IPCProtocol::RequestToString_t IPCProtocol::RequestToString =
         boost::assign::map_list_of
         (IPCProtocol::Request::HandShake, "HandShake")
         (IPCProtocol::Request::LatestDesktopClientVersion, "LatestDesktopClientVersion")
-        (IPCProtocol::Request::Login, "Login")
+        /*(IPCProtocol::Request::Login, "Login")
         (IPCProtocol::Request::PasswordChange, "PasswordChange")
         (IPCProtocol::Request::Login, "Login")
         (IPCProtocol::Request::PasswordRecovery, "PasswordRecovery")
-        (IPCProtocol::Request::Registeration, "Registeration");
-
-const IPCProtocol::HandShakeRequestArgHash_t HandShakeRequestArgToString =
+        (IPCProtocol::Request::Registeration, "Registeration")*/;
+const IPCProtocol::RequestToEnum_t IPCProtocol::RequestToEnum =
         boost::assign::map_list_of
-        (IPCProtocol::HandShakeRequestArg::IP, "IP");
+        ("HandShake", IPCProtocol::Request::HandShake)
+        ("LatestDesktopClientVersion", IPCProtocol::Request::LatestDesktopClientVersion)
+        /*("Login", IPCProtocol::Request::Login,)
+        ("PasswordChange", IPCProtocol::Request::PasswordChange)
+        ("Login", IPCProtocol::Request::Login)
+        ("PasswordRecovery", IPCProtocol::Request::PasswordRecovery)
+        ("Registeration", IPCProtocol::Request::Registeration)*/;
 
-const IPCProtocol::HandShakeResponseStatusHash_t HandShakeResponseStatusToString =
+const IPCProtocol::RequestArg::CommonToString_t IPCProtocol::CommonRequestArgToString =
         boost::assign::map_list_of
-        (IPCProtocol::HandShakeResponseStatus::OK, "OK")
-        (IPCProtocol::HandShakeResponseStatus::ProtocolTooOld, "ProtocolTooOld")
-        (IPCProtocol::HandShakeResponseStatus::InvalidProtocol, "InvalidProtocol");
+        (IPCProtocol::RequestArg::Common::Void, "Void")
+        ;
+const IPCProtocol::RequestArg::CommonToEnum_t IPCProtocol::CommonRequestArgToEnum =
+        boost::assign::map_list_of
+        ("Void", IPCProtocol::RequestArg::Common::Void)
+        ;
 
-const IPCProtocol::LatestDesktopClientVersionRequestArgHash_t LatestDesktopClientVersionRequestArgToString =
+const IPCProtocol::RequestArg::HandShakeToString_t IPCProtocol::HandShakeRequestArgToString =
         boost::assign::map_list_of
-        (IPCProtocol::LatestDesktopClientVersionRequestArg::IP, "IP");
+        (IPCProtocol::RequestArg::HandShake::IP, "IP")
+        ;
+const IPCProtocol::RequestArg::HandShakeToEnum_t IPCProtocol::HandShakeRequestArgToEnum =
+        boost::assign::map_list_of
+        ("IP", IPCProtocol::RequestArg::HandShake::IP)
+        ;
 
-const IPCProtocol::LatestDesktopClientVersionResponseArgHash_t LatestDesktopClientVersionResponseArgToString =
+const IPCProtocol::RequestArg::LatestDesktopClientVersionToString_t
+IPCProtocol::LatestDesktopClientVersionRequestArgToString =
         boost::assign::map_list_of
-        (IPCProtocol::LatestDesktopClientVersionResponseArg::Version, "Version")
-        (IPCProtocol::LatestDesktopClientVersionResponseArg::VersionMajor, "VersionMajor")
-        (IPCProtocol::LatestDesktopClientVersionResponseArg::VersionMinor, "VersionMinor")
-        (IPCProtocol::LatestDesktopClientVersionResponseArg::VersionPatch, "VersionPatch")
-        (IPCProtocol::LatestDesktopClientVersionResponseArg::VersionRevision, "VersionRevision");
+        (IPCProtocol::RequestArg::LatestDesktopClientVersion::IP, "IP")
+        ;
+const IPCProtocol::RequestArg::LatestDesktopClientVersionToEnum_t
+IPCProtocol::LatestDesktopClientVersionRequestArgToEnum =
+        boost::assign::map_list_of
+        ("IP", IPCProtocol::RequestArg::LatestDesktopClientVersion::IP)
+        ;
 
-const IPCProtocol::LatestDesktopClientVersionResponseStatusHash_t LatestDesktopClientVersionResponseStatusToString =
+const IPCProtocol::ResponseStatus::CommonToString_t IPCProtocol::CommonResponseStatusToString =
         boost::assign::map_list_of
-        (IPCProtocol::LatestDesktopClientVersionResponseStatus::OK, "OK");
+        (IPCProtocol::ResponseStatus::Common::InvalidProtocol, "InvalidProtocol")
+        (IPCProtocol::ResponseStatus::Common::InvalidProtocolVersion, "InvalidProtocolVersion")
+        (IPCProtocol::ResponseStatus::Common::ExpiredProtocolVersion, "ExpiredProtocolVersion")
+        (IPCProtocol::ResponseStatus::Common::OK, "OK")
+        ;
+const IPCProtocol::ResponseStatus::CommonToEnum_t IPCProtocol::CommonResponseStatusToEnum =
+        boost::assign::map_list_of
+        ("InvalidProtocol", IPCProtocol::ResponseStatus::Common::InvalidProtocol)
+        ("InvalidProtocolVersion", IPCProtocol::ResponseStatus::Common::InvalidProtocolVersion)
+        ("ExpiredProtocolVersion", IPCProtocol::ResponseStatus::Common::ExpiredProtocolVersion)
+        ("OK", IPCProtocol::ResponseStatus::Common::OK)
+        ;
 
-const IPCProtocol::LoginRequestArgHash_t LoginRequestArgToString =
+const IPCProtocol::ResponseArg::CommonToString_t IPCProtocol::CommonResponseArgToString =
         boost::assign::map_list_of
-        (IPCProtocol::LoginRequestArg::IP, "IP")
-        (IPCProtocol::LoginRequestArg::Username, "Username")
-        (IPCProtocol::LoginRequestArg::Password, "Password");
+        (IPCProtocol::ResponseArg::Common::Void, "Void")
+        ;
+const IPCProtocol::ResponseArg::CommonToEnum_t IPCProtocol::CommonResponseArgToEnum =
+        boost::assign::map_list_of
+        ("Void", IPCProtocol::ResponseArg::Common::Void)
+        ;
 
-const IPCProtocol::LoginResponseStatusHash_t LoginResponseStatusToString =
+const IPCProtocol::ResponseArg::LatestDesktopClientVersionToString_t
+IPCProtocol::LatestDesktopClientVersionResponseArgToString =
         boost::assign::map_list_of
-        (IPCProtocol::LoginResponseStatus::OK, "OK")
-        (IPCProtocol::LoginResponseStatus::InvalidUserPwd, "InvalidUserPwd");
-
-const IPCProtocol::PasswordChangeRequestArgHash_t PasswordChangeRequestArgToString =
+        (IPCProtocol::ResponseArg::LatestDesktopClientVersion::String, "String")
+        (IPCProtocol::ResponseArg::LatestDesktopClientVersion::Major, "Major")
+        (IPCProtocol::ResponseArg::LatestDesktopClientVersion::Minor, "Minor")
+        (IPCProtocol::ResponseArg::LatestDesktopClientVersion::Patch, "Patch")
+        (IPCProtocol::ResponseArg::LatestDesktopClientVersion::Revision, "Revision")
+        ;
+const IPCProtocol::ResponseArg::LatestDesktopClientVersionToEnum_t
+IPCProtocol::LatestDesktopClientVersionResponseArgToEnum =
         boost::assign::map_list_of
-        (IPCProtocol::PasswordChangeRequestArg::CurrentPassword, "CurrentPassword")
-        (IPCProtocol::PasswordChangeRequestArg::NewPassowrd, "NewPassowrd");
-
-const IPCProtocol::PasswordChangeResponseStatusHash_t PasswordChangeResponseStatusToString =
-        boost::assign::map_list_of
-        (IPCProtocol::PasswordChangeResponseStatus::OK, "OK")
-        (IPCProtocol::PasswordChangeResponseStatus::InvalidCurrentPwd, "InvalidCurrentPwd");
-
-const IPCProtocol::PasswordRecoveryRequestArgHash_t PasswordRecoveryRequestArgToString =
-        boost::assign::map_list_of
-        (IPCProtocol::PasswordRecoveryRequestArg::IP, "IP")
-        (IPCProtocol::PasswordRecoveryRequestArg::Username, "Username");
-
-const IPCProtocol::PasswordRecoveryResponseStatusHash_t PasswordRecoveryResponseStatusToString =
-        boost::assign::map_list_of
-        (IPCProtocol::PasswordRecoveryResponseStatus::OK, "OK")
-        (IPCProtocol::PasswordRecoveryResponseStatus::InvalidUser, "InvalidUser");
-
-const IPCProtocol::RegisterationRequestArgHash_t RegisterationRequestArgToString =
-        boost::assign::map_list_of
-        (IPCProtocol::RegisterationRequestArg::IP, "IP")
-        (IPCProtocol::RegisterationRequestArg::Username, "Username")
-        (IPCProtocol::RegisterationRequestArg::Password, "Password")
-        (IPCProtocol::RegisterationRequestArg::FirstName, "FirstName")
-        (IPCProtocol::RegisterationRequestArg::LastName, "LastName")
-        (IPCProtocol::RegisterationRequestArg::Vocation, "Vocation")
-        (IPCProtocol::RegisterationRequestArg::Birthday, "Birthday")
-        (IPCProtocol::RegisterationRequestArg::Educations, "Educations")
-        (IPCProtocol::RegisterationRequestArg::LearningExperiences, "LearningExperiences")
-        (IPCProtocol::RegisterationRequestArg::Course, "Course")
-        (IPCProtocol::RegisterationRequestArg::AcquaintanceMethod, "AcquaintanceMethod")
-        (IPCProtocol::RegisterationRequestArg::Province, "Province")
-        (IPCProtocol::RegisterationRequestArg::Phone, "Phone")
-        (IPCProtocol::RegisterationRequestArg::Mobile, "Mobile");
-
-const IPCProtocol::RegisterationResponseStatusHash_t RegisterationResponseStatusToString =
-        boost::assign::map_list_of
-        (IPCProtocol::RegisterationResponseStatus::OK, "OK")
-        (IPCProtocol::RegisterationResponseStatus::InvalidData, "InvalidData");
+        ("String", IPCProtocol::ResponseArg::LatestDesktopClientVersion::String)
+        ("Major", IPCProtocol::ResponseArg::LatestDesktopClientVersion::Major)
+        ("Minor", IPCProtocol::ResponseArg::LatestDesktopClientVersion::Minor)
+        ("Patch", IPCProtocol::ResponseArg::LatestDesktopClientVersion::Patch)
+        ("Revision", IPCProtocol::ResponseArg::LatestDesktopClientVersion::Revision)
+        ;
 
 std::string IPCProtocol::Name()
 {

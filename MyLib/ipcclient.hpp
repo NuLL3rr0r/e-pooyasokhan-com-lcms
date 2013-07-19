@@ -2,15 +2,17 @@
 #define IPCCLIENT_HPP
 
 
-#include <functional>
 #include <memory>
 #include <mutex>
 #include <queue>
 #include <string>
+#include <boost/function.hpp>
 #include <boost/thread/thread.hpp>
 #include <zmq.hpp>
 #include "ipcrequest.hpp"
 #include "compression.hpp"
+
+#define     IPC_TIMED_OUT_MSG       "TIMED_OUT"
 
 namespace MyLib {
     class IPCClient;
@@ -25,7 +27,7 @@ private:
 
     typedef unsigned short int port_t;
 
-    typedef std::function<void(void)> Callback_t;
+    typedef boost::function<void(const std::string &)> Callback_t;
 
 private:
     bool m_running;
@@ -45,7 +47,7 @@ private:
 
 public:
     IPCClient();
-    IPCClient(const std::string &id, const std::string &remoteHost, port_t remotePort);
+    IPCClient(const std::string &remoteHost, port_t remotePort);
     ~IPCClient();
 
 public:
@@ -60,7 +62,7 @@ public:
     void Stop();
 
     template<typename _IPCRequestT>
-    void SendRequest(const _IPCRequestT &request, Callback_t &callback)
+    void SendRequest(const _IPCRequestT &request, Callback_t callback)
     {
         {
             std::lock_guard<std::mutex> lock(m_workerMutex);
@@ -78,7 +80,7 @@ public:
     }
 
 private:
-    void SendRequest(Compression::CompressionBuffer_t &buffer, Callback_t &callback);
+    void SendARequest(Compression::CompressionBuffer_t &buffer, Callback_t callback);
     void SendRequests();
 };
 

@@ -1,3 +1,4 @@
+#include <chrono>
 #include <cassert>
 
 #if defined ( _WIN32 )
@@ -15,6 +16,8 @@
 #include "log.hpp"
 #include "make_unique.hpp"
 
+#define     IPC_TIMEOUT         10
+
 using namespace MyLib;
 
 IPCClient::IPCClient() :
@@ -23,7 +26,7 @@ IPCClient::IPCClient() :
 {
 }
 
-IPCClient::IPCClient(const std::string &id, const std::string &remoteHost, port_t remotePort) :
+IPCClient::IPCClient(const std::string &remoteHost, port_t remotePort) :
     m_running(false),
     m_remoteHost(remoteHost),
     m_remotePort(remotePort)
@@ -147,12 +150,13 @@ void IPCClient::Stop()
 }
 
 
-void IPCClient::SendRequest(Compression::CompressionBuffer_t &buffer, Callback_t &callback)
+void IPCClient::SendARequest(Compression::CompressionBuffer_t &buffer, Callback_t callback)
 {
     zmq::message_t req(buffer.size());
-    memcpy(buffer.data(), buffer.data(), buffer.size());
+    memcpy(req.data(), &buffer.data()[0], buffer.size());
 
     bool rc = false;
+    auto sendStart = std::chrono::high_resolution_clock::now();
     do {
         boost::this_thread::disable_interruption di;
 
@@ -167,6 +171,7 @@ void IPCClient::SendRequest(Compression::CompressionBuffer_t &buffer, Callback_t
 
         if (rc) {
             zmq::message_t response;
+            auto recvStart = std::chrono::high_resolution_clock::now();
             do {
                 try {
                     std::lock_guard<std::mutex> lock(m_workerMutex);
@@ -179,14 +184,30 @@ void IPCClient::SendRequest(Compression::CompressionBuffer_t &buffer, Callback_t
 
                 if (rc) {
                     const Compression::CompressionBuffer_t
-                            buffer(static_cast<const char *>(response.data())[0], response.size());
-                    boost::bind(callback, buffer);
-                    callback();
+                            buffer(static_cast<const char *>(response.data()),
+                                   static_cast<const char *>(response.data()) + response.size());
+                    std::string res;
+                    Compression::Decompress(buffer, res);
+                    callback(res);
+                } else {
+                    if (std::chrono::duration_cast<std::chrono::seconds>(
+                             std::chrono::high_resolution_clock::now() - recvStart).count() >= IPC_TIMEOUT) {
+                        LOG_ERROR("Reading request's response timed out!");
+                        callback(IPC_TIMED_OUT_MSG);
+                        return;
+                    }
                 }
 
                 boost::this_thread::restore_interruption ri(di);
                 boost::this_thread::interruption_point();
             } while (!rc);
+        } else {
+            if (std::chrono::duration_cast<std::chrono::seconds>(
+                     std::chrono::high_resolution_clock::now() - sendStart).count() >= IPC_TIMEOUT) {
+                LOG_ERROR("Request timed out!");
+                callback(IPC_TIMED_OUT_MSG);
+                return;
+            }
         }
 
         boost::this_thread::restore_interruption ri(di);
@@ -196,26 +217,32 @@ void IPCClient::SendRequest(Compression::CompressionBuffer_t &buffer, Callback_t
 
 void IPCClient::SendRequests()
 {
-    m_workerMutex.lock();
-    while(m_running) {
-        m_workerMutex.unlock();
+    while (true) {
+        {
+            std::lock_guard<std::mutex> lock(m_workerMutex);
+            (void)lock;
 
-        m_dataMutex.lock();
-        if (m_reqBuffers.size() > 0) {
-            m_dataMutex.unlock();
+            if (!m_running)
+                break;
+        }
 
-            Compression::CompressionBuffer_t buffer;
-            Callback_t callback;
+        bool isReqQueueEmpty;
+        Compression::CompressionBuffer_t buffer;
+        Callback_t callback;
 
-            {
-                std::lock_guard<std::mutex> lock(m_dataMutex);
-                (void)lock;
+        {
+            std::lock_guard<std::mutex> lock(m_dataMutex);
+            (void)lock;
 
+            isReqQueueEmpty = !(m_reqBuffers.size() > 0);
+            if (!isReqQueueEmpty) {
                 buffer = m_reqBuffers.front();
                 callback = m_reqCallbacks.front();
             }
+        }
 
-            SendRequest(buffer, callback);
+        if (!isReqQueueEmpty) {
+            SendARequest(buffer, callback);
 
             {
                 std::lock_guard<std::mutex> lock(m_dataMutex);
@@ -224,12 +251,9 @@ void IPCClient::SendRequests()
                 m_reqBuffers.pop();
                 m_reqCallbacks.pop();
             }
-        } else {
-            m_dataMutex.unlock();
         }
 
         boost::this_thread::interruption_point();
-        m_workerMutex.lock();
     }
 }
 
