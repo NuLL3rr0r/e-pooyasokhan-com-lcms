@@ -87,12 +87,12 @@ Log::StorageStruct *Log::Storage()
         m_storageInstance->Initialized = false;
 
         m_storageInstance->LogTypeHash.clear();
-        m_storageInstance->LogTypeHash[Log::EType::Trace] = "Trace";
-        m_storageInstance->LogTypeHash[Log::EType::Debug] = "Debug";
-        m_storageInstance->LogTypeHash[Log::EType::Info] = "Info";
-        m_storageInstance->LogTypeHash[Log::EType::Warning] = "Warning";
-        m_storageInstance->LogTypeHash[Log::EType::Error] = "Error";
-        m_storageInstance->LogTypeHash[Log::EType::Fatal] = "Fatal";
+        m_storageInstance->LogTypeHash[Log::EType::Trace] = "TRACE";
+        m_storageInstance->LogTypeHash[Log::EType::Debug] = "DEBUG";
+        m_storageInstance->LogTypeHash[Log::EType::Info] = "INFO";
+        m_storageInstance->LogTypeHash[Log::EType::Warning] = "WARNING";
+        m_storageInstance->LogTypeHash[Log::EType::Error] = "ERROR";
+        m_storageInstance->LogTypeHash[Log::EType::Fatal] = "FATAL";
 
         m_storageInstance->LogOutputStream = NULL;
 
