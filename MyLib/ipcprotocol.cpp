@@ -1,7 +1,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include "crypto.hpp"
 #include "ipcprotocol.hpp"
-#include "log.hpp"
 
 using namespace std;
 using namespace  MyLib;
@@ -140,7 +139,5 @@ void IPCProtocol::SetMessage(const boost::property_tree::ptree &tree, MyLib::Com
     Crypto::Encrypt(json, encrypted);
 
     Compression::Compress(encrypted, out_buffer);
-
-    LOG_TRACE(out_buffer.data());
 }
 
