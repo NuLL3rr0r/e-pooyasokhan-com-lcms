@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <boost/assign/list_of.hpp>
 #include <boost/bimap.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include "compression.hpp"
 
 namespace MyLib {
     class IPCProtocol;
@@ -191,6 +193,9 @@ public:
     static std::string Version();
     static Version_t VersionMajor();
     static Version_t VersionMinor();
+
+    static void GetMessage(const MyLib::Compression::CompressionBuffer_t &buffer, boost::property_tree::ptree &out_tree);
+    static void SetMessage(const boost::property_tree::ptree &tree, MyLib::Compression::CompressionBuffer_t &out_buffer);
 };
 
 
