@@ -9,7 +9,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include "ipcserver.hpp"
 #include "compression.hpp"
 #include "exception.hpp"
@@ -173,17 +172,10 @@ void IPCServer::Listen()
 
         if (rc) {
             try {
-                const Compression::CompressionBuffer_t
-                        buffer(static_cast<const char *>(request.data()),
-                               static_cast<const char *>(request.data()) + request.size());
-
-                std::string req;
-                Compression::Decompress(buffer, req);
-                std::stringstream reqJSON;
-                reqJSON << req;
-
                 boost::property_tree::ptree reqTree;
-                boost::property_tree::read_json(reqJSON, reqTree);
+                IPCProtocol::GetMessage(std::string(static_cast<const char *>(
+                                                        request.data()), request.size()),
+                                        reqTree);
 
                 if (reqTree.get<std::string>("request.protocol.name") == IPCProtocol::Name()) {
                     IPCProtocol::Version_t versionMajor = boost::lexical_cast<IPCProtocol::Version_t>(
@@ -193,48 +185,48 @@ void IPCServer::Listen()
                                     reqTree.get<std::string>("request.protocol.version.minor"));
                         if (versionMinor == IPCProtocol::VersionMinor()) {
                             if (!ResponseHandler.empty()) {
-                                Compression::CompressionBuffer_t responseBuffer;
-                                ResponseHandler(reqTree, responseBuffer);
-                                SendResponse(responseBuffer);
+                                std::string response;
+                                ResponseHandler(reqTree, response);
+                                SendResponse(response);
                             } else {
                                 IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::OK,
                                                              MyLib::IPCProtocol::CommonResponseStatusToString,
                                                              MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
                                                              MyLib::IPCProtocol::CommonResponseArgToString);
-                                SendResponse(response.Buffer());
+                                SendResponse(response.Message());
                             }
                         } else if (versionMinor < IPCProtocol::VersionMinor()) {
                             IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::ExpiredProtocolVersion,
                                                          MyLib::IPCProtocol::CommonResponseStatusToString,
                                                          MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
                                                          MyLib::IPCProtocol::CommonResponseArgToString);
-                            SendResponse(response.Buffer());
+                            SendResponse(response.Message());
                         } else {
                             IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::InvalidProtocolVersion,
                                                          MyLib::IPCProtocol::CommonResponseStatusToString,
                                                          MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
                                                          MyLib::IPCProtocol::CommonResponseArgToString);
-                            SendResponse(response.Buffer());
+                            SendResponse(response.Message());
                         }
                     } else if (versionMajor < IPCProtocol::VersionMajor()) {
                         IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::ExpiredProtocolVersion,
                                                      MyLib::IPCProtocol::CommonResponseStatusToString,
                                                      MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
                                                      MyLib::IPCProtocol::CommonResponseArgToString);
-                        SendResponse(response.Buffer());
+                        SendResponse(response.Message());
                     } else {
                         IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::InvalidProtocolVersion,
                                                      MyLib::IPCProtocol::CommonResponseStatusToString,
                                                      MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
                                                      MyLib::IPCProtocol::CommonResponseArgToString);
-                        SendResponse(response.Buffer());
+                        SendResponse(response.Message());
                     }
                 } else {
                     IPCResponse::Common response(MyLib::IPCProtocol::ResponseStatus::Common::InvalidProtocol,
                                                  MyLib::IPCProtocol::CommonResponseStatusToString,
                                                  MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
                                                  MyLib::IPCProtocol::CommonResponseArgToString);
-                    SendResponse(response.Buffer());
+                    SendResponse(response.Message());
                 }
             }
 
@@ -243,7 +235,7 @@ void IPCServer::Listen()
                                              MyLib::IPCProtocol::CommonResponseStatusToString,
                                              MyLib::IPCProtocol::ResponseArg::CommonHash_t {  },
                                              MyLib::IPCProtocol::CommonResponseArgToString);
-                SendResponse(response.Buffer());
+                SendResponse(response.Message());
             }
         }
 
@@ -252,10 +244,10 @@ void IPCServer::Listen()
     }
 }
 
-void IPCServer::SendResponse(MyLib::Compression::CompressionBuffer_t &responseBuffer)
+void IPCServer::SendResponse(const std::string &response)
 {
-    zmq::message_t res(responseBuffer.size());
-    memcpy(res.data(), &responseBuffer.data()[0], responseBuffer.size());
+    zmq::message_t res(response.size());
+    memcpy(res.data(), response.data(), response.size());
 
     try {
         std::lock_guard<std::mutex> lock(m_workerMutex);

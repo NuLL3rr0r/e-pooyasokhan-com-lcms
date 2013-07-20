@@ -104,7 +104,6 @@ void SplashScreen::OnConnectionEstablished(QNetworkReply *reply)
 
 void SplashScreen::OnHandShakeResponded(const std::string &response)
 {
-    LOG_INFO("RES FROM SERVER: " + response);
     if (response != IPC_TIMED_OUT_MSG) {
         m_connectionFailed = false;
         emit signal_Closing();

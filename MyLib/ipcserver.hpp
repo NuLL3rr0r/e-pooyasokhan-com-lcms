@@ -26,7 +26,7 @@ private:
     typedef unsigned short int port_t;
 
     typedef boost::function<void(const boost::property_tree::ptree &,
-                                 MyLib::Compression::CompressionBuffer_t &)> ResponseHandler_t;
+                                 std::string &)> ResponseHandler_t;
 
 public:
     ResponseHandler_t ResponseHandler;
@@ -58,7 +58,7 @@ public:
 private:
     void Listen();
 
-    void SendResponse(MyLib::Compression::CompressionBuffer_t &responseBuffer);
+    void SendResponse(const std::string &response);
 };
 
 

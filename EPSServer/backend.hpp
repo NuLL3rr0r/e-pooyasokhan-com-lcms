@@ -16,13 +16,13 @@ class EPSServer::Backend
 {
 public:
     void OnIPCRequestReceived(const boost::property_tree::ptree &requestTree,
-                              MyLib::Compression::CompressionBuffer_t &out_responseBuffer);
+                              std::string &out_response);
 
     void HandShake(const boost::property_tree::ptree &requestTree,
-                   MyLib::Compression::CompressionBuffer_t &out_responseBuffer);
+                   std::string &out_response);
 
     void LatestDesktopClientVersion(const boost::property_tree::ptree &requestTree,
-                                    MyLib::Compression::CompressionBuffer_t &out_responseBuffer);
+                                    std::string &out_response);
 };
 
 

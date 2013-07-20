@@ -36,7 +36,7 @@ template<typename _ResponseStatusT, typename _ResponseStatusToStringT,
 class MyLib::BasicIPCResponse
 {
 private:
-    Compression::CompressionBuffer_t m_buffer;
+    std::string m_message;
 
 public:
     BasicIPCResponse(const _ResponseStatusT status, const _ResponseStatusToStringT &statusToString,
@@ -52,17 +52,13 @@ public:
             resTree.put("response.args.value", arg.second);
         }
 
-        std::stringstream resStream;
-        boost::property_tree::write_json(resStream, resTree);
-        std::string resJSON(resStream.str());
-
-        Compression::Compress(resJSON, m_buffer);
+        IPCProtocol::SetMessage(resTree, m_message);
     }
 
 public:
-    Compression::CompressionBuffer_t &Buffer()
+    const std::string &Message() const
     {
-        return m_buffer;
+        return m_message;
     }
 };
 

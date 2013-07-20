@@ -27,7 +27,7 @@ template<typename _RequestArgHashT, typename _RequestArgToStringT>
 class MyLib::BasicIPCRequest
 {
 private:
-    Compression::CompressionBuffer_t m_buffer;
+    std::string m_message;
 
 public:
     BasicIPCRequest(const IPCProtocol::Request &request,
@@ -48,20 +48,16 @@ public:
                 reqTree.put("request.args.value", arg.second);
             }
 
-            std::stringstream reqStream;
-            boost::property_tree::write_json(reqStream, reqTree);
-            std::string reqJSON(reqStream.str());
-
-            Compression::Compress(reqJSON, m_buffer);
+            IPCProtocol::SetMessage(reqTree, m_message);
         } catch (...) {
 
         }
     }
 
 public:
-    const Compression::CompressionBuffer_t &Buffer() const
+    const std::string &Message() const
     {
-        return m_buffer;
+        return m_message;
     }
 };
 

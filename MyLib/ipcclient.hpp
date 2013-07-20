@@ -35,7 +35,7 @@ private:
     std::string m_remoteHost;
     port_t m_remotePort;
 
-    std::queue<MyLib::Compression::CompressionBuffer_t> m_reqBuffers;
+    std::queue<std::string> m_reqMessages;
     std::queue<Callback_t> m_reqCallbacks;
 
     thread_ptr m_workerThread;
@@ -75,12 +75,12 @@ public:
         std::lock_guard<std::mutex> lock(m_dataMutex);
         (void)lock;
 
-        m_reqBuffers.push(request.Buffer());
+        m_reqMessages.push(request.Message());
         m_reqCallbacks.push(callback);
     }
 
 private:
-    void SendARequest(Compression::CompressionBuffer_t &buffer, Callback_t callback);
+    void SendARequest(const std::string &request, Callback_t callback);
     void SendRequests();
 };
 

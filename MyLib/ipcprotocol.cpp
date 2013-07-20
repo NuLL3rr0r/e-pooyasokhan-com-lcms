@@ -1,6 +1,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include "crypto.hpp"
 #include "ipcprotocol.hpp"
+#include "log.hpp"
 
 using namespace std;
 using namespace  MyLib;
@@ -116,28 +117,31 @@ IPCProtocol::Version_t IPCProtocol::VersionMinor()
     return IPC_PROTOCOL_VERSION_MINOR;
 }
 
-void IPCProtocol::GetMessage(const MyLib::Compression::CompressionBuffer_t &buffer, boost::property_tree::ptree &out_tree)
+void IPCProtocol::GetMessage(const std::string &message, boost::property_tree::ptree &out_tree)
 {
-    std::string encrypted;
-    Compression::Decompress(buffer, encrypted);
+    out_tree.clear();
+    std::string decrypted;
+    Crypto::Decrypt(message, decrypted);
 
-    string json;
-    Crypto::Decrypt(encrypted, json);
+    std::string json;
+    Compression::CompressionBuffer_t buffer(decrypted.begin(), decrypted.end());
+    Compression::Decompress(buffer, json);
 
     std::stringstream stream;
     stream << json;
     boost::property_tree::read_json(stream, out_tree);
 }
 
-void IPCProtocol::SetMessage(const boost::property_tree::ptree &tree, MyLib::Compression::CompressionBuffer_t &out_buffer)
+void IPCProtocol::SetMessage(const boost::property_tree::ptree &tree, std::string &out_message)
 {
+    out_message.clear();
     std::stringstream stream;
     boost::property_tree::write_json(stream, tree);
     std::string json(stream.str());
 
-    std::string encrypted;
-    Crypto::Encrypt(json, encrypted);
+    Compression::CompressionBuffer_t buffer;
+    Compression::Compress(json, buffer);
 
-    Compression::Compress(encrypted, out_buffer);
+    Crypto::Encrypt(string(buffer.begin(), buffer.end()), out_message);
 }
 

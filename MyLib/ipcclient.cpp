@@ -10,8 +10,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include "ipcclient.hpp"
 #include "log.hpp"
 #include "make_unique.hpp"
@@ -150,10 +148,10 @@ void IPCClient::Stop()
 }
 
 
-void IPCClient::SendARequest(Compression::CompressionBuffer_t &buffer, Callback_t callback)
+void IPCClient::SendARequest(const std::string &request, Callback_t callback)
 {
-    zmq::message_t req(buffer.size());
-    memcpy(req.data(), &buffer.data()[0], buffer.size());
+    zmq::message_t req(request.size());
+    memcpy(req.data(), request.data(), request.size());
 
     bool rc = false;
     auto sendStart = std::chrono::high_resolution_clock::now();
@@ -227,28 +225,28 @@ void IPCClient::SendRequests()
         }
 
         bool isReqQueueEmpty;
-        Compression::CompressionBuffer_t buffer;
+        std::string message;
         Callback_t callback;
 
         {
             std::lock_guard<std::mutex> lock(m_dataMutex);
             (void)lock;
 
-            isReqQueueEmpty = !(m_reqBuffers.size() > 0);
+            isReqQueueEmpty = !(m_reqMessages.size() > 0);
             if (!isReqQueueEmpty) {
-                buffer = m_reqBuffers.front();
+                message = m_reqMessages.front();
                 callback = m_reqCallbacks.front();
             }
         }
 
         if (!isReqQueueEmpty) {
-            SendARequest(buffer, callback);
+            SendARequest(message, callback);
 
             {
                 std::lock_guard<std::mutex> lock(m_dataMutex);
                 (void)lock;
 
-                m_reqBuffers.pop();
+                m_reqMessages.pop();
                 m_reqCallbacks.pop();
             }
         }

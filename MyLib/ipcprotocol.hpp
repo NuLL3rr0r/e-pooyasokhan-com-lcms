@@ -194,8 +194,8 @@ public:
     static Version_t VersionMajor();
     static Version_t VersionMinor();
 
-    static void GetMessage(const MyLib::Compression::CompressionBuffer_t &buffer, boost::property_tree::ptree &out_tree);
-    static void SetMessage(const boost::property_tree::ptree &tree, MyLib::Compression::CompressionBuffer_t &out_buffer);
+    static void GetMessage(const std::string &message, boost::property_tree::ptree &out_tree);
+    static void SetMessage(const boost::property_tree::ptree &tree, std::string &out_message);
 };
 
 
